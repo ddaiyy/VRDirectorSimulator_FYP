@@ -1,4 +1,4 @@
-using System;
+Ôªøusing System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +6,7 @@ using UnityEngine;
 public class SceneInitializer : MonoBehaviour
 {
 
-    public Transform spawnPoint; // Õœ»Î“ª∏ˆ…˙≥…µ„µƒø’ŒÔÃÂ
+    public Transform spawnPoint; // √ç√è√à√´√í¬ª¬∏√∂√â√∫¬≥√â¬µ√£¬µ√Ñ¬ø√ï√é√Ø√å√•
     void Start()
     {
         int charID = GameManager.Instance.GetSelectedCharacterID();
@@ -18,29 +18,54 @@ public class SceneInitializer : MonoBehaviour
         Debug.Log("Play action: " + action);
         Debug.Log("Enviornment: " + environment);
 
-        // ƒ„ø…“‘‘⁄’‚¿Ô µ¿˝ªØ∂‘”¶Ω«…´ƒ£–Õ£¨≤¢≤•∑≈—°‘Òµƒ∂Ø◊˜
-        // ∞≤»´ºÏ≤È
+        // √Ñ√£¬ø√â√í√î√î√ö√ï√¢√Ä√Ø√ä¬µ√Ä√Ω¬ª¬Ø¬∂√î√ì¬¶¬Ω√á√â¬´√Ñ¬£√ê√ç¬£¬¨¬≤¬¢¬≤¬•¬∑√Ö√ë¬°√î√±¬µ√Ñ¬∂¬Ø√ó√∑
+        // ¬∞¬≤√à¬´¬º√¨¬≤√©
         if (charID >= 0 && charID < GameManager.Instance.characterPrefabs.Length)
         {
-            //  µ¿˝ªØΩ«…´
+            // √ä¬µ√Ä√Ω¬ª¬Ø¬Ω√á√â¬´
             GameObject character = Instantiate(
                 GameManager.Instance.characterPrefabs[charID],
                 spawnPoint != null ? spawnPoint.position : Vector3.zero,
                 Quaternion.identity
             );
 
-            // ≤•∑≈∂Øª≠£®ºŸ…Ëƒ„”– Animator «“∂Øª≠√˚∫Õ∂Ø◊˜√˚“ª÷¬£©
+            // ¬≤¬•¬∑√Ö¬∂¬Ø¬ª¬≠¬£¬®¬º√ô√â√®√Ñ√£√ì√ê Animator √á√í¬∂¬Ø¬ª¬≠√É√ª¬∫√ç¬∂¬Ø√ó√∑√É√ª√í¬ª√ñ√Ç¬£¬©
             Animator animator = character.GetComponent<Animator>();
-            if (animator != null)
+            if (animator != null && !string.IsNullOrEmpty(action))
             {
-                animator.Play(action);
+                Debug.Log("Trying to set trigger: Do" + action);
+                StartCoroutine(PlayActionLater(animator, action));
+
+
+                animator.SetTrigger("Do" + action); // ÊØîÂ¶Ç DoJump„ÄÅDoWave
             }
+            if (animator == null)
+            {
+                Debug.LogError("Animator component missing on character prefab!");
+            }
+            else if (animator.runtimeAnimatorController == null)
+            {
+                Debug.LogError("Animator Controller is not assigned!");
+            }
+
+
         }
         else
         {
             Debug.LogWarning("Invalid character ID or missing prefab.");
         }
     }
+
+    IEnumerator PlayActionLater(Animator animator, string action)
+    {
+        yield return null; // Á≠âÂæÖ‰∏ÄÂ∏ß
+        if (animator != null)
+        {
+            Debug.Log("Triggering animation: Do" + action);
+            animator.SetTrigger("Do" + action);
+        }
+    }
+
 
 
 }
