@@ -76,4 +76,15 @@ public class CameraController : MonoBehaviour
     {
         CameraManager.Instance.DeleteCamera(this);
     }
+
+    public void SetFOV(float value)
+    {
+        cam.fieldOfView = value;
+    }
+
+    public float GetFOV()
+    {
+        return cam.fieldOfView;
+    }
+
 }

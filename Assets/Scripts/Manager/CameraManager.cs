@@ -96,6 +96,10 @@ public class CameraManager : MonoBehaviour
 
         // 3. 让它启用渲染到 RenderTexture
         currentSelected.EnablePreview(previewTexture);
+
+        // 通知 UI 当前焦距值
+        FindObjectOfType<CameraFOVSlider>()?.SyncSlider(controller);
+
     }
 
 
@@ -117,5 +121,11 @@ public class CameraManager : MonoBehaviour
         RegisterCamera(controller);
         SelectCamera(controller); // 添加完自动选中，预览该摄像机
     }
+
+    public CameraController GetCurrentSelectedCamera()
+    {
+        return currentSelected;
+    }
+
 
 }
