@@ -46,7 +46,9 @@ public class CameraManager : MonoBehaviour
     {
         if (cameraList.Contains(controller))
         {
-            if (currentSelected == controller)
+            bool wasCurrent = (currentSelected == controller);
+
+            if (wasCurrent)
             {
                 currentSelected.DisablePreview();
                 currentSelected = null;
@@ -54,18 +56,30 @@ public class CameraManager : MonoBehaviour
 
             cameraList.Remove(controller);
 
-            // 销毁整个虚拟摄像机结构（而不仅是摄像机组件）
+            //  删除整组
             if (controller.rigRoot != null)
             {
                 Destroy(controller.rigRoot);
             }
             else
             {
-                // 回退：如果 rigRoot 没有设置，就删除自身
                 Destroy(controller.gameObject);
+            }
+
+            // 如果删的是当前选中，并且还有其他摄像机，自动切换到下一个
+            if (wasCurrent && cameraList.Count > 0)
+            {
+                SelectCamera(cameraList[0]); // 你也可以选第一个：cameraList[0]
+            }
+
+            // 如果没摄像机了，就清空预览画面
+            if (cameraList.Count == 0 && previewPlaneRenderer != null)
+            {
+                previewPlaneRenderer.material.mainTexture = null;
             }
         }
     }
+
 
 
 
@@ -89,6 +103,7 @@ public class CameraManager : MonoBehaviour
     {
         GameObject camObj = Instantiate(cameraPrefab, cameraSpawnPoint.position, cameraSpawnPoint.rotation);
         CameraController controller = camObj.GetComponentInChildren<CameraController>();
+
 
         if (controller == null)
         {
