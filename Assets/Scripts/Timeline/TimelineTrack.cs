@@ -8,9 +8,14 @@ public class TimelineTrack : MonoBehaviour
     public float currentTime = 0f;
     public bool isPlaying = false;
     public float duration = 5f; // 轨道总时长，可根据clips自动计算
+    public bool isControlledByMaster = false;
 
     void Update()
     {
+        if (isControlledByMaster){
+            return;
+        }
+
         if (isPlaying && clips.Count > 1)
         {
             currentTime += Time.deltaTime;
@@ -18,9 +23,10 @@ public class TimelineTrack : MonoBehaviour
             {
                 currentTime = duration;
                 isPlaying = false; // 播放完毕
-                SetTime(0f);
+                SetTime(clips[0].time);
+            }else{
+                ApplyClipAtTime(currentTime);
             }
-            ApplyClipAtTime(currentTime);
         }
     }
 
@@ -58,6 +64,27 @@ public class TimelineTrack : MonoBehaviour
     // 平滑插值
     void ApplyClipAtTime(float time)
     {
+        if (clips.Count == 0) return;
+
+        Camera cam = GetComponent<Camera>();
+        if (time < clips[0].time)
+        {
+            transform.position = new Vector3(99999, 99999, 99999);
+            return;
+        }
+
+
+        if (isControlledByMaster && time >= clips[clips.Count - 1].time)
+        {
+            var last = clips[clips.Count - 1];
+            transform.position = last.position;
+            transform.rotation = last.rotation;
+            transform.localScale = last.scale;
+            if (cam != null)
+                cam.fieldOfView = last.fov;
+            return;
+        }
+
         // 找到前后两个关键帧
         TimelineClip prev = null, next = null;
         for (int i = 0; i < clips.Count - 1; i++)
@@ -78,7 +105,6 @@ public class TimelineTrack : MonoBehaviour
         transform.localScale = Vector3.Lerp(prev.scale, next.scale, t);
         
         //TODO: 摄像机
-        Camera cam = GetComponent<Camera>();
         if (cam != null)
             cam.fieldOfView = Mathf.Lerp(prev.fov, next.fov, t);
     }

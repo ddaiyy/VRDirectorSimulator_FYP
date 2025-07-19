@@ -16,15 +16,31 @@ public class MasterTimelineTrack : MonoBehaviour
             if (currentTime > duration)
             {
                 currentTime = duration;
+                foreach (var track in TimelineManager.Instance.GetAllTracks())
+                {
+                    if (track.isControlledByMaster){
+                        track.SetTime(track.clips[0].time);
+                    }
+                }
+                
                 isPlaying = false;
+                foreach (var track in TimelineManager.Instance.GetAllTracks())
+                {
+                    if (track.isControlledByMaster){
+                        track.isControlledByMaster = false;
+                    }
+                }
+                
+            }else{
+                // 推进所有轨道
+                foreach (var track in TimelineManager.Instance.GetAllTracks())
+                {
+                    if (track.isControlledByMaster){
+                        track.SetTime(currentTime);
+                    }
+                }
             }
-            // 推进所有轨道
-            foreach (var track in TimelineManager.Instance.GetAllTracks())
-            {
-                track.SetTime(currentTime);
-            }
-            // 如果主轨道自己也有clips，可以在这里处理
-            // ApplyClipAtTime(currentTime);
+            
         }
     }
 
@@ -34,6 +50,11 @@ public class MasterTimelineTrack : MonoBehaviour
         isPlaying = true;
         currentTime = 0f;
         duration = GetDuration();
+        
+        foreach (var track in TimelineManager.Instance.GetAllTracks())
+        {
+            track.isControlledByMaster = true;
+        }
     }
 
     [ContextMenu("暂停")]
@@ -49,7 +70,8 @@ public class MasterTimelineTrack : MonoBehaviour
         currentTime = 0f;
         foreach (var track in TimelineManager.Instance.GetAllTracks())
         {
-            track.SetTime(0f);
+            track.SetTime(track.clips[0].time);
+            track.isControlledByMaster = false;
         }
     }
 
