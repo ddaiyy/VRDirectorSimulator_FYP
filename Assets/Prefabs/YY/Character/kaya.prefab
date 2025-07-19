@@ -832,6 +832,7 @@ GameObject:
   - component: {fileID: 8145883108610328704}
   - component: {fileID: 896729234155909722}
   - component: {fileID: 2699711140145053989}
+  - component: {fileID: 1113276530041595299}
   m_Layer: 0
   m_Name: kaya
   m_TagString: Untagged
@@ -1011,7 +1012,19 @@ MonoBehaviour:
       m_Calls: []
   m_Activated:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1113276530041595299}
+        m_TargetAssemblyTypeName: CharacterSelectionAndActionUI, Assembly-CSharp
+        m_MethodName: OnCharacterButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_Deactivated:
     m_PersistentCalls:
       m_Calls: []
@@ -1118,6 +1131,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 3626515414287238990}
   actionSequence: []
+--- !u!114 &1113276530041595299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1836936020492445810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afbddb92ffbf54a41a246f6f1c912caf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controllerForThisCharacter: {fileID: 2699711140145053989}
+  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  characterTransform: {fileID: 765142760248896194}
 --- !u!1 &1849076958665312485
 GameObject:
   m_ObjectHideFlags: 0
@@ -2703,7 +2731,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6055756441579659465
 Transform:
   m_ObjectHideFlags: 0

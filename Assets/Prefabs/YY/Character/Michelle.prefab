@@ -175,6 +175,7 @@ GameObject:
   - component: {fileID: 3440744345700622126}
   - component: {fileID: 3308241055785528768}
   - component: {fileID: 8616481323134706416}
+  - component: {fileID: 2144556219631297523}
   m_Layer: 0
   m_Name: Michelle
   m_TagString: Untagged
@@ -351,7 +352,19 @@ MonoBehaviour:
       m_Calls: []
   m_Activated:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2144556219631297523}
+        m_TargetAssemblyTypeName: CharacterSelectionAndActionUI, Assembly-CSharp
+        m_MethodName: OnCharacterButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_Deactivated:
     m_PersistentCalls:
       m_Calls: []
@@ -458,6 +471,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 8561977624628038494}
   actionSequence: []
+--- !u!114 &2144556219631297523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1384412809518333611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afbddb92ffbf54a41a246f6f1c912caf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controllerForThisCharacter: {fileID: 8616481323134706416}
+  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  characterTransform: {fileID: 7302554327282129156}
 --- !u!1 &1386002455302445983
 GameObject:
   m_ObjectHideFlags: 0
@@ -1583,7 +1611,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1342626343071396379
 Transform:
   m_ObjectHideFlags: 0

@@ -409,7 +409,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3256277076556335931
 Transform:
   m_ObjectHideFlags: 0
@@ -2180,6 +2180,7 @@ GameObject:
   - component: {fileID: 1922697069308495520}
   - component: {fileID: 615474646306409220}
   - component: {fileID: 5083038581258631808}
+  - component: {fileID: 3609353130149329393}
   m_Layer: 0
   m_Name: Jackie
   m_TagString: Untagged
@@ -2356,7 +2357,19 @@ MonoBehaviour:
       m_Calls: []
   m_Activated:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3609353130149329393}
+        m_TargetAssemblyTypeName: CharacterSelectionAndActionUI, Assembly-CSharp
+        m_MethodName: OnCharacterButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_Deactivated:
     m_PersistentCalls:
       m_Calls: []
@@ -2463,6 +2476,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 2213968351009963515}
   actionSequence: []
+--- !u!114 &3609353130149329393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8025752508931190599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afbddb92ffbf54a41a246f6f1c912caf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controllerForThisCharacter: {fileID: 5083038581258631808}
+  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  characterTransform: {fileID: 2506800998407036457}
 --- !u!1 &8111664243806537893
 GameObject:
   m_ObjectHideFlags: 0
