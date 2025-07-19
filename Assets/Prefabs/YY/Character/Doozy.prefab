@@ -2138,8 +2138,7 @@ GameObject:
   - component: {fileID: 2437650434889942116}
   - component: {fileID: 7785133900329043945}
   - component: {fileID: 4830372031895031694}
-  - component: {fileID: 7911607283706320475}
-  - component: {fileID: 2880851352639025966}
+  - component: {fileID: 2283346602738948330}
   m_Layer: 0
   m_Name: ActionSelectButton
   m_TagString: Untagged
@@ -2284,21 +2283,9 @@ MonoBehaviour:
   m_SelectEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7911607283706320475}
-        m_TargetAssemblyTypeName: ActionButtonController, Assembly-CSharp
-        m_MethodName: OnActionButtonClicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2880851352639025966}
-        m_TargetAssemblyTypeName: CharacterSelectButton, Assembly-CSharp
-        m_MethodName: OnCharacterSelected
+      - m_Target: {fileID: 2283346602738948330}
+        m_TargetAssemblyTypeName: CharacterSelectionAndActionUI, Assembly-CSharp
+        m_MethodName: OnCharacterButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2359,7 +2346,7 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &7911607283706320475
+--- !u!114 &2283346602738948330
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2368,24 +2355,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7975282015421205043}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edb472656e77c7a448c12f3a1a84ed4a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
-  characterTransform: {fileID: 3435689413019917439}
---- !u!114 &2880851352639025966
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7975282015421205043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d88d5262fb28c74fb161c1650755743, type: 3}
+  m_Script: {fileID: 11500000, guid: afbddb92ffbf54a41a246f6f1c912caf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   controllerForThisCharacter: {fileID: 4651477063809589424}
+  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  characterTransform: {fileID: 3435689413019917439}
 --- !u!1 &8021004552038078568
 GameObject:
   m_ObjectHideFlags: 0

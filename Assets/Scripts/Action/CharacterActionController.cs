@@ -38,11 +38,14 @@ public class CharacterActionController : MonoBehaviour
         }
 
         Debug.Log($"播放动作: {action.actionName}，时长: {action.duration}");
-        animator.Play(action.actionName);
+        /*animator.Play(action.actionName);*/
+        animator.Play(action.actionName, 0, 0f);  // 从头播放当前动作
+        animator.Update(0f);                      // 强制刷新动画状态
+
         timer = 0f;
     }
 
-
+  
     public void PlaySequence()
     {
         if (actionSequence.Count == 0)

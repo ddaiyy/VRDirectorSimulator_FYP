@@ -127,7 +127,7 @@ MonoBehaviour:
   actionData:
     actionName: Wave
     animationClip: {fileID: -203655887218126122, guid: 12b8d10afad145c4e95526b0dc541907, type: 3}
-    duration: 2
+    duration: 10
   viewButton: {fileID: 3827334997069709212}
   selectButton: {fileID: 5977789726412554678}
 --- !u!1 &201001284896654262
