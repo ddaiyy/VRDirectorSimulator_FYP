@@ -18,6 +18,7 @@ public class TimelineTrack : MonoBehaviour
             {
                 currentTime = duration;
                 isPlaying = false; // 播放完毕
+                SetTime(0f);
             }
             ApplyClipAtTime(currentTime);
         }
@@ -92,5 +93,11 @@ public class TimelineTrack : MonoBehaviour
                 maxTime = clip.time;
         }
         return maxTime;
+    }
+
+    public void SetTime(float time)
+    {
+        currentTime = time;
+        ApplyClipAtTime(time);
     }
 } 
