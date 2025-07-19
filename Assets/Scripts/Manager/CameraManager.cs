@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,11 +9,13 @@ public class CameraManager : MonoBehaviour
     public RenderTexture previewTexture; // 预览用RT
     public GameObject cameraPrefab; // 摄像机预制体
     public Transform cameraSpawnPoint; // 生成位置
+    public delegate void SelectedCameraChangedHandler(CameraController selectedCamera);
+    public event SelectedCameraChangedHandler OnSelectedCameraChanged;
 
     private List<CameraController> cameraList = new List<CameraController>();
     private CameraController currentSelected;
     public Renderer previewPlaneRenderer;
-
+    
     private void Awake()
     {
         Instance = this;
@@ -100,7 +103,11 @@ public class CameraManager : MonoBehaviour
         // 通知 UI 当前焦距值
         FindObjectOfType<CameraFOVSlider>()?.SyncSlider(controller);
 
-    }
+        // 4. 触发事件，通知UI等订阅者
+        OnSelectedCameraChanged?.Invoke(currentSelected);
+        
+    
+}
 
 
     public void AddNewCamera()

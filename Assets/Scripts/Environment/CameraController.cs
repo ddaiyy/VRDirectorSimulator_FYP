@@ -1,10 +1,13 @@
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class CameraController : MonoBehaviour
 {
     public GameObject worldCanvas; // 按钮Canvas，挂载在摄像机Prefab下
     public Camera mainPlayerCamera;
-
+    public PostProcessVolume postProcessVolume;  // 新增：后期处理Volume引用
+    public DepthOfField dof;  // DepthOfField设置缓存
+    private float focusDistance = 5f; // 默认5
     private Camera cam;
     [HideInInspector]
     public GameObject rigRoot; // 添加：整个 VirtualCameraRig 的引用
@@ -21,6 +24,17 @@ public class CameraController : MonoBehaviour
         cam.enabled = true;
         cam.targetTexture = null;
 
+        if (postProcessVolume != null)
+        {
+            var oldProfile = postProcessVolume.profile;
+            postProcessVolume.profile = Instantiate(oldProfile);
+            Debug.Log($"Old Profile ID: {oldProfile.GetInstanceID()}, New Profile ID: {postProcessVolume.profile.GetInstanceID()}");
+
+            if (!postProcessVolume.profile.TryGetSettings(out dof))
+            {
+                Debug.LogError("PostProcessProfile 中没有找到 DepthOfField 设置！");
+            }
+        }
 
 
     }
@@ -101,5 +115,26 @@ public class CameraController : MonoBehaviour
 
         Debug.Log($"worldCanvas 状态切换为 {!isActive}");
     }
+    public void SetFocusDistance(float value)
+    {
+        if (dof != null)
+        {
+            dof.focusDistance.value = value;
+            dof.enabled.value = true;  // 确保景深开启
+            Debug.Log($"设置景深焦距为 {value}");
+        }
+    }
+    public float GetFocusDistance()
+    {
+        if (dof != null)
+            return dof.focusDistance.value;
+        else
+            return 0f;
+    }
 
+    [ContextMenu("Test Set Focus Distance 3")]
+    private void TestSetFocusDistance()
+    {
+        SetFocusDistance(3f);
+    }
 }
