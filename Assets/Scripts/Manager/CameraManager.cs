@@ -6,9 +6,9 @@ public class CameraManager : MonoBehaviour
 {
     public static CameraManager Instance;
 
-    public RenderTexture previewTexture; // Ô¤ÀÀÓÃRT
-    public GameObject cameraPrefab; // ÉãÏñ»úÔ¤ÖÆÌå
-    public Transform cameraSpawnPoint; // Éú³ÉÎ»ÖÃ
+    public RenderTexture previewTexture; // Ô¤ï¿½ï¿½ï¿½ï¿½RT
+    public GameObject cameraPrefab; // ï¿½ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½
+    public Transform cameraSpawnPoint; // ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
     public delegate void SelectedCameraChangedHandler(CameraController selectedCamera);
     public event SelectedCameraChangedHandler OnSelectedCameraChanged;
 
@@ -20,7 +20,7 @@ public class CameraManager : MonoBehaviour
     {
         Instance = this;
     }
-    // ÔÚCameraManagerÖÐ£¬´òÓ¡previewTextureÐÅÏ¢È·ÈÏ
+    // ï¿½ï¿½CameraManagerï¿½Ð£ï¿½ï¿½ï¿½Ó¡previewTextureï¿½ï¿½Ï¢È·ï¿½ï¿½
     private void Start()
     {
         if (previewTexture != null)
@@ -42,7 +42,7 @@ public class CameraManager : MonoBehaviour
     public void RegisterCamera(CameraController controller)
     {
         cameraList.Add(controller);
-        /*controller.DisablePreview(); // Ä¬ÈÏ¶¼²»Ô¤ÀÀ*/
+        /*controller.DisablePreview(); // Ä¬ï¿½Ï¶ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½*/
     }
 
     public void DeleteCamera(CameraController controller)
@@ -59,7 +59,7 @@ public class CameraManager : MonoBehaviour
 
             cameraList.Remove(controller);
 
-            //  É¾³ýÕû×é
+            //  É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (controller.rigRoot != null)
             {
                 Destroy(controller.rigRoot);
@@ -69,13 +69,13 @@ public class CameraManager : MonoBehaviour
                 Destroy(controller.gameObject);
             }
 
-            // Èç¹ûÉ¾µÄÊÇµ±Ç°Ñ¡ÖÐ£¬²¢ÇÒ»¹ÓÐÆäËûÉãÏñ»ú£¬×Ô¶¯ÇÐ»»µ½ÏÂÒ»¸ö
+            // ï¿½ï¿½ï¿½É¾ï¿½ï¿½ï¿½Çµï¿½Ç°Ñ¡ï¿½Ð£ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½Ð»ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
             if (wasCurrent && cameraList.Count > 0)
             {
-                SelectCamera(cameraList[0]); // ÄãÒ²¿ÉÒÔÑ¡µÚÒ»¸ö£ºcameraList[0]
+                SelectCamera(cameraList[0]); // ï¿½ï¿½Ò²ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½cameraList[0]
             }
 
-            // Èç¹ûÃ»ÉãÏñ»úÁË£¬¾ÍÇå¿ÕÔ¤ÀÀ»­Ãæ
+            // ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (cameraList.Count == 0 && previewPlaneRenderer != null)
             {
                 previewPlaneRenderer.material.mainTexture = null;
@@ -88,22 +88,22 @@ public class CameraManager : MonoBehaviour
 
     public void SelectCamera(CameraController controller)
     {
-        // 1. ¹Ø±ÕÖ®Ç°µÄÉãÏñ»ú
+        // 1. ï¿½Ø±ï¿½Ö®Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (currentSelected != null && currentSelected != controller)
         {
             currentSelected.DisablePreview();
         }
 
-        // 2. ÉèÖÃÐÂµÄÉãÏñ»úÎªµ±Ç°Ñ¡Ôñ
+        // 2. ï¿½ï¿½ï¿½ï¿½ï¿½Âµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Ç°Ñ¡ï¿½ï¿½
         currentSelected = controller;
 
-        // 3. ÈÃËüÆôÓÃäÖÈ¾µ½ RenderTexture
+        // 3. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¾ï¿½ï¿½ RenderTexture
         currentSelected.EnablePreview(previewTexture);
 
-        // Í¨Öª UI µ±Ç°½¹¾àÖµ
+        // Í¨Öª UI ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Öµ
         FindObjectOfType<CameraFOVSlider>()?.SyncSlider(controller);
 
-        // 4. ´¥·¢ÊÂ¼þ£¬Í¨ÖªUIµÈ¶©ÔÄÕß
+        // 4. ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½Í¨ÖªUIï¿½È¶ï¿½ï¿½ï¿½ï¿½ï¿½
         OnSelectedCameraChanged?.Invoke(currentSelected);
         
     
@@ -114,7 +114,8 @@ public class CameraManager : MonoBehaviour
     {
         GameObject camObj = Instantiate(cameraPrefab, cameraSpawnPoint.position, cameraSpawnPoint.rotation);
         CameraController controller = camObj.GetComponentInChildren<CameraController>();
-
+        
+        TimelineManager.Instance.RegisterTrack(camObj.GetComponentInChildren<TimelineTrack>());
 
         if (controller == null)
         {
@@ -122,11 +123,11 @@ public class CameraManager : MonoBehaviour
             return;
         }
 
-        //  ¸æËß Controller ËüÊôÓÚÄÄ¸ö Rig£¨ÕûÌå£©
+        //  ï¿½ï¿½ï¿½ï¿½ Controller ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ Rigï¿½ï¿½ï¿½ï¿½ï¿½å£©
         controller.rigRoot = camObj;
 
         RegisterCamera(controller);
-        SelectCamera(controller); // Ìí¼ÓÍê×Ô¶¯Ñ¡ÖÐ£¬Ô¤ÀÀ¸ÃÉãÏñ»ú
+        SelectCamera(controller); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½Ñ¡ï¿½Ð£ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     }
 
     public CameraController GetCurrentSelectedCamera()
