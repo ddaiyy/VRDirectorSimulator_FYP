@@ -174,6 +174,7 @@ GameObject:
   - component: {fileID: 463992683607360392}
   - component: {fileID: 3440744345700622126}
   - component: {fileID: 3308241055785528768}
+  - component: {fileID: 8616481323134706416}
   m_Layer: 0
   m_Name: Michelle
   m_TagString: Untagged
@@ -209,10 +210,10 @@ Animator:
   m_GameObject: {fileID: 1384412809518333611}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: bbae0d27066be0642bfb04f9712e12dd, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 757b324ee1844c042841d99f91c621dd, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -443,6 +444,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalPrefab: {fileID: 0}
+--- !u!114 &8616481323134706416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1384412809518333611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3df787921afa77f4a91b15e05b86ee9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 8561977624628038494}
+  actionSequence: []
 --- !u!1 &1386002455302445983
 GameObject:
   m_ObjectHideFlags: 0
@@ -681,6 +696,7 @@ GameObject:
   - component: {fileID: 6512577001694143605}
   - component: {fileID: 273414411915666576}
   - component: {fileID: 6278983447265386735}
+  - component: {fileID: 7120027782464003340}
   m_Layer: 0
   m_Name: ActionSelectButton
   m_TagString: Untagged
@@ -837,6 +853,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 7120027782464003340}
+        m_TargetAssemblyTypeName: CharacterSelectButton, Assembly-CSharp
+        m_MethodName: OnCharacterSelected
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_SelectExited:
     m_PersistentCalls:
       m_Calls: []
@@ -902,6 +930,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
   characterTransform: {fileID: 7302554327282129156}
+--- !u!114 &7120027782464003340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2308924595263413567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d88d5262fb28c74fb161c1650755743, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controllerForThisCharacter: {fileID: 8616481323134706416}
 --- !u!1 &2320388823733610770
 GameObject:
   m_ObjectHideFlags: 0

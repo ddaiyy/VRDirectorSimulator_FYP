@@ -941,6 +941,7 @@ GameObject:
   - component: {fileID: 5086209837923380847}
   - component: {fileID: 3066166712062235121}
   - component: {fileID: 6944884032319281902}
+  - component: {fileID: 3607546275094737699}
   m_Layer: 0
   m_Name: ActionSelectButton
   m_TagString: Untagged
@@ -1097,6 +1098,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 3607546275094737699}
+        m_TargetAssemblyTypeName: CharacterSelectButton, Assembly-CSharp
+        m_MethodName: OnCharacterSelected
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_SelectExited:
     m_PersistentCalls:
       m_Calls: []
@@ -1162,6 +1175,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
   characterTransform: {fileID: 4987226776554295599}
+--- !u!114 &3607546275094737699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3348807323088339144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d88d5262fb28c74fb161c1650755743, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controllerForThisCharacter: {fileID: 179434825456944928}
 --- !u!1 &3405123446078864614
 GameObject:
   m_ObjectHideFlags: 0
@@ -1657,6 +1683,7 @@ GameObject:
   - component: {fileID: 5142511788431141528}
   - component: {fileID: 3608794333933376782}
   - component: {fileID: 4361512561997283123}
+  - component: {fileID: 179434825456944928}
   m_Layer: 0
   m_Name: Peasant
   m_TagString: Untagged
@@ -1692,10 +1719,10 @@ Animator:
   m_GameObject: {fileID: 5372288485508970322}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: aa8b226dc9be4b944b2e036476aaecbc, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 757b324ee1844c042841d99f91c621dd, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -1926,6 +1953,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalPrefab: {fileID: 0}
+--- !u!114 &179434825456944928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5372288485508970322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3df787921afa77f4a91b15e05b86ee9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 6196872169463861229}
+  actionSequence: []
 --- !u!1 &5621541306978918869
 GameObject:
   m_ObjectHideFlags: 0

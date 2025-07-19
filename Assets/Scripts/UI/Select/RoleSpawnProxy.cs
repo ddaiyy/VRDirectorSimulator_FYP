@@ -36,6 +36,14 @@ public class RoleSpawnProxy : MonoBehaviour
             rb = newCharacter.AddComponent<Rigidbody>();
         rb.isKinematic = false;
 
+        // **重新绑定 Animator，刷新姿态**
+        Animator animator = newCharacter.GetComponent<Animator>();
+        if (animator != null)
+        {
+            animator.Rebind();
+            animator.Update(0f);
+        }
+
         // 如果在 VR 中就立即被抓取
         if (interactor != null)
         {

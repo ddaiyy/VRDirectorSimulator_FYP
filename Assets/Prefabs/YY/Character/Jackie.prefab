@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 8650771238628485197}
   - component: {fileID: 6471471534409464553}
   - component: {fileID: 182161904046019320}
+  - component: {fileID: 7889750126703624397}
   m_Layer: 0
   m_Name: ActionSelectButton
   m_TagString: Untagged
@@ -189,7 +190,31 @@ MonoBehaviour:
       m_Calls: []
   m_SelectEntered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 182161904046019320}
+        m_TargetAssemblyTypeName: ActionButtonController, Assembly-CSharp
+        m_MethodName: OnActionButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7889750126703624397}
+        m_TargetAssemblyTypeName: CharacterSelectButton, Assembly-CSharp
+        m_MethodName: OnCharacterSelected
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_SelectExited:
     m_PersistentCalls:
       m_Calls: []
@@ -255,6 +280,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
   characterTransform: {fileID: 2506800998407036457}
+--- !u!114 &7889750126703624397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203988437610372902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d88d5262fb28c74fb161c1650755743, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controllerForThisCharacter: {fileID: 5083038581258631808}
 --- !u!1 &567582108340241262
 GameObject:
   m_ObjectHideFlags: 0
@@ -2166,6 +2204,7 @@ GameObject:
   - component: {fileID: 6664416708519458302}
   - component: {fileID: 1922697069308495520}
   - component: {fileID: 615474646306409220}
+  - component: {fileID: 5083038581258631808}
   m_Layer: 0
   m_Name: Jackie
   m_TagString: Untagged
@@ -2201,10 +2240,10 @@ Animator:
   m_GameObject: {fileID: 8025752508931190599}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: d67417adc97018741862f2bfd9b6f961, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 757b324ee1844c042841d99f91c621dd, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -2435,6 +2474,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalPrefab: {fileID: 0}
+--- !u!114 &5083038581258631808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8025752508931190599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3df787921afa77f4a91b15e05b86ee9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 2213968351009963515}
+  actionSequence: []
 --- !u!1 &8111664243806537893
 GameObject:
   m_ObjectHideFlags: 0
