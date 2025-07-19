@@ -24,14 +24,18 @@ public class TimelineManager : MonoBehaviour
     {
         if (!tracks.Contains(track) && track != masterTrack){
             tracks.Add(track);
-            Debug.Log("添加");
+            //Debug.Log("添加");
         }
 }
 
     public void UnregisterTrack(TimelineTrack track)
     {
         if (tracks.Contains(track))
+        {
             tracks.Remove(track);
+            //Debug.Log("删除");
+        }
+            
     }
 
     public List<TimelineTrack> GetAllTracks()

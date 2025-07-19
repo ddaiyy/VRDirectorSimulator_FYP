@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraManager : MonoBehaviour
@@ -47,6 +48,7 @@ public class CameraManager : MonoBehaviour
 
     public void DeleteCamera(CameraController controller)
     {
+        TimelineManager.Instance.UnregisterTrack(controller.GameObject().GetComponentInChildren<TimelineTrack>());
         if (cameraList.Contains(controller))
         {
             bool wasCurrent = (currentSelected == controller);
@@ -56,7 +58,7 @@ public class CameraManager : MonoBehaviour
                 currentSelected.DisablePreview();
                 currentSelected = null;
             }
-
+            
             cameraList.Remove(controller);
 
             //  ɾ������
