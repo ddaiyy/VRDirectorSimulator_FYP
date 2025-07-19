@@ -66,8 +66,8 @@ public class CameraController : MonoBehaviour
             cam.enabled = true;
         }
 
-        if (worldCanvas != null)
-            worldCanvas.SetActive(false);
+        /*if (worldCanvas != null)
+            worldCanvas.SetActive(false);*/
     }
 
 
@@ -76,8 +76,8 @@ public class CameraController : MonoBehaviour
         cam.targetTexture = null;
         cam.enabled = false;
 
-        if (worldCanvas != null)
-            worldCanvas.SetActive(false);
+        /*if (worldCanvas != null)
+            worldCanvas.SetActive(false);*/
     }
 
 
@@ -101,7 +101,7 @@ public class CameraController : MonoBehaviour
         return cam.fieldOfView;
     }
 
-    [ContextMenu("Toggle WorldCanvas")]
+    /*[ContextMenu("Toggle WorldCanvas")]
     public void ToggleWorldCanvas()
     {
         if (worldCanvas == null)
@@ -114,7 +114,7 @@ public class CameraController : MonoBehaviour
         worldCanvas.SetActive(!isActive);
 
         Debug.Log($"worldCanvas ״̬�л�Ϊ {!isActive}");
-    }
+    }*/
     public void SetFocusDistance(float value)
     {
         if (dof != null)
