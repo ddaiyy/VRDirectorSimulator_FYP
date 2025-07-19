@@ -3377,6 +3377,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2851488713231759452, guid: 764b60b326f323a40bfc2e61e20f7e04, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5302434421615887470, guid: 764b60b326f323a40bfc2e61e20f7e04, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5302434421615887470, guid: 764b60b326f323a40bfc2e61e20f7e04, type: 3}
       propertyPath: mainPlayerCamera
       value: 

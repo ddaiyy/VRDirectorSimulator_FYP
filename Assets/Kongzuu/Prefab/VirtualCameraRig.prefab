@@ -382,6 +382,7 @@ GameObject:
   - component: {fileID: 3722343043453736191}
   - component: {fileID: 2901269045789950430}
   - component: {fileID: 4520443516751514733}
+  - component: {fileID: 6524368165118255730}
   m_Layer: 0
   m_Name: Button
   m_TagString: Untagged
@@ -589,6 +590,19 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6524368165118255730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621462378361474357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3dbe1cb18b88c942bf1069bf0a9b0f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraController: {fileID: 5302434421615887470}
 --- !u!1 &2851488713231759452
 GameObject:
   m_ObjectHideFlags: 0
@@ -607,7 +621,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2798213696247970635
 RectTransform:
   m_ObjectHideFlags: 0
@@ -947,6 +961,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCanvas: {fileID: 0}
   mainPlayerCamera: {fileID: 0}
+  rigRoot: {fileID: 0}
 --- !u!1 &4707522017402363255
 GameObject:
   m_ObjectHideFlags: 0
@@ -1054,6 +1069,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCanvas: {fileID: 2851488713231759452}
   mainPlayerCamera: {fileID: 0}
+  rigRoot: {fileID: 0}
 --- !u!1 &5643172674677349906
 GameObject:
   m_ObjectHideFlags: 0
