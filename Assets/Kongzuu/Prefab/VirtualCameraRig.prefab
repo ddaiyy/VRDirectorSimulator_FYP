@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2565430697071930721}
   - component: {fileID: 718996790521648446}
   - component: {fileID: 8625817245553083751}
+  - component: {fileID: 6901752715865164888}
   m_Layer: 0
   m_Name: VirtualCameraRig
   m_TagString: Untagged
@@ -235,6 +236,22 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
+--- !u!114 &6901752715865164888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 501570407239413944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74f13c23de0b88b46ad1372775141cc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraTransform: {fileID: 271552667093920378}
+  recordInterval: 0.1
+  trajectoryDuration: 5
+  fadeDuration: 1
 --- !u!1 &594180995413794149
 GameObject:
   m_ObjectHideFlags: 0
@@ -1024,6 +1041,7 @@ MonoBehaviour:
   worldCanvas: {fileID: 2851488713231759452}
   mainPlayerCamera: {fileID: 0}
   postProcessVolume: {fileID: 6256381692250732556}
+  dof: {fileID: 0}
   rigRoot: {fileID: 0}
 --- !u!114 &5267442434373400334
 MonoBehaviour:
