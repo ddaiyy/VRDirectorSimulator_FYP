@@ -16,7 +16,7 @@ public class TimelineClip
     public float fov = 60f;
     
     //缩放
-    public float scale = 1f;
+    public Vector3 scale;
     
     //是否激活
     public bool isActive = true;
