@@ -137,5 +137,9 @@ public class CameraManager : MonoBehaviour
         return currentSelected;
     }
 
+    public List<CameraController> GetAllCameras()
+    {
+        return cameraList;
+    }
 
 }

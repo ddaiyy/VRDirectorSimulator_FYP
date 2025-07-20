@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
+
 
 public class TimelineTrack : MonoBehaviour
 {
@@ -9,6 +11,23 @@ public class TimelineTrack : MonoBehaviour
     public bool isPlaying = false;
     public float duration = 5f; // 轨道总时长，可根据clips自动计算
     public bool isControlledByMaster = false;
+    public PostProcessVolume volume;  // Inspector 里拖入
+    private DepthOfField dof;
+
+    void Start()
+    {
+        if (volume != null)
+        {
+            if (!volume.profile.TryGetSettings(out dof))
+            {
+                Debug.LogWarning("PostProcessVolume中没有DepthOfField");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("未设置PostProcessVolume引用！");
+        }
+    }
 
     void Update()
     {
@@ -38,11 +57,37 @@ public class TimelineTrack : MonoBehaviour
         clip.position = transform.position;
         clip.rotation = transform.rotation;
         clip.scale = transform.localScale;
+
         Camera cam = GetComponent<Camera>();
         if (cam != null)
+        {
             clip.fov = cam.fieldOfView;
+
+            if (dof != null)
+            {
+                clip.focusDistance = dof.focusDistance.value;
+            }
+            else
+            {
+                clip.focusDistance = 5f;
+            }
+        }
         else
+        {
             clip.fov = 60f;
+            clip.focusDistance = 5f;
+        }
+
+        // 记录当前激活的摄像机ID（假设用 InstanceID）
+        if (CameraManager.Instance != null && CameraManager.Instance.GetCurrentSelectedCamera() != null)
+        {
+            clip.activeCameraID = CameraManager.Instance.GetCurrentSelectedCamera().GetInstanceID();
+        }
+        else
+        {
+            clip.activeCameraID = -1; // 没有选中摄像机
+        }
+
         clips.Add(clip);
     }
     
@@ -81,7 +126,14 @@ public class TimelineTrack : MonoBehaviour
             transform.rotation = last.rotation;
             transform.localScale = last.scale;
             if (cam != null)
+            {
                 cam.fieldOfView = last.fov;
+
+                if (dof != null)
+                {
+                    dof.focusDistance.value = last.focusDistance;
+                }
+            }
             return;
         }
 
@@ -96,7 +148,14 @@ public class TimelineTrack : MonoBehaviour
                 break;
             }
         }
-        if (prev == null || next == null) return;
+
+        /*if (prev == null || next == null) return;*/
+        if (prev == null || next == null)
+        {
+            // 处理边界，直接取最后一个关键帧
+            prev = clips[clips.Count - 1];
+            next = prev;
+        }
 
         float t = (time - prev.time) / (next.time - prev.time);
 
@@ -106,7 +165,34 @@ public class TimelineTrack : MonoBehaviour
         
         //TODO: 摄像机
         if (cam != null)
+        {
             cam.fieldOfView = Mathf.Lerp(prev.fov, next.fov, t);
+
+            if (dof != null)
+            {
+                dof.focusDistance.value = Mathf.Lerp(prev.focusDistance, next.focusDistance, t);
+            }
+        }
+
+        // 处理摄像机激活状态：优先使用 prev 关键帧的激活摄像机
+        int activeID = prev.activeCameraID;
+
+        // 找到对应的 CameraController
+        CameraController toActivate = null;
+        foreach (var camCtrl in CameraManager.Instance.GetAllCameras()) // 需要你CameraManager增加GetAllCameras接口返回List<CameraController>
+        {
+            if (camCtrl.GetInstanceID() == activeID)
+            {
+                toActivate = camCtrl;
+                break;
+            }
+        }
+
+        // 激活选中的摄像机，关闭其他摄像机预览
+        if (toActivate != null)
+        {
+            CameraManager.Instance.SelectCamera(toActivate);
+        }
     }
     
     public float GetDuration()
