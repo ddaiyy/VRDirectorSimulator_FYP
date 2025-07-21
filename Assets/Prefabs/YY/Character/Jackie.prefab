@@ -2177,10 +2177,9 @@ GameObject:
   - component: {fileID: 2213968351009963515}
   - component: {fileID: 6652548666921107569}
   - component: {fileID: 6664416708519458302}
-  - component: {fileID: 1922697069308495520}
-  - component: {fileID: 615474646306409220}
   - component: {fileID: 5083038581258631808}
   - component: {fileID: 3609353130149329393}
+  - component: {fileID: 4344185315501832144}
   m_Layer: 0
   m_Name: Jackie
   m_TagString: Untagged
@@ -2273,11 +2272,41 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &1922697069308495520
+--- !u!114 &5083038581258631808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8025752508931190599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3df787921afa77f4a91b15e05b86ee9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 2213968351009963515}
+  actionSequence: []
+  isPlacedCharacter: 1
+--- !u!114 &3609353130149329393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8025752508931190599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afbddb92ffbf54a41a246f6f1c912caf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controllerForThisCharacter: {fileID: 5083038581258631808}
+  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  characterTransform: {fileID: 2506800998407036457}
+--- !u!114 &4344185315501832144
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2328,10 +2357,10 @@ MonoBehaviour:
   m_SelectEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 615474646306409220}
-        m_TargetAssemblyTypeName: RoleSpawnProxy, Assembly-CSharp
-        m_MethodName: OnGrab
-        m_Mode: 0
+      - m_Target: {fileID: 3609353130149329393}
+        m_TargetAssemblyTypeName: CharacterSelectionAndActionUI, Assembly-CSharp
+        m_MethodName: OnCharacterButtonClicked
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2357,19 +2386,7 @@ MonoBehaviour:
       m_Calls: []
   m_Activated:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3609353130149329393}
-        m_TargetAssemblyTypeName: CharacterSelectionAndActionUI, Assembly-CSharp
-        m_MethodName: OnCharacterButtonClicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_Deactivated:
     m_PersistentCalls:
       m_Calls: []
@@ -2449,49 +2466,6 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
---- !u!114 &615474646306409220
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8025752508931190599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e06540ae13bd01489db6cda9b295434, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  originalPrefab: {fileID: 0}
---- !u!114 &5083038581258631808
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8025752508931190599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3df787921afa77f4a91b15e05b86ee9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 2213968351009963515}
-  actionSequence: []
-  isPlacedCharacter: 1
---- !u!114 &3609353130149329393
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8025752508931190599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afbddb92ffbf54a41a246f6f1c912caf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controllerForThisCharacter: {fileID: 5083038581258631808}
-  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
-  characterTransform: {fileID: 2506800998407036457}
 --- !u!1 &8111664243806537893
 GameObject:
   m_ObjectHideFlags: 0

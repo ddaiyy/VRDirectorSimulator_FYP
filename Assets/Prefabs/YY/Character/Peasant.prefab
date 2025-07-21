@@ -1657,7 +1657,6 @@ GameObject:
   - component: {fileID: 3397385677086195751}
   - component: {fileID: 5142511788431141528}
   - component: {fileID: 3608794333933376782}
-  - component: {fileID: 4361512561997283123}
   - component: {fileID: 179434825456944928}
   - component: {fileID: 6611395900439971830}
   m_Layer: 0
@@ -1752,9 +1751,9 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &3608794333933376782
 MonoBehaviour:
@@ -1807,10 +1806,10 @@ MonoBehaviour:
   m_SelectEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4361512561997283123}
-        m_TargetAssemblyTypeName: RoleSpawnProxy, Assembly-CSharp
-        m_MethodName: OnGrab
-        m_Mode: 0
+      - m_Target: {fileID: 6611395900439971830}
+        m_TargetAssemblyTypeName: CharacterSelectionAndActionUI, Assembly-CSharp
+        m_MethodName: OnCharacterButtonClicked
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1928,19 +1927,6 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
---- !u!114 &4361512561997283123
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5372288485508970322}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e06540ae13bd01489db6cda9b295434, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  originalPrefab: {fileID: 0}
 --- !u!114 &179434825456944928
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1099,7 +1099,6 @@ GameObject:
   - component: {fileID: 3767276941617643577}
   - component: {fileID: 68407861621129087}
   - component: {fileID: 507248946596652778}
-  - component: {fileID: 2502522096473342777}
   - component: {fileID: 4651477063809589424}
   - component: {fileID: 2848972011937757050}
   m_Layer: 0
@@ -1194,9 +1193,9 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &507248946596652778
 MonoBehaviour:
@@ -1249,10 +1248,10 @@ MonoBehaviour:
   m_SelectEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2502522096473342777}
-        m_TargetAssemblyTypeName: RoleSpawnProxy, Assembly-CSharp
-        m_MethodName: OnGrab
-        m_Mode: 0
+      - m_Target: {fileID: 2848972011937757050}
+        m_TargetAssemblyTypeName: CharacterSelectionAndActionUI, Assembly-CSharp
+        m_MethodName: OnCharacterButtonClicked
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1278,19 +1277,7 @@ MonoBehaviour:
       m_Calls: []
   m_Activated:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2848972011937757050}
-        m_TargetAssemblyTypeName: CharacterSelectionAndActionUI, Assembly-CSharp
-        m_MethodName: OnCharacterButtonClicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_Deactivated:
     m_PersistentCalls:
       m_Calls: []
@@ -1370,19 +1357,6 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
---- !u!114 &2502522096473342777
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4199056328295280206}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e06540ae13bd01489db6cda9b295434, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  originalPrefab: {fileID: 0}
 --- !u!114 &4651477063809589424
 MonoBehaviour:
   m_ObjectHideFlags: 0
