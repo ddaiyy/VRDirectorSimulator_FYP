@@ -1397,6 +1397,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 7460388038537059013}
   actionSequence: []
+  isPlacedCharacter: 1
 --- !u!114 &2848972011937757050
 MonoBehaviour:
   m_ObjectHideFlags: 0

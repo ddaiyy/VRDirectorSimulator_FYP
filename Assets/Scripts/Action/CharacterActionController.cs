@@ -1,5 +1,6 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 public class CharacterActionController : MonoBehaviour
 {
@@ -9,28 +10,18 @@ public class CharacterActionController : MonoBehaviour
     private int currentIndex = 0;
     private float timer = 0f;
     private bool isPlaying = false;
+    // æ·»åŠ ä¸€ä¸ª public åªè¯»å±æ€§
+    public bool IsPlaying => isPlaying;
+
 
     private bool isPreviewMode = false;
     private float previewTimer = 0f;
     private float previewMaxDuration = 5f;
 
+    public bool isPlacedCharacter = false;
+
     private void Update()
     {
-        /*if (!isPlaying || actionSequence.Count == 0 || isPreviewMode) return;
-
-        timer += Time.deltaTime;
-        if (timer >= actionSequence[currentIndex].duration)
-        {
-            currentIndex++;
-            if (currentIndex >= actionSequence.Count)
-            {
-                isPlaying = false;
-                return;
-            }
-
-            PlayAction(actionSequence[currentIndex]);
-        }*/
-
         if (isPreviewMode)
         {
             previewTimer += Time.deltaTime;
@@ -41,16 +32,19 @@ public class CharacterActionController : MonoBehaviour
             return;
         }
 
-        if (!isPlaying || actionSequence.Count == 0) return;
-
+        if (!isPlaying || actionSequence.Count == 0 || currentIndex >= actionSequence.Count) return;
+        Debug.Log($"æ’­æ”¾ç¬¬ {currentIndex} ä¸ªåŠ¨ä½œ {actionSequence[currentIndex].actionName}ï¼Œå·²è®¡æ—¶ {timer} / {actionSequence[currentIndex].duration}");
         timer += Time.deltaTime;
+
         if (timer >= actionSequence[currentIndex].duration)
         {
             currentIndex++;
             if (currentIndex >= actionSequence.Count)
             {
                 isPlaying = false;
-                animator.Play("T-Pose", 0, 0f);
+                /*animator.Play("T-Pose", 0, 0f);*/
+                animator.CrossFade("T-Pose", 0f, 0, 0f);
+                Debug.Log("åŠ¨ä½œåºåˆ—æ’­æ”¾å®Œæ¯•ï¼Œåˆ‡å› T-Pose");
                 return;
             }
 
@@ -63,16 +57,19 @@ public class CharacterActionController : MonoBehaviour
     {
         if (animator == null)
         {
-            Debug.LogError("Animator Î´¸³Öµ£¡");
+            Debug.LogError("Animator æœªèµ‹å€¼ï¼");
             return;
         }
 
         isPreviewMode = preview;
         if (preview) previewTimer = 0f;
-        Debug.Log($"²¥·Å¶¯×÷: {action.actionName}£¬Ê±³¤: {action.duration}, Ô¤ÀÀÄ£Ê½: { preview}");
+        Debug.Log($"æ’­æ”¾åŠ¨ä½œ: {action.actionName}ï¼Œæ—¶é•¿: {action.duration}, é¢„è§ˆæ¨¡å¼: { preview}");
         /*animator.Play(action.actionName);*/
-        animator.Play(action.actionName, 0, 0f);  // ´ÓÍ·²¥·Åµ±Ç°¶¯×÷
-        animator.Update(0f);                      // Ç¿ÖÆË¢ĞÂ¶¯»­×´Ì¬
+        /* animator.Play(action.actionName, 0, 0f);  // ä»å¤´æ’­æ”¾å½“å‰åŠ¨ä½œ*/
+        // CrossFadeåˆ°åŠ¨ä½œï¼Œè¿‡æ¸¡æ—¶é—´è®¾ä¸º0ï¼Œç¡®ä¿ä»å¤´å¼€å§‹
+        animator.CrossFade(action.actionName, 0f, 0, 0f);
+
+        animator.Update(0f);                      // å¼ºåˆ¶åˆ·æ–°åŠ¨ç”»çŠ¶æ€
 
         timer = 0f;
     }
@@ -80,10 +77,10 @@ public class CharacterActionController : MonoBehaviour
     public void StopPreview()
     {
         /*isPreviewMode = false;
-        animator.Play("T-Pose", 0, 0f);  // ÇĞ»ØIdle¶¯»­£¨¼ÇµÃÓĞIdle×´Ì¬£©*/
+        animator.Play("T-Pose", 0, 0f);  // åˆ‡å›IdleåŠ¨ç”»ï¼ˆè®°å¾—æœ‰IdleçŠ¶æ€ï¼‰*/
         if (isPreviewMode)
         {
-            Debug.Log("Ô¤ÀÀ½áÊø£¬ÇĞ»»»Ø Idle ¶¯×÷");
+            Debug.Log("é¢„è§ˆç»“æŸï¼Œåˆ‡æ¢å› Idle åŠ¨ä½œ");
             isPreviewMode = false;
             previewTimer = 0f;
             animator.Play("T-Pose", 0, 0f);
@@ -95,15 +92,18 @@ public class CharacterActionController : MonoBehaviour
     {
         if (actionSequence.Count == 0)
         {
-            Debug.LogWarning("¶¯×÷ĞòÁĞÎª¿Õ£¬ÎŞ·¨²¥·Å£¡");
+            Debug.LogWarning("åŠ¨ä½œåºåˆ—ä¸ºç©ºï¼Œæ— æ³•æ’­æ”¾ï¼");
             return;
         }
 
         currentIndex = 0;
+        timer = 0f;
         isPlaying = true;
         isPreviewMode = false;
-        Debug.Log($"¿ªÊ¼²¥·Å¶¯×÷ĞòÁĞ£¬¹² {actionSequence.Count} ¸ö¶¯×÷");
-        PlayAction(actionSequence[currentIndex]);
+        Debug.Log($"å¼€å§‹æ’­æ”¾åŠ¨ä½œåºåˆ—ï¼Œå…± {actionSequence.Count} ä¸ªåŠ¨ä½œ");
+       /* PlayAction(actionSequence[currentIndex]);*/
+        // ç«‹å³CrossFadeæ’­æ”¾ç¬¬ä¸€ä¸ªåŠ¨ä½œ
+        animator.CrossFade(actionSequence[currentIndex].actionName, 0f, 0, 0f);
     }
 
     public void PauseSequence()
@@ -126,11 +126,24 @@ public class CharacterActionController : MonoBehaviour
     public void AddAction(CharacterAction action)
     {
         actionSequence.Add(action);
-        Debug.Log($"Ìí¼ÓÁË¶¯×÷: {action.actionName}£¬µ±Ç°ĞòÁĞ³¤¶È: {actionSequence.Count}");
+        Debug.Log($"æ·»åŠ äº†åŠ¨ä½œ: {action.actionName}ï¼Œå½“å‰åºåˆ—é•¿åº¦: {actionSequence.Count}");
     }
 
     public void ClearActions()
     {
         actionSequence.Clear();
+        currentIndex = 0;        // âœ… é‡ç½®å½“å‰ç´¢å¼•
+        timer = 0f;              // âœ… å¯é€‰ï¼šé˜²æ­¢æ®‹ç•™æ—¶é—´è§¦å‘
+        isPlaying = false;       // âœ… å¯é€‰ï¼šç¡®ä¿ä¸å†å°è¯•æ’­æ”¾
+        isPreviewMode = false;
     }
+
+    IEnumerator PlayActionWithDelay(CharacterAction action)
+    {
+        animator.Play(action.actionName, 0, 0f);
+        yield return null;  // ç­‰ä¸€å¸§
+        animator.Update(0f);
+        timer = 0f;
+    }
+
 }

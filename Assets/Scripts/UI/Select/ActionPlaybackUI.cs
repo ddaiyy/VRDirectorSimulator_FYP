@@ -17,7 +17,7 @@ public class ActionPlaybackUI : MonoBehaviour
         clearButton.onClick.AddListener(() => Controller?.ClearActions());
     }
 
-    void OnPlayPauseResumeClicked()
+    /*void OnPlayPauseResumeClicked()
     {
         if (Controller == null) return;
 
@@ -41,7 +41,35 @@ public class ActionPlaybackUI : MonoBehaviour
                 Debug.Log("继续播放");
                 break;
         }
+    }*/
+
+    void OnPlayPauseResumeClicked()
+    {
+        if (Controller == null) return;
+
+        if (!Controller.IsPlaying)
+        {
+            Controller.PlaySequence();
+            currentState = PlaybackState.Playing;
+            Debug.Log("开始播放");
+        }
+        else
+        {
+            if (currentState == PlaybackState.Playing)
+            {
+                Controller.PauseSequence();
+                currentState = PlaybackState.Paused;
+                Debug.Log("已暂停");
+            }
+            else if (currentState == PlaybackState.Paused)
+            {
+                Controller.ResumeSequence();
+                currentState = PlaybackState.Playing;
+                Debug.Log("继续播放");
+            }
+        }
     }
+
 
     // 👇 添加右键测试：播放/暂停/恢复
     [ContextMenu("测试播放")]
