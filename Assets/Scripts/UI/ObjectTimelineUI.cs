@@ -18,7 +18,12 @@ public class ObjectTimelineUI : MonoBehaviour
 
     //public Text currentTimeText;
     public TextMeshProUGUI currentTimeText;
+
     public Transform keyframeListContent;
+
+    //public Transform propertyTrackListContent; // Vertical Layout Group
+    public GameObject propertyTrackPrefab; // 每个属性轨道的Prefab
+
     public GameObject keyframeItemPrefab;
     public Button addKeyframeButton;
     private TimelineTrack currentTrack;
@@ -43,7 +48,7 @@ public class ObjectTimelineUI : MonoBehaviour
         currentTrack = track;
         gameObject.SetActive(true);
 
-        titleText.text = "时间轴 - " + track.gameObject.name;
+        titleText.text = "Timeline- " + track.gameObject.name;
         timeSlider.minValue = 0;
         timeSlider.maxValue = 20f;
         timeSlider.value = track.currentTime;
@@ -72,13 +77,13 @@ public class ObjectTimelineUI : MonoBehaviour
 
     void RefreshTime()
     {
-        currentTimeText.text = $"当前时间: {currentTrack.currentTime:F2} / {currentTrack.GetDuration():F2}";
+        currentTimeText.text = $"Time: {currentTrack.currentTime:F2} / {currentTrack.GetDuration():F2}";
         timeSlider.value = currentTrack.currentTime;
     }
 
     void RefreshKeyframeList()
     {
-        // 清空旧的
+        /*// 清空旧的
         foreach (Transform child in timelineContent)
             Destroy(child.gameObject);
 
@@ -106,6 +111,53 @@ public class ObjectTimelineUI : MonoBehaviour
                     currentTrack.SetTime(t);
                     RefreshTime();
                 });
+            }
+        }*/
+
+        // 清空旧的
+        foreach (Transform child in keyframeListContent)
+            Destroy(child.gameObject);
+
+        // 你要支持的属性
+        string[] properties = { "Position", "Rotation", "Scale" };
+// 如果是摄像机，加上FOV
+        if (currentTrack.GetComponent<Camera>() != null)
+        {
+            properties = new string[] { "Position", "Rotation", "Scale", "FOV" };
+        }
+
+        foreach (string prop in properties)
+        {
+            GameObject trackRow = Instantiate(propertyTrackPrefab, keyframeListContent);
+            trackRow.GetComponentInChildren<TextMeshProUGUI>().text = prop;
+
+            RectTransform trackContent = trackRow.transform.Find("Track Content").GetComponent<RectTransform>();
+
+            // 这里直接遍历所有关键帧
+            foreach (var clip in currentTrack.clips)
+            {
+                GameObject point = Instantiate(keyframeItemPrefab, trackContent);
+                float normalizedTime = Mathf.Clamp01(clip.time / maxTime);
+                float x = normalizedTime * timelineWidth;
+                var rect = point.GetComponent<RectTransform>();
+                rect.anchoredPosition = new Vector2(x, 0);
+
+                // 可选：显示时间
+                var text = point.GetComponentInChildren<TextMeshProUGUI>();
+                if (text != null)
+                    text.text = $"{clip.time:F2}";
+
+                // 可选：点击跳转
+                var btn = point.GetComponent<Button>();
+                if (btn != null)
+                {
+                    float t = clip.time;
+                    btn.onClick.AddListener(() =>
+                    {
+                        currentTrack.SetTime(t);
+                        RefreshTime();
+                    });
+                }
             }
         }
     }
@@ -146,6 +198,7 @@ public class ObjectTimelineUI : MonoBehaviour
         clip.position = track.transform.position;
         clip.rotation = track.transform.rotation;
         clip.scale = track.transform.localScale;
+
         Camera cam = track.GetComponent<Camera>();
         if (cam != null)
             clip.fov = cam.fieldOfView;
