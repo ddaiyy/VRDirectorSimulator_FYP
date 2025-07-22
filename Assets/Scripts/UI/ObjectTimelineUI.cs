@@ -120,7 +120,7 @@ public class ObjectTimelineUI : MonoBehaviour
 
         // 你要支持的属性
         string[] properties = { "Position", "Rotation", "Scale" };
-// 如果是摄像机，加上FOV
+        // 如果是摄像机，加上FOV
         if (currentTrack.GetComponent<Camera>() != null)
         {
             properties = new string[] { "Position", "Rotation", "Scale", "FOV" };
@@ -192,21 +192,6 @@ public class ObjectTimelineUI : MonoBehaviour
 
     void AddKeyframeAtTime(TimelineTrack track, float time)
     {
-        // 创建新关键帧
-        TimelineClip clip = new TimelineClip();
-        clip.time = time;
-        clip.position = track.transform.position;
-        clip.rotation = track.transform.rotation;
-        clip.scale = track.transform.localScale;
-
-        Camera cam = track.GetComponent<Camera>();
-        if (cam != null)
-            clip.fov = cam.fieldOfView;
-        else
-            clip.fov = 60f;
-        track.clips.Add(clip);
-
-        // 关键帧排序
-        track.clips = track.clips.OrderBy(c => c.time).ToList();
+        track.AddClip(time);
     }
 }

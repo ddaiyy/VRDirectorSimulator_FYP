@@ -24,6 +24,7 @@ public class TimelineManager : MonoBehaviour
     {
         if (!tracks.Contains(track) && track != masterTrack){
             tracks.Add(track);
+            MasterTimelineUI.Instance?.RefreshTimelineUI();
             //Debug.Log("添加");
         }
 }
@@ -33,6 +34,7 @@ public class TimelineManager : MonoBehaviour
         if (tracks.Contains(track))
         {
             tracks.Remove(track);
+            MasterTimelineUI.Instance?.RefreshTimelineUI();
             //Debug.Log("删除");
         }
             

@@ -7,7 +7,7 @@ public class TimelineTrack : MonoBehaviour
     public List<TimelineClip> clips = new List<TimelineClip>();
     public float currentTime = 0f;
     public bool isPlaying = false;
-    public float duration = 5f; // 轨道总时长，可根据clips自动计算
+    public float duration = 0f; // 轨道总时长，可根据clips自动计算
     public bool isControlledByMaster = false;
 
     void Update()
@@ -44,8 +44,38 @@ public class TimelineTrack : MonoBehaviour
         else
             clip.fov = 60f;
         clips.Add(clip);
+        
+        if (clips.Count >1)
+        {
+            Debug.Log("计算duration");
+            duration = GetDuration();
+        }
+        MasterTimelineUI.Instance?.RefreshTimelineUI();
     }
-    
+
+    public void AddClip(float time)
+    {
+        TimelineClip clip = new TimelineClip();
+        clip.time = time;
+        clip.position = transform.position;
+        clip.rotation = transform.rotation;
+        clip.scale = transform.localScale;
+        Camera cam = GetComponent<Camera>();
+        if (cam != null)
+            clip.fov = cam.fieldOfView;
+        else
+            clip.fov = 60f;
+        clips.Add(clip);
+        
+        if (clips.Count >1)
+        {
+            Debug.Log("计算duration");
+            duration = GetDuration();
+        }
+        MasterTimelineUI.Instance?.RefreshTimelineUI();
+    }
+
+
     [ContextMenu("播放")]
     public void Play()
     {
