@@ -21,6 +21,8 @@ public class CameraTrajectoryVisualizer : MonoBehaviour
     private void Start()
     {
         if (cameraTransform == null) cameraTransform = Camera.main.transform;
+        // 把 LineRenderer 所在物体设置为特定层，比如 UI 层
+        gameObject.layer = LayerMask.NameToLayer("UI");
 
         lineRenderer = gameObject.GetComponent<LineRenderer>();
         if (lineRenderer == null)
