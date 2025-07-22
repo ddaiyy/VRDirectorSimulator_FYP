@@ -67,17 +67,13 @@ public class ObjectTimelineUI : MonoBehaviour
     {
         if (currentTrack != null && gameObject.activeSelf)
         {
-            // 只有在播放时才自动刷新Slider
-            if (currentTrack.isPlaying)
-            {
-                RefreshTime();
-            }
+            RefreshTime();
         }
     }
 
     void RefreshTime()
     {
-        currentTimeText.text = $"Time: {currentTrack.currentTime:F2} / {currentTrack.GetDuration():F2}";
+        currentTimeText.text = $"Time: {currentTrack.currentTime:F2}";
         timeSlider.value = currentTrack.currentTime;
     }
 
@@ -121,7 +117,7 @@ public class ObjectTimelineUI : MonoBehaviour
         // 你要支持的属性
         string[] properties = { "Position", "Rotation", "Scale" };
         // 如果是摄像机，加上FOV
-        if (currentTrack.GetComponent<Camera>() != null)
+        if (currentTrack.GetComponentInChildren<Camera>() != null)
         {
             properties = new string[] { "Position", "Rotation", "Scale", "FOV" };
         }

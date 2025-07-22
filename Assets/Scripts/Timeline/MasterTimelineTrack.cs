@@ -22,14 +22,13 @@ public class MasterTimelineTrack : MonoBehaviour
                         track.SetTime(track.clips[0].time);
                     }
                 }
-                
-                isPlaying = false;
                 foreach (var track in TimelineManager.Instance.GetAllTracks())
                 {
                     if (track.isControlledByMaster){
                         track.isControlledByMaster = false;
                     }
                 }
+                isPlaying = false;
                 
             }else{
                 // 推进所有轨道

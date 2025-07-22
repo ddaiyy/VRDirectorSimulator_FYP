@@ -385,7 +385,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: Add Keyframe
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1174,9 +1174,9 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 263762548}
   m_FillRect: {fileID: 1558810467}
   m_HandleRect: {fileID: 263762547}
-  m_Direction: 0
+  m_Direction: 1
   m_MinValue: 0
-  m_MaxValue: 1
+  m_MaxValue: 100
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
@@ -1334,7 +1334,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1296817386}
-  - {fileID: 1118963152}
   - {fileID: 1939506605}
   - {fileID: 1173123860}
   - {fileID: 1650199591}
@@ -1521,7 +1520,7 @@ GameObject:
   - component: {fileID: 532959002}
   - component: {fileID: 532959001}
   - component: {fileID: 532959000}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: PreviewWin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1698,10 +1697,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 1158501499}
   m_HandleRect: {fileID: 102450897}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 1
+  m_MinValue: 0.1
+  m_MaxValue: 20
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 0.1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2239,7 +2238,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: -5, y: 0}
+  m_AnchoredPosition: {x: 5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &840109268 stripped
@@ -2308,7 +2307,7 @@ Transform:
   m_GameObject: {fileID: 882530107}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.2, y: 0, z: 4.3}
+  m_LocalPosition: {x: -0.97, y: 0, z: -2.35}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2431,14 +2430,15 @@ RectTransform:
   m_GameObject: {fileID: 896336803}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 6.930929, y: 7.382857, z: 15.323877}
+  m_LocalScale: {x: 0.35495722, y: 0.685223, z: 15.323877}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1118963152}
   m_Father: {fileID: 850377559}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -1.300003, y: 60.6}
+  m_AnchoredPosition: {x: -4.6, y: 130.4}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &896336805
@@ -2461,7 +2461,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 93370e70c949bce4a818eae05d235c6a, type: 3}
+  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3683,16 +3683,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1118963151}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.2709693, y: 0.2341508, z: 0.033743404}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 316373154}
+  m_Father: {fileID: 896336804}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 293, y: 165}
+  m_AnchoredPosition: {x: 8, y: 13.3}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1118963153
@@ -4914,7 +4914,6 @@ GameObject:
   - component: {fileID: 1202008454}
   - component: {fileID: 1202008453}
   - component: {fileID: 1202008457}
-  - component: {fileID: 1202008456}
   - component: {fileID: 1202008455}
   m_Layer: 5
   m_Name: Panel
@@ -5002,33 +5001,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   focusDistanceSlider: {fileID: 549035165}
   focusDistanceValueText: {fileID: 1478226547}
---- !u!54 &1202008456
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1202008451}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &1202008457
 MonoBehaviour:
   m_ObjectHideFlags: 0

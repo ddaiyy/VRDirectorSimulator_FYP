@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
@@ -96,6 +97,8 @@ public class TimelineTrack : MonoBehaviour
             duration = GetDuration();
         }
         MasterTimelineUI.Instance?.RefreshTimelineUI();
+        clips = clips.OrderBy(c => c.time).ToList();
+
     }
 
     public void AddClip(float time)
@@ -144,6 +147,8 @@ public class TimelineTrack : MonoBehaviour
             duration = GetDuration();
         }
         MasterTimelineUI.Instance?.RefreshTimelineUI();
+        clips = clips.OrderBy(c => c.time).ToList();
+
     }
 
 
@@ -167,15 +172,29 @@ public class TimelineTrack : MonoBehaviour
     {
         if (clips.Count == 0) return;
 
-        Camera cam = GetComponent<Camera>();
-        if (time < clips[0].time && isPlaying)
+        Camera cam = GetComponentInChildren<Camera>();
+
+        
+        if (time < clips[0].time && (isPlaying||isControlledByMaster))
         {
             transform.position = new Vector3(99999, 99999, 99999);
             return;
+        }else if(time < clips[0].time && !isPlaying){
+            var first = clips[0];
+            transform.position = first.position;
+            transform.rotation = first.rotation;
+            transform.localScale = first.scale;
+            if (cam != null)
+            {
+                cam.fieldOfView = first.fov;
+                if (dof != null)
+                    dof.focusDistance.value = first.focusDistance;
+            }
+            return;
         }
 
-
-        if (isControlledByMaster && time >= clips[clips.Count - 1].time)
+        // 2. time晚于最后一个关键帧，或isControlledByMaster时超出范围
+        if (time >= clips[clips.Count - 1].time || (isControlledByMaster && time >= clips[clips.Count - 1].time))
         {
             var last = clips[clips.Count - 1];
             transform.position = last.position;
@@ -184,16 +203,31 @@ public class TimelineTrack : MonoBehaviour
             if (cam != null)
             {
                 cam.fieldOfView = last.fov;
-
                 if (dof != null)
-                {
                     dof.focusDistance.value = last.focusDistance;
+            }
+            // 摄像机激活逻辑
+            int activeID = last.activeCameraID;
+            CameraController toActivate = null;
+            if (CameraManager.Instance != null)
+            {
+                foreach (var camCtrl in CameraManager.Instance.GetAllCameras())
+                {
+                    if (camCtrl.GetInstanceID() == activeID)
+                    {
+                        toActivate = camCtrl;
+                        break;
+                    }
+                }
+                if (toActivate != null)
+                {
+                    CameraManager.Instance.SelectCamera(toActivate);
                 }
             }
             return;
         }
 
-        // 找到前后两个关键帧
+        // 3. 在关键帧区间内，找到前后帧
         TimelineClip prev = null, next = null;
         for (int i = 0; i < clips.Count - 1; i++)
         {
@@ -204,16 +238,14 @@ public class TimelineTrack : MonoBehaviour
                 break;
             }
         }
+        if (prev == null || next == null) return; // 理论上不会发生
 
-        /*if (prev == null || next == null) return;*/
-        if (prev == null || next == null)
-        {
-            // 处理边界，直接取最后一个关键帧
-            prev = clips[clips.Count - 1];
-            next = prev;
-        }
-
-        float t = (time - prev.time) / (next.time - prev.time);
+        float delta = next.time - prev.time;
+        float t = 0f;
+        if (Mathf.Approximately(delta, 0f))
+            t = 0f;
+        else
+            t = (time - prev.time) / delta;
 
         transform.position = Vector3.Lerp(prev.position, next.position, t);
         transform.rotation = Quaternion.Slerp(prev.rotation, next.rotation, t);
@@ -223,34 +255,28 @@ public class TimelineTrack : MonoBehaviour
         if (cam != null)
         {
             cam.fieldOfView = Mathf.Lerp(prev.fov, next.fov, t);
-
             if (dof != null)
-            {
                 dof.focusDistance.value = Mathf.Lerp(prev.focusDistance, next.focusDistance, t);
-            }
-            
-            // 处理摄像机激活状态：优先使用 prev 关键帧的激活摄像机
-            int activeID = prev.activeCameraID;
 
-            // 找到对应的 CameraController
+            // 摄像机激活状态
+            int activeID = prev.activeCameraID;
             CameraController toActivate = null;
-            foreach (var camCtrl in CameraManager.Instance.GetAllCameras()) // 需要你CameraManager增加GetAllCameras接口返回List<CameraController>
+            if (CameraManager.Instance != null)
             {
-                if (camCtrl.GetInstanceID() == activeID)
+                foreach (var camCtrl in CameraManager.Instance.GetAllCameras())
                 {
-                    toActivate = camCtrl;
-                    break;
+                    if (camCtrl.GetInstanceID() == activeID)
+                    {
+                        toActivate = camCtrl;
+                        break;
+                    }
+                }
+                if (toActivate != null)
+                {
+                    CameraManager.Instance.SelectCamera(toActivate);
                 }
             }
-
-            // 激活选中的摄像机，关闭其他摄像机预览
-            if (toActivate != null)
-            {
-                CameraManager.Instance.SelectCamera(toActivate);
-            }
         }
-
-        
     }
     
     public float GetDuration()

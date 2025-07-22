@@ -73,7 +73,7 @@ public class MasterTimelineUI : MonoBehaviour
             var track = tracks[i];
             float startTime = 0f;
             float duration = 0.1f; // 默认最小宽度
-            bool hasClips = track.clips != null && track.clips.Count > 0;
+            bool hasClips = track.clips != null && track.clips.Count > 1;
             if (hasClips)
             {
                 startTime = track.clips.Min(c => c.time);
