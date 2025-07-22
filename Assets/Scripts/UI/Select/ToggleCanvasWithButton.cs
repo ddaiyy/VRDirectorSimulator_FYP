@@ -5,6 +5,9 @@ using System.Collections.Generic;
 public class ToggleCanvasWithButton : MonoBehaviour
 {
     public GameObject canvasToToggle;
+    public Transform userHead; // 拖入 XR Origin 的 Main Camera
+    public Vector3 offset = new Vector3(0.5f, -0.3f, 0.6f); // Canvas 相对头部右前偏移
+
 
     private InputDevice rightController;
     private bool isCanvasVisible = false;
@@ -41,6 +44,17 @@ public class ToggleCanvasWithButton : MonoBehaviour
                     lastToggleTime = Time.time;
                 }
             }
+        }
+        // 🧭 跟随用户右侧
+        if (isCanvasVisible && canvasToToggle != null && userHead != null)
+        {
+            Vector3 targetPos = userHead.position + userHead.right * offset.x
+                                                 + userHead.up * offset.y
+                                                 + userHead.forward * offset.z;
+
+            canvasToToggle.transform.position = targetPos;
+            canvasToToggle.transform.LookAt(userHead);
+            canvasToToggle.transform.Rotate(0, 180, 0); // 反转使正面朝向用户
         }
     }
 
