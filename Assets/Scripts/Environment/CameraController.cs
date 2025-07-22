@@ -1,7 +1,10 @@
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
+using static CameraController;
+using MyGame.Selection;
 
-public class CameraController : MonoBehaviour
+public class CameraController : MonoBehaviour, ICustomSelectable
 {
     public GameObject worldCanvas; // 按钮Canvas，挂载在摄像机Prefab下
     public Camera mainPlayerCamera;
@@ -137,4 +140,30 @@ public class CameraController : MonoBehaviour
     {
         SetFocusDistance(3f);
     }
+
+    public void OnSelect()
+    {
+        worldCanvas?.SetActive(true);
+        CameraManager.Instance.SelectCamera(this); // 打开预览
+        Debug.Log($"{gameObject.name} 被选中");
+    }
+
+    public void OnDeselect()
+    {
+        worldCanvas?.SetActive(false);
+        Debug.Log($"{gameObject.name} 取消选中");
+    }
+
+    [ContextMenu("Test OnSelect")]
+    private void TestOnSelect()
+    {
+        OnSelect();
+    }
+
+    [ContextMenu("Test OnDeselect")]
+    private void TestOnDeselect()
+    {
+        OnDeselect();
+    }
+
 }
