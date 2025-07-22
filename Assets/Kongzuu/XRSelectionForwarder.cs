@@ -1,14 +1,15 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using MyGame.Selection;
 
 public class XRSelectionForwarder : MonoBehaviour
 {
-    public XRRayInteractor rayInteractor;  // ÔÚInspectorÍÏÈë¶ÔÓ¦µÄXRRayInteractor
-    public XRController xrController;      // ÔÚInspectorÍÏÈë¶ÔÓ¦µÄXRController£¬¸ºÔğ¼àÌıTrigger°´¼ü
+    public XRRayInteractor rayInteractor;  // Ã”ÃšInspectorÃÃÃˆÃ«Â¶Ã”Ã“Â¦ÂµÃ„XRRayInteractor
+    public ActionBasedController xrController;
 
-    private ICustomSelectable currentHoverSelectable;    // µ±Ç°ÉäÏßÖ¸ÏòµÄ¿ÉÑ¡ÖĞÎïÌå£¨hover£©
-    private ICustomSelectable currentSelectedSelectable; // µ±Ç°ÒÑÑ¡ÖĞµÄÎïÌå
+
+    private ICustomSelectable currentHoverSelectable;    // ÂµÂ±Ã‡Â°Ã‰Ã¤ÃÃŸÃ–Â¸ÃÃ²ÂµÃ„Â¿Ã‰Ã‘Â¡Ã–ÃÃÃ¯ÃŒÃ¥Â£Â¨hoverÂ£Â©
+    private ICustomSelectable currentSelectedSelectable; // ÂµÂ±Ã‡Â°Ã’Ã‘Ã‘Â¡Ã–ÃÂµÃ„ÃÃ¯ÃŒÃ¥
 
     private void OnEnable()
     {
@@ -24,40 +25,87 @@ public class XRSelectionForwarder : MonoBehaviour
 
     private void Update()
     {
-        if (xrController != null && xrController.inputDevice.isValid)
+        if (xrController != null && xrController.activateActionValue.action != null)
         {
-            bool triggerPressed = false;
-            InputHelpers.IsPressed(xrController.inputDevice, InputHelpers.Button.Trigger, out triggerPressed);
+            float triggerValue = xrController.activateActionValue.action.ReadValue<float>();
 
-            if (triggerPressed)
+            if (triggerValue > 0.1f)
             {
-                // °´ÏÂTriggerÊ±Ñ¡ÖĞµ±Ç°hoverµÄÎïÌå
-                if (currentHoverSelectable != null && currentSelectedSelectable != currentHoverSelectable)
+                Debug.Log("Trigger Pressed (activateAction)");
+
+                if (currentHoverSelectable != null)
                 {
-                    currentSelectedSelectable?.OnDeselect();
-                    currentSelectedSelectable = currentHoverSelectable;
-                    currentSelectedSelectable.OnSelect();
+                    if (currentHoverSelectable is MonoBehaviour mb)
+                    {
+                        var cameraController = mb.GetComponent<CameraController>();
+                        var propSelectable = mb.GetComponent<PropSelectable>();
+
+                        bool isCamera = (cameraController != null);
+                        bool isProp = (propSelectable != null);
+
+                        if (currentSelectedSelectable != currentHoverSelectable)
+                        {
+                            // åˆ‡æ¢é€‰ä¸­ï¼Œå–æ¶ˆä¹‹å‰çš„é€‰ä¸­
+                            currentSelectedSelectable?.OnDeselect();
+                            currentSelectedSelectable = currentHoverSelectable;
+                            currentSelectedSelectable.OnSelect();
+                        }
+                        else
+                        {
+                            // ç‚¹å‡»åŒä¸€ä¸ªå¯¹è±¡ï¼Œå†æ¬¡è°ƒç”¨ OnSelect æ¥åˆ·æ–°é¢„è§ˆï¼ˆç‰¹åˆ«æ˜¯æ‘„åƒæœºï¼‰
+                            currentSelectedSelectable.OnSelect();
+                        }
+                    }
+                    else
+                    {
+                        // éMonoBehaviourä¹Ÿç›´æ¥è°ƒç”¨OnSelect
+                        if (currentSelectedSelectable != currentHoverSelectable)
+                        {
+                            currentSelectedSelectable?.OnDeselect();
+                            currentSelectedSelectable = currentHoverSelectable;
+                            currentSelectedSelectable.OnSelect();
+                        }
+                        else
+                        {
+                            currentSelectedSelectable.OnSelect();
+                        }
+                    }
                 }
             }
-            // ×¢ÒâÕâÀï²»ÔÚËÉ¿ªTriggerÊ±È¡ÏûÑ¡ÖĞ£¬ËùÒÔcanvas±£³ÖÏÔÊ¾
         }
     }
+
+
+
+
 
     private void OnHoverEntered(HoverEnterEventArgs args)
     {
+        // å…ˆæ‰¾è‡ªå·±
         var selectable = args.interactableObject.transform.GetComponent<ICustomSelectable>();
+
+        // å¦‚æœæ²¡æ‰¾åˆ°ï¼Œè¯•è¯•æ‰¾å­ç‰©ä½“
+        if (selectable == null)
+            selectable = args.interactableObject.transform.GetComponentInChildren<ICustomSelectable>();
+
         if (selectable != null)
         {
             currentHoverSelectable = selectable;
+            Debug.Log($"Hoverè¿›å…¥äº† {selectable}");
         }
     }
+
 
     private void OnHoverExited(HoverExitEventArgs args)
     {
         var selectable = args.interactableObject.transform.GetComponent<ICustomSelectable>();
+        if (selectable == null)
+            selectable = args.interactableObject.transform.GetComponentInChildren<ICustomSelectable>();
+
         if (selectable == currentHoverSelectable)
         {
             currentHoverSelectable = null;
         }
     }
+
 }

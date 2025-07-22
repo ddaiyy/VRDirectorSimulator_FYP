@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using MyGame.Selection;
 
 public class PropSelectable : MonoBehaviour, ICustomSelectable
@@ -7,13 +7,20 @@ public class PropSelectable : MonoBehaviour, ICustomSelectable
 
     public void OnSelect()
     {
-        propUI?.SetActive(true);
-        Debug.Log("µÀ¾ß±»Ñ¡ÖĞ");
+        if (propUI != null)
+        {
+            propUI.SetActive(true);
+            Debug.Log("é“å…·è¢«é€‰ä¸­ï¼Œæ˜¾ç¤º UI");
+        }
     }
 
     public void OnDeselect()
     {
-        Debug.Log("µÀ¾ßÈ¡ÏûÑ¡ÖĞ");
+        if (propUI != null)
+        {
+            propUI.SetActive(false);
+            Debug.Log("å–æ¶ˆé€‰ä¸­ï¼Œéšè— UI");
+        }
     }
 
     [ContextMenu("Test OnSelect")]

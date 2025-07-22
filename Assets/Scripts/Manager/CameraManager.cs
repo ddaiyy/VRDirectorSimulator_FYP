@@ -90,26 +90,21 @@ public class CameraManager : MonoBehaviour
 
     public void SelectCamera(CameraController controller)
     {
-        // 1. �ر�֮ǰ�������
-        if (currentSelected != null && currentSelected != controller)
+        if (currentSelected != null)
         {
             currentSelected.DisablePreview();
         }
 
-        // 2. �����µ������Ϊ��ǰѡ��
         currentSelected = controller;
 
-        // 3. ����������Ⱦ�� RenderTexture
         currentSelected.EnablePreview(previewTexture);
 
-        // ֪ͨ UI ��ǰ����ֵ
-        FindObjectOfType<CameraFOVSlider>()?.SyncSlider(controller);
+        Debug.Log($"Selected camera: {controller.gameObject.name}");
 
-        // 4. �����¼���֪ͨUI�ȶ�����
+        FindObjectOfType<CameraFOVSlider>()?.SyncSlider(controller);
         OnSelectedCameraChanged?.Invoke(currentSelected);
-        
-    
-}
+    }
+
 
 
     public void AddNewCamera()
