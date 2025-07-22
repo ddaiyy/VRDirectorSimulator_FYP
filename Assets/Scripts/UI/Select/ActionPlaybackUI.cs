@@ -5,6 +5,8 @@ public class ActionPlaybackUI : MonoBehaviour
 {
     public Button playPauseResumeButton;
     public Button clearButton;
+    /*// 新增关闭按钮引用
+    public Button closeButton;*/
 
     private enum PlaybackState { Idle, Playing, Paused }
     private PlaybackState currentState = PlaybackState.Idle;
@@ -14,34 +16,50 @@ public class ActionPlaybackUI : MonoBehaviour
     void Start()
     {
         playPauseResumeButton.onClick.AddListener(OnPlayPauseResumeClicked);
-        clearButton.onClick.AddListener(() => Controller?.ClearActions());
+        clearButton.onClick.AddListener(ClearAllActionsAndResetSliders);
+
+        /*// 绑定关闭按钮事件
+        if (closeButton != null)
+        {
+            closeButton.onClick.AddListener(OnCloseButtonClicked);
+        }
+        else
+        {
+            Debug.LogWarning("closeButton 未绑定！");
+        }*/
+
+
+        UpdateButtonStates(); // 初始化按钮状态
     }
 
-    /*void OnPlayPauseResumeClicked()
+    void Update()
     {
-        if (Controller == null) return;
+        UpdateButtonStates(); // 每帧检查一次选中角色状态（也可以优化成事件驱动）
+    }
 
-        switch (currentState)
+    void UpdateButtonStates()
+    {
+        var target = Controller;
+        bool valid = target != null && target.isPlacedCharacter;
+
+        playPauseResumeButton.interactable = valid;
+        clearButton.interactable = valid;
+    }
+
+    void ClearAllActionsAndResetSliders()
+    {
+        Controller?.ClearActions();
+
+        // 找到所有界面上的 ActionSelectUI 实例，把滑动条清零
+        var allActionUIs = FindObjectsOfType<ActionSelectUI>();
+        foreach (var ui in allActionUIs)
         {
-            case PlaybackState.Idle:
-                Controller.PlaySequence();
-                currentState = PlaybackState.Playing;
-                Debug.Log("开始播放");
-                break;
-
-            case PlaybackState.Playing:
-                Controller.PauseSequence();
-                currentState = PlaybackState.Paused;
-                Debug.Log("已暂停");
-                break;
-
-            case PlaybackState.Paused:
-                Controller.ResumeSequence();
-                currentState = PlaybackState.Playing;
-                Debug.Log("继续播放");
-                break;
+            ui.ResetSlider();
         }
-    }*/
+
+        Debug.Log("动作已清空，所有滑动条已重置为0");
+    }
+
 
     void OnPlayPauseResumeClicked()
     {
@@ -69,6 +87,14 @@ public class ActionPlaybackUI : MonoBehaviour
             }
         }
     }
+
+    /*// 关闭按钮事件
+    [ContextMenu("测试关闭Canvas")]
+    void OnCloseButtonClicked()
+    {
+        Destroy(gameObject);
+    }*/
+
 
 
     // 👇 添加右键测试：播放/暂停/恢复

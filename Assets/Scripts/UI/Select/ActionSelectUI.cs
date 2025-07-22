@@ -26,13 +26,6 @@ public class ActionSelectUI : MonoBehaviour
         OnSliderValueChanged(durationSlider.value); // 初始化 UI 状态（让 select 灰掉）
     }
 
-
-    /*void OnSliderValueChanged(float value)
-    {
-        UpdateDurationText(value);
-        selectButton.interactable = value > 0f;
-    }*/
-
     void OnSliderValueChanged(float value)
     {
         UpdateDurationText(value);
@@ -86,6 +79,12 @@ public class ActionSelectUI : MonoBehaviour
             Debug.LogWarning("当前选中角色不能添加动作！");
         }
     }
+
+    public void ResetSlider()
+    {
+        durationSlider.value = 0f;
+    }
+
 
     [ContextMenu("测试 PreviewAction()")]
     void TestPreviewAction()
