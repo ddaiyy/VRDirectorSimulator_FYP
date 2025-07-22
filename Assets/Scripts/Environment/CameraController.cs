@@ -150,7 +150,6 @@ public class CameraController : MonoBehaviour, ICustomSelectable
 
     public void OnDeselect()
     {
-        worldCanvas?.SetActive(false);
         Debug.Log($"{gameObject.name} 取消选中");
     }
 

@@ -1867,6 +1867,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c03f977129fbe8e4db0c5e3f17cea590, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rayInteractor: {fileID: 828178795}
+  xrController: {fileID: 828178796}
 --- !u!1 &834286491
 GameObject:
   m_ObjectHideFlags: 0
@@ -2112,34 +2114,10 @@ MonoBehaviour:
       m_Calls: []
   m_SelectEntered:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 828178797}
-        m_TargetAssemblyTypeName: XRSelectionForwarder, Assembly-CSharp
-        m_MethodName: OnSelectEntered
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_SelectExited:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 828178797}
-        m_TargetAssemblyTypeName: XRSelectionForwarder, Assembly-CSharp
-        m_MethodName: OnSelectExited
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_FirstFocusEntered:
     m_PersistentCalls:
       m_Calls: []

@@ -4,48 +4,57 @@ using MyGame.Selection;
 
 public class XRSelectionForwarder : MonoBehaviour
 {
-    private XRRayInteractor rayInteractor;
-    private ICustomSelectable currentSelectable;
+    public XRRayInteractor rayInteractor;
+    public XRBaseController xrController; // 新增：手柄控制器引用
 
-    private void Awake()
-    {
-        rayInteractor = GetComponent<XRRayInteractor>();
-        if (rayInteractor == null)
-        {
-            Debug.LogError("需要 XRRayInteractor 组件！");
-        }
-    }
+    private ICustomSelectable currentSelectable;
+    private IXRInteractable currentHovered;
 
     private void OnEnable()
     {
-        rayInteractor.selectEntered.AddListener(OnSelectEntered);
-        rayInteractor.selectExited.AddListener(OnSelectExited);
+        rayInteractor.hoverEntered.AddListener(OnHoverEntered);
+        rayInteractor.hoverExited.AddListener(OnHoverExited);
     }
 
     private void OnDisable()
     {
-        rayInteractor.selectEntered.RemoveListener(OnSelectEntered);
-        rayInteractor.selectExited.RemoveListener(OnSelectExited);
+        rayInteractor.hoverEntered.RemoveListener(OnHoverEntered);
+        rayInteractor.hoverExited.RemoveListener(OnHoverExited);
     }
 
-    public void OnSelectEntered(SelectEnterEventArgs args)
+    private void Update()
     {
-        var selectable = args.interactableObject.transform.GetComponent<ICustomSelectable>();
-        if (selectable != null)
+        if (currentHovered != null && xrController != null)
         {
-            currentSelectable?.OnDeselect();
-            currentSelectable = selectable;
-            currentSelectable.OnSelect();
+            // 检查 Trigger 是否按下
+            if (xrController.selectInteractionState.activatedThisFrame)
+            {
+                var selectable = currentHovered.transform.GetComponent<ICustomSelectable>();
+                if (selectable != null && selectable != currentSelectable)
+                {
+                    currentSelectable?.OnDeselect();
+                    currentSelectable = selectable;
+                    currentSelectable.OnSelect();
+                }
+            }
         }
     }
 
-    public void OnSelectExited(SelectExitEventArgs args)
+    private void OnHoverEntered(HoverEnterEventArgs args)
+    {
+        currentHovered = args.interactableObject;
+    }
+
+    private void OnHoverExited(HoverExitEventArgs args)
     {
         var selectable = args.interactableObject.transform.GetComponent<ICustomSelectable>();
-        if (selectable != null && currentSelectable == selectable)
+        if (selectable != null && selectable == currentSelectable)
         {
+            // 如果你不想自动取消选中，可以注释掉下一行
             currentSelectable.OnDeselect();
             currentSelectable = null;
         }
+
+        currentHovered = null;
     }
 }

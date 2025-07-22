@@ -13,7 +13,6 @@ public class PropSelectable : MonoBehaviour, ICustomSelectable
 
     public void OnDeselect()
     {
-        propUI?.SetActive(false);
         Debug.Log("道具取消选中");
     }
 
