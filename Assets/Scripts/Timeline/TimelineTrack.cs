@@ -97,7 +97,7 @@ public class TimelineTrack : MonoBehaviour
         if (clips.Count == 0) return;
 
         Camera cam = GetComponent<Camera>();
-        if (time < clips[0].time)
+        if (time < clips[0].time && isPlaying)
         {
             transform.position = new Vector3(99999, 99999, 99999);
             return;

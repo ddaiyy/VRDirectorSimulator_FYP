@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MasterTimelineUI : MonoBehaviour
 {
@@ -10,9 +11,12 @@ public class MasterTimelineUI : MonoBehaviour
     [Header("UI References")]
     public RectTransform timelineContent; // 拖到Content
     public GameObject trackBarPrefab;     // 拖到你做好的Prefab
-    public RectTransform objectNameContent; // 新增：物体名字区域
-    public GameObject objectNamePrefab;     // 新增：物体名字条目Prefab（带TextMeshProUGUI）
-
+    public RectTransform objectNameContent; //物体名字区域
+    public GameObject objectNamePrefab;     //物体名字条目Prefab（带TextMeshProUGUI）
+    public Button playButton;
+    public Button stopButton;
+    
+    
     [Header("Timeline Settings")]
     public float timelineWidth = 40f;   // 时间轴总宽度
     public float timelineHeight = 40f;    // 条带高度
@@ -31,6 +35,18 @@ public class MasterTimelineUI : MonoBehaviour
     void Start()
     {
         RefreshTimelineUI();
+        playButton.onClick.AddListener(OnPlayClicked);
+        stopButton.onClick.AddListener(OnStopClicked);
+    }
+
+    private void OnStopClicked()
+    {
+        TimelineManager.Instance.masterTrack.Stop();
+    }
+
+    private void OnPlayClicked()
+    {
+        TimelineManager.Instance.masterTrack.Play();
     }
 
     public void RefreshTimelineUI()
