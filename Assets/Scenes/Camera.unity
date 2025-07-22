@@ -1868,7 +1868,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rayInteractor: {fileID: 828178795}
-  xrController: {fileID: 828178796}
+  xrController: {fileID: 0}
 --- !u!1 &834286491
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,11 +4,11 @@ using MyGame.Selection;
 
 public class XRSelectionForwarder : MonoBehaviour
 {
-    public XRRayInteractor rayInteractor;
-    public XRController xrController;  // 要在Inspector拖入XR Controller组件
+    public XRRayInteractor rayInteractor;  // 在Inspector拖入对应的XRRayInteractor
+    public XRController xrController;      // 在Inspector拖入对应的XRController，负责监听Trigger按键
 
-    private ICustomSelectable currentHoverSelectable;
-    private ICustomSelectable currentSelectedSelectable;
+    private ICustomSelectable currentHoverSelectable;    // 当前射线指向的可选中物体（hover）
+    private ICustomSelectable currentSelectedSelectable; // 当前已选中的物体
 
     private void OnEnable()
     {
@@ -24,21 +24,22 @@ public class XRSelectionForwarder : MonoBehaviour
 
     private void Update()
     {
-        bool isTriggerPressed = false;
         if (xrController != null && xrController.inputDevice.isValid)
         {
-            InputHelpers.IsPressed(xrController.inputDevice, InputHelpers.Button.Trigger, out isTriggerPressed, 0.1f);
-        }
+            bool triggerPressed = false;
+            InputHelpers.IsPressed(xrController.inputDevice, InputHelpers.Button.Trigger, out triggerPressed);
 
-        if (isTriggerPressed)
-        {
-            if (currentHoverSelectable != null && currentSelectedSelectable != currentHoverSelectable)
+            if (triggerPressed)
             {
-                currentSelectedSelectable?.OnDeselect();
-
-                currentSelectedSelectable = currentHoverSelectable;
-                currentSelectedSelectable.OnSelect();
+                // 按下Trigger时选中当前hover的物体
+                if (currentHoverSelectable != null && currentSelectedSelectable != currentHoverSelectable)
+                {
+                    currentSelectedSelectable?.OnDeselect();
+                    currentSelectedSelectable = currentHoverSelectable;
+                    currentSelectedSelectable.OnSelect();
+                }
             }
+            // 注意这里不在松开Trigger时取消选中，所以canvas保持显示
         }
     }
 
