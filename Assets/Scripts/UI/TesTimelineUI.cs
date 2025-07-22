@@ -22,6 +22,11 @@ public class TesTimelineUI : MonoBehaviour
         allTrackObjects = FindObjectsOfType<TimelineTrack>().Select(t => t.gameObject).ToList();
     }
 
+    void Update()
+    {
+        allTrackObjects = FindObjectsOfType<TimelineTrack>().Select(t => t.gameObject).ToList();
+        UpdateFilteredList();
+    }
     void OnGUI()
     {
         GUILayout.BeginArea(new Rect(10, 10, 300, 200), GUI.skin.box);

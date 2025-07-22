@@ -58,7 +58,7 @@ public class TimelineTrack : MonoBehaviour
         clip.rotation = transform.rotation;
         clip.scale = transform.localScale;
 
-        Camera cam = GetComponent<Camera>();
+        Camera cam = GetComponentInChildren<Camera>();
         if (cam != null)
         {
             clip.fov = cam.fieldOfView;
@@ -105,11 +105,37 @@ public class TimelineTrack : MonoBehaviour
         clip.position = transform.position;
         clip.rotation = transform.rotation;
         clip.scale = transform.localScale;
-        Camera cam = GetComponent<Camera>();
+        
+        Camera cam = GetComponentInChildren<Camera>();
         if (cam != null)
+        {
             clip.fov = cam.fieldOfView;
+
+            if (dof != null)
+            {
+                clip.focusDistance = dof.focusDistance.value;
+            }
+            else
+            {
+                clip.focusDistance = 5f;
+            }
+        }
         else
+        {
             clip.fov = 60f;
+            clip.focusDistance = 5f;
+        }
+
+        // 记录当前激活的摄像机ID（假设用 InstanceID）
+        if (CameraManager.Instance != null && CameraManager.Instance.GetCurrentSelectedCamera() != null)
+        {
+            clip.activeCameraID = CameraManager.Instance.GetCurrentSelectedCamera().GetInstanceID();
+        }
+        else
+        {
+            clip.activeCameraID = -1; // 没有选中摄像机
+        }
+        
         clips.Add(clip);
         
         if (clips.Count >1)
@@ -202,27 +228,29 @@ public class TimelineTrack : MonoBehaviour
             {
                 dof.focusDistance.value = Mathf.Lerp(prev.focusDistance, next.focusDistance, t);
             }
-        }
+            
+            // 处理摄像机激活状态：优先使用 prev 关键帧的激活摄像机
+            int activeID = prev.activeCameraID;
 
-        // 处理摄像机激活状态：优先使用 prev 关键帧的激活摄像机
-        int activeID = prev.activeCameraID;
-
-        // 找到对应的 CameraController
-        CameraController toActivate = null;
-        foreach (var camCtrl in CameraManager.Instance.GetAllCameras()) // 需要你CameraManager增加GetAllCameras接口返回List<CameraController>
-        {
-            if (camCtrl.GetInstanceID() == activeID)
+            // 找到对应的 CameraController
+            CameraController toActivate = null;
+            foreach (var camCtrl in CameraManager.Instance.GetAllCameras()) // 需要你CameraManager增加GetAllCameras接口返回List<CameraController>
             {
-                toActivate = camCtrl;
-                break;
+                if (camCtrl.GetInstanceID() == activeID)
+                {
+                    toActivate = camCtrl;
+                    break;
+                }
+            }
+
+            // 激活选中的摄像机，关闭其他摄像机预览
+            if (toActivate != null)
+            {
+                CameraManager.Instance.SelectCamera(toActivate);
             }
         }
 
-        // 激活选中的摄像机，关闭其他摄像机预览
-        if (toActivate != null)
-        {
-            CameraManager.Instance.SelectCamera(toActivate);
-        }
+        
     }
     
     public float GetDuration()
