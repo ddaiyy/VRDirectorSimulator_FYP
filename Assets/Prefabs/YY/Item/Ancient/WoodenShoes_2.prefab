@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 502232180016748731}
   - component: {fileID: 8403486679756597266}
   - component: {fileID: 5903813811347139367}
+  - component: {fileID: 1895722342517066314}
   m_Layer: 0
   m_Name: WoodenShoes_2
   m_TagString: Untagged
@@ -282,3 +283,15 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
+--- !u!114 &1895722342517066314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837048688504084822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4746b596b1674d419c8c06b7a33c83b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

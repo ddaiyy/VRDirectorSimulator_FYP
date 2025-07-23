@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1360204927204900278}
   - component: {fileID: 1069218854831910119}
   - component: {fileID: 4381821485260239950}
+  - component: {fileID: -4458342533592607568}
   m_Layer: 0
   m_Name: LacqueredBox_2
   m_TagString: Untagged
@@ -282,3 +283,15 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
+--- !u!114 &-4458342533592607568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 503843003877701161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4746b596b1674d419c8c06b7a33c83b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

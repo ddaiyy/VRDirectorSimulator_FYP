@@ -1659,6 +1659,7 @@ GameObject:
   - component: {fileID: 3608794333933376782}
   - component: {fileID: 179434825456944928}
   - component: {fileID: 6611395900439971830}
+  - component: {fileID: 8884627104359936955}
   m_Layer: 0
   m_Name: Peasant
   m_TagString: Untagged
@@ -1957,6 +1958,18 @@ MonoBehaviour:
   controllerForThisCharacter: {fileID: 179434825456944928}
   actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
   characterTransform: {fileID: 4987226776554295599}
+--- !u!114 &8884627104359936955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5372288485508970322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4746b596b1674d419c8c06b7a33c83b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5621541306978918869
 GameObject:
   m_ObjectHideFlags: 0

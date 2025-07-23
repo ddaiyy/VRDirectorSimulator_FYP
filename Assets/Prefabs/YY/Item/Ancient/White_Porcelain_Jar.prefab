@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7613297304887230460}
   - component: {fileID: 1904605331102799950}
   - component: {fileID: 8227639818990956916}
+  - component: {fileID: 8434975182363139185}
   m_Layer: 0
   m_Name: White_Porcelain_Jar
   m_TagString: Untagged
@@ -282,3 +283,15 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
+--- !u!114 &8434975182363139185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5624386694252684119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4746b596b1674d419c8c06b7a33c83b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

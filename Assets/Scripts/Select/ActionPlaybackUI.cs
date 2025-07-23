@@ -5,8 +5,6 @@ public class ActionPlaybackUI : MonoBehaviour
 {
     public Button playPauseResumeButton;
     public Button clearButton;
-    /*// 新增关闭按钮引用
-    public Button closeButton;*/
 
     private enum PlaybackState { Idle, Playing, Paused }
     private PlaybackState currentState = PlaybackState.Idle;
@@ -16,18 +14,7 @@ public class ActionPlaybackUI : MonoBehaviour
     void Start()
     {
         playPauseResumeButton.onClick.AddListener(OnPlayPauseResumeClicked);
-        clearButton.onClick.AddListener(ClearAllActionsAndResetSliders);
-
-        /*// 绑定关闭按钮事件
-        if (closeButton != null)
-        {
-            closeButton.onClick.AddListener(OnCloseButtonClicked);
-        }
-        else
-        {
-            Debug.LogWarning("closeButton 未绑定！");
-        }*/
-
+        clearButton.onClick.AddListener(ClearAllActionsAndResetSliders); 
 
         UpdateButtonStates(); // 初始化按钮状态
     }
