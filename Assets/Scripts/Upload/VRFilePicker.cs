@@ -135,6 +135,7 @@ public class VRModelLoader : MonoBehaviour
         }
 
         // 模型实例化完成后
+        // 模型实例化完成后
         bool instantiated = await gltf.InstantiateMainSceneAsync(parent.transform);
         if (!instantiated)
         {
@@ -142,22 +143,14 @@ public class VRModelLoader : MonoBehaviour
             return;
         }
 
-        // 在 LoadModel 的最后实例化完成部分，替换如下：
+        // 给所有子物体添加 MeshCollider 并设置 convex = true
+        AddMeshCollidersRecursive(parent);
 
-        if (parent.transform.childCount > 0)
+        if (instantiated)
         {
-            GameObject firstLayer = parent.transform.GetChild(0).gameObject;
-            // 给第一层子物体添加刚体和抓取组件
-            SetupRigidbodyAndGrab(firstLayer);
-            var boxCol = firstLayer.gameObject.GetComponent<BoxCollider>();
-            if (boxCol == null)
-                boxCol = firstLayer.gameObject.AddComponent<BoxCollider>();
-
-            // 可选：调整 BoxCollider 大小或中心，按需求调整
-            boxCol.size = Vector3.one;  // 默认1，视需求改
-            boxCol.center = Vector3.zero;
+            AddMeshCollidersRecursive(parent);
+            SetupRigidbodyAndGrab(parent); // 必须在 AddMeshColliders 后
         }
-
 
         Debug.Log("[完成] 模型加载完成");
         ReplaceShadersToStandard(parent);
@@ -243,19 +236,66 @@ public class VRModelLoader : MonoBehaviour
         }
     }
 
+    void AddMeshCollidersRecursive(GameObject root)
+    {
+        var meshRenderers = root.GetComponentsInChildren<MeshRenderer>();
+        foreach (var mr in meshRenderers)
+        {
+            var go = mr.gameObject;
 
+            var collider = go.GetComponent<Collider>();
+            if (collider == null)
+            {
+                var meshFilter = go.GetComponent<MeshFilter>();
+                if (meshFilter != null && meshFilter.sharedMesh != null)
+                {
+                    var meshCollider = go.AddComponent<MeshCollider>();
+                    meshCollider.convex = true; // 必须是凸包，XR交互要求
+                }
+                else
+                {
+                    // 没有Mesh则用BoxCollider兜底
+                    go.AddComponent<BoxCollider>();
+                }
+            }
+            else if (collider is MeshCollider mc)
+            {
+                mc.convex = true; // 确保是凸包
+            }
+        }
+    }
     void SetupRigidbodyAndGrab(GameObject go)
     {
+        // 添加 Rigidbody
         var rb = go.GetComponent<Rigidbody>();
         if (rb == null) rb = go.AddComponent<Rigidbody>();
         rb.useGravity = true;
         rb.isKinematic = false;
 
+        // 添加 XRGrabInteractable
         var grab = go.GetComponent<XRGrabInteractable>();
         if (grab == null) grab = go.AddComponent<XRGrabInteractable>();
+
+        // 清空并重新添加 colliders
+        grab.colliders.Clear();
+        var colliders = go.GetComponentsInChildren<Collider>();
+        foreach (var col in colliders)
+        {
+            grab.colliders.Add(col);
+        }
+
+        // 设置 Interaction Manager（确保存在）
+        var manager = UnityEngine.Object.FindFirstObjectByType<XRInteractionManager>();
+        if (manager != null)
+        {
+            grab.interactionManager = manager;
+        }
+
+        // 强制刷新
+        grab.enabled = false;
+        grab.enabled = true;
     }
 
-    
-   
+
 
 }
