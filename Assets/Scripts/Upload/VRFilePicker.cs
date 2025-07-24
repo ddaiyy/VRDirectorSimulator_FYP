@@ -134,6 +134,7 @@ public class VRModelLoader : MonoBehaviour
             return;
         }
 
+        // 模型实例化完成后
         bool instantiated = await gltf.InstantiateMainSceneAsync(parent.transform);
         if (!instantiated)
         {
@@ -141,18 +142,30 @@ public class VRModelLoader : MonoBehaviour
             return;
         }
 
+        // 在 LoadModel 的最后实例化完成部分，替换如下：
+
+        if (parent.transform.childCount > 0)
+        {
+            GameObject firstLayer = parent.transform.GetChild(0).gameObject;
+            // 给第一层子物体添加刚体和抓取组件
+            SetupRigidbodyAndGrab(firstLayer);
+            var boxCol = firstLayer.gameObject.GetComponent<BoxCollider>();
+            if (boxCol == null)
+                boxCol = firstLayer.gameObject.AddComponent<BoxCollider>();
+
+            // 可选：调整 BoxCollider 大小或中心，按需求调整
+            boxCol.size = Vector3.one;  // 默认1，视需求改
+            boxCol.center = Vector3.zero;
+        }
+
+
         Debug.Log("[完成] 模型加载完成");
-
-        // 💡 替换 Shader
         ReplaceShadersToStandard(parent);
-
-        // ✅ 打印贴图调试信息
         PrintLoadedMaterialsAndTextures(parent);
-
         ForceAssignTestTexture(parent);
 
-
     }
+
     void PrintLoadedMaterialsAndTextures(GameObject root)
     {
         var renderers = root.GetComponentsInChildren<Renderer>();
@@ -231,5 +244,18 @@ public class VRModelLoader : MonoBehaviour
     }
 
 
+    void SetupRigidbodyAndGrab(GameObject go)
+    {
+        var rb = go.GetComponent<Rigidbody>();
+        if (rb == null) rb = go.AddComponent<Rigidbody>();
+        rb.useGravity = true;
+        rb.isKinematic = false;
+
+        var grab = go.GetComponent<XRGrabInteractable>();
+        if (grab == null) grab = go.AddComponent<XRGrabInteractable>();
+    }
+
+    
+   
 
 }
