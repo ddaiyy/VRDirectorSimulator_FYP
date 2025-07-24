@@ -1,16 +1,18 @@
 ﻿using UnityEngine;
+using UnityEngine;
 using GLTFast;
 using System.Threading.Tasks;
 using System.IO;
 using System;
 using UnityEngine.XR.Interaction.Toolkit;
 
+
 public class VRModelLoader : MonoBehaviour
 {
     public async void OpenModelPicker()
     {
         Debug.Log("[测试] OpenModelPicker 被调用了");
-        string[] types = { ".glb", ".gltf", ".fbx", ".obj" };
+        string[] types = { ".glb", ".gltf", ".fbx", ".obj", ".zip" };
         NativeFilePicker.PickFile(async (path) =>
         {
             if (string.IsNullOrEmpty(path))
@@ -24,12 +26,15 @@ public class VRModelLoader : MonoBehaviour
             // 这里加判断，如果是content://，报个警告或者直接提示用户选其他路径
             if (path.StartsWith("content://"))
             {
-                Debug.LogError("路径是content URI，不能直接用File API读取，建议选择文件管理器里的文件复制到缓存目录。");
-                // 你也可以这里调用其他处理content uri的方法，但NativeFilePicker通常会自动复制，直接用缓存路径更好。
+                string destPath = CopyFileToPersistentPath(path);
+                await LoadByExtension(destPath);
+                Debug.LogError("路径是content URI，建议选择文件管理器里的文件复制到缓存目录。");
                 return;
             }
-            // 这里才可以用 await 了
-            await LoadModel(path);
+            else
+            {
+                await LoadByExtension(path);
+            }
         }, null);
 
     }
@@ -112,10 +117,21 @@ public class VRModelLoader : MonoBehaviour
             }
             else if (path.EndsWith(".gltf", StringComparison.OrdinalIgnoreCase))
             {
-                string json = System.Text.Encoding.UTF8.GetString(fileData);
-                // 这里简单示例，假设没有外部依赖文件，如果有需实现 getExternalFile 代理
-                loaded = await gltf.LoadGltfJson(json, null);
+                string directory = Path.GetDirectoryName(path);
+                var import = new GltfImport(new LocalDownloadProvider(directory));
+
+                loaded = await import.Load(path);  // ← 不要重新声明 loaded，只赋值
+
+                if (!loaded)
+                {
+                    Debug.LogError("[失败] GLTF 加载失败！");
+                    return;
+                }
+
+                gltf = import; // 把 import 赋值回外部的 gltf
             }
+
+
             else
             {
                 Debug.LogError("不支持的文件格式（不是 glb 或 gltf）");
@@ -134,22 +150,18 @@ public class VRModelLoader : MonoBehaviour
             return;
         }
 
-        // 模型实例化完成后
-        // 模型实例化完成后
         bool instantiated = await gltf.InstantiateMainSceneAsync(parent.transform);
         if (!instantiated)
         {
             Debug.LogError("[失败] 实例化失败！");
             return;
         }
-
-        // 给所有子物体添加 MeshCollider 并设置 convex = true
-        AddMeshCollidersRecursive(parent);
-
+        // 统一缩放模型到最大边长1米以内
+        NormalizeModelScale(parent, 1f);
         if (instantiated)
         {
-            AddMeshCollidersRecursive(parent);
-            SetupRigidbodyAndGrab(parent); // 必须在 AddMeshColliders 后
+            AddColliderToParentOnly(parent);
+            SetupRigidbodyAndGrab(parent);
         }
 
         Debug.Log("[完成] 模型加载完成");
@@ -236,66 +248,125 @@ public class VRModelLoader : MonoBehaviour
         }
     }
 
-    void AddMeshCollidersRecursive(GameObject root)
+    // 新增简化碰撞体方法，替代 AddMeshCollidersRecursive
+    void AddColliderToParentOnly(GameObject root)
     {
-        var meshRenderers = root.GetComponentsInChildren<MeshRenderer>();
-        foreach (var mr in meshRenderers)
-        {
-            var go = mr.gameObject;
+        if (root.GetComponent<Collider>() != null)
+            return; // 已有碰撞体则不重复添加
 
-            var collider = go.GetComponent<Collider>();
-            if (collider == null)
-            {
-                var meshFilter = go.GetComponent<MeshFilter>();
-                if (meshFilter != null && meshFilter.sharedMesh != null)
-                {
-                    var meshCollider = go.AddComponent<MeshCollider>();
-                    meshCollider.convex = true; // 必须是凸包，XR交互要求
-                }
-                else
-                {
-                    // 没有Mesh则用BoxCollider兜底
-                    go.AddComponent<BoxCollider>();
-                }
-            }
-            else if (collider is MeshCollider mc)
-            {
-                mc.convex = true; // 确保是凸包
-            }
+        var meshFilter = root.GetComponent<MeshFilter>();
+        if (meshFilter != null && meshFilter.sharedMesh != null)
+        {
+            var meshCollider = root.AddComponent<MeshCollider>();
+            meshCollider.convex = true;  // 父物体加凸包碰撞体
+        }
+        else
+        {
+            root.AddComponent<BoxCollider>();
         }
     }
+
+    // 修改 SetupRigidbodyAndGrab 只给父物体添加刚体和抓取组件
     void SetupRigidbodyAndGrab(GameObject go)
     {
-        // 添加 Rigidbody
         var rb = go.GetComponent<Rigidbody>();
         if (rb == null) rb = go.AddComponent<Rigidbody>();
         rb.useGravity = true;
         rb.isKinematic = false;
 
-        // 添加 XRGrabInteractable
         var grab = go.GetComponent<XRGrabInteractable>();
         if (grab == null) grab = go.AddComponent<XRGrabInteractable>();
 
-        // 清空并重新添加 colliders
+        // 抓取组件的colliders只添加根物体的碰撞器即可
         grab.colliders.Clear();
-        var colliders = go.GetComponentsInChildren<Collider>();
-        foreach (var col in colliders)
+        var col = go.GetComponent<Collider>();
+        if (col != null)
         {
             grab.colliders.Add(col);
         }
 
-        // 设置 Interaction Manager（确保存在）
         var manager = UnityEngine.Object.FindFirstObjectByType<XRInteractionManager>();
         if (manager != null)
         {
             grab.interactionManager = manager;
         }
 
-        // 强制刷新
         grab.enabled = false;
         grab.enabled = true;
     }
 
+    public static string CopyFileToPersistentPath(string srcPath)
+    {
+        string fileName = Path.GetFileName(srcPath);
+        string destPath = Path.Combine(Application.persistentDataPath, fileName);
 
+        File.Copy(srcPath, destPath, true);
+        return destPath;
+    }
+    public async Task LoadZipModel(string zipPath)
+    {
+        string extractPath = Path.Combine(Application.temporaryCachePath, "unzipped_model");
+        if (Directory.Exists(extractPath))
+            Directory.Delete(extractPath, true);
+
+        Directory.CreateDirectory(extractPath);
+
+        // 使用 SharpZipLib 或 System.IO.Compression 解压
+        System.IO.Compression.ZipFile.ExtractToDirectory(zipPath, extractPath);
+
+        // 查找 gltf 或 glb 文件
+        string[] gltfFiles = Directory.GetFiles(extractPath, "*.gltf", SearchOption.AllDirectories);
+        string[] glbFiles = Directory.GetFiles(extractPath, "*.glb", SearchOption.AllDirectories);
+        string modelPath = (gltfFiles.Length > 0) ? gltfFiles[0] :
+                           (glbFiles.Length > 0) ? glbFiles[0] : null;
+
+        if (modelPath == null)
+        {
+            Debug.LogError("Zip 文件中未找到 gltf 或 glb 文件");
+            return;
+        }
+
+        await LoadModel(modelPath);
+    }
+
+    private async Task LoadByExtension(string path)
+    {
+        string ext = Path.GetExtension(path).ToLowerInvariant();
+
+        if (ext == ".zip")
+        {
+            await LoadZipModel(path);
+        }
+        else if (ext == ".glb" || ext == ".gltf")
+        {
+            await LoadModel(path);
+        }
+        else
+        {
+            Debug.LogError($"不支持的文件格式: {ext}");
+        }
+    }
+
+    void NormalizeModelScale(GameObject model, float maxSize = 1f)
+    {
+        // 计算模型的包围盒
+        var renderers = model.GetComponentsInChildren<Renderer>();
+        if (renderers.Length == 0) return;
+
+        Bounds bounds = renderers[0].bounds;
+        foreach (var r in renderers)
+        {
+            bounds.Encapsulate(r.bounds);
+        }
+
+        // 计算最大边长
+        float maxDimension = Mathf.Max(bounds.size.x, Mathf.Max(bounds.size.y, bounds.size.z));
+        if (maxDimension <= 0) return;
+
+        // 计算缩放比例
+        float scaleFactor = maxSize / maxDimension;
+
+        model.transform.localScale = model.transform.localScale * scaleFactor;
+    }
 
 }
