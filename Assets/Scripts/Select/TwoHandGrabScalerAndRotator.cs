@@ -1,5 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using System.Collections;
 using System.Collections.Generic;
 
 public class TwoHandGrabScalerAndRotator : MonoBehaviour
@@ -12,9 +13,24 @@ public class TwoHandGrabScalerAndRotator : MonoBehaviour
     private Quaternion initialRotation;
     private Quaternion initialHandsRotation;
 
+    private Vector3 lastScale;
+    private bool wasTwoHanded = false;
+
     void Awake()
     {
         grab = GetComponent<XRGrabInteractable>();
+        if (grab != null)
+        {
+            grab.trackPosition = true;
+            grab.trackRotation = true;
+            grab.throwOnDetach = false;
+            grab.useDynamicAttach = false;
+            grab.attachTransform = null;  // 防止缩放被重置
+
+            initialScale = transform.localScale;
+            lastScale = transform.localScale;
+            initialRotation = transform.rotation;
+        }
     }
 
     void OnEnable()
@@ -39,35 +55,61 @@ public class TwoHandGrabScalerAndRotator : MonoBehaviour
     {
         if (!interactors.Contains(args.interactorObject))
             interactors.Add(args.interactorObject);
-
-        if (interactors.Count == 2)
-        {
-            initialDistance = Vector3.Distance(GetPos(0), GetPos(1));
-            initialScale = transform.localScale;
-
-            initialHandsRotation = GetRotationBetweenHands();
-            initialRotation = transform.rotation;
-        }
     }
 
     private void OnSelectExited(SelectExitEventArgs args)
     {
-        interactors.Remove(args.interactorObject);
+        if (interactors.Contains(args.interactorObject))
+            interactors.Remove(args.interactorObject);
+
+        // 保存当前状态作为新的初始值
+        initialScale = transform.localScale;
+        lastScale = transform.localScale;
+        initialRotation = transform.rotation;
+        wasTwoHanded = false;
+
+        // 关键：等一帧再设置缩放，防止系统重置
+        StartCoroutine(ResetScaleNextFrame());
+    }
+
+    IEnumerator ResetScaleNextFrame()
+    {
+        yield return null;
+        transform.localScale = lastScale;
     }
 
     void Update()
     {
         if (interactors.Count == 2)
         {
-            // --- ���� ---
+            if (!wasTwoHanded)
+            {
+                initialDistance = Vector3.Distance(GetPos(0), GetPos(1));
+                initialScale = transform.localScale;
+                initialRotation = transform.rotation;
+                initialHandsRotation = GetRotationBetweenHands();
+                wasTwoHanded = true;
+            }
+
+            // 缩放
             float currentDistance = Vector3.Distance(GetPos(0), GetPos(1));
             float scaleRatio = currentDistance / initialDistance;
             transform.localScale = initialScale * scaleRatio;
+            lastScale = transform.localScale;
 
-            // --- ��ת ---
+            // 旋转
             Quaternion currentHandsRotation = GetRotationBetweenHands();
             Quaternion rotationDelta = currentHandsRotation * Quaternion.Inverse(initialHandsRotation);
             transform.rotation = rotationDelta * initialRotation;
+        }
+    }
+
+    void LateUpdate()
+    {
+        // 强制缩放锁定，防止 XR 系统偷偷修改
+        if (lastScale != Vector3.zero)
+        {
+            transform.localScale = lastScale;
         }
     }
 
@@ -78,7 +120,7 @@ public class TwoHandGrabScalerAndRotator : MonoBehaviour
 
     private Quaternion GetRotationBetweenHands()
     {
-        Vector3 handDir = GetPos(1) - GetPos(0);
-        return Quaternion.LookRotation(handDir);
+        Vector3 dir = GetPos(1) - GetPos(0);
+        return Quaternion.LookRotation(dir != Vector3.zero ? dir : Vector3.forward);
     }
 }
