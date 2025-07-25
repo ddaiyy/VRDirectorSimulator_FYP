@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine;
 using GLTFast;
 using System.Threading.Tasks;
 using System.IO;
@@ -7,7 +6,6 @@ using System;
 using UnityEngine.XR.Interaction.Toolkit;
 using System.Collections.Generic;
 using System.Linq;
-
 
 public class VRModelLoader : MonoBehaviour
 {
@@ -25,284 +23,179 @@ public class VRModelLoader : MonoBehaviour
 
             Debug.Log("选择路径: " + path);
 
-            // 这里加判断，如果是content://，报个警告或者直接提示用户选其他路径
             if (path.StartsWith("content://"))
             {
-                string destPath = CopyFileToPersistentPath(path);
-                await LoadByExtension(destPath);
-                Debug.LogError("路径是content URI，建议选择文件管理器里的文件复制到缓存目录。");
-                return;
+                string copiedPath = CopyFileToPersistentPath(path);
+                if (string.IsNullOrEmpty(copiedPath))
+                {
+                    Debug.LogError("拷贝文件失败，无法加载");
+                    return;
+                }
+                await LoadByExtension(copiedPath);
             }
             else
             {
                 await LoadByExtension(path);
             }
         }, null);
-
     }
+
+    private async Task LoadByExtension(string path)
+    {
+        string ext = Path.GetExtension(path).ToLowerInvariant();
+        if (ext == ".zip")
+        {
+            await LoadZipModel(path);
+        }
+        else if (ext == ".glb")
+        {
+            await LoadModel(path);
+        }
+        else
+        {
+            Debug.LogError($"只支持 .glb 格式，当前文件格式为: {ext}");
+        }
+    }
+
+
     public async Task LoadModel(string path)
     {
+        path = path.Replace("\\", "/");
         Debug.Log($"[加载开始] 路径: {path}");
 
         if (!File.Exists(path))
         {
-            Debug.LogError("文件不存在！");
+            Debug.LogError("❌ 文件不存在！");
             return;
         }
 
         GameObject parent = new GameObject("UploadedModel");
-        // 模型实例化完成后，给所有MeshRenderer添加Collider和XRGrabInteractable（如果需要抓取整个模型，建议只在parent加即可）
-        var meshRenderers = parent.GetComponentsInChildren<MeshRenderer>();
-        foreach (var mr in meshRenderers)
-        {
-            var go = mr.gameObject;
-            if (go.GetComponent<Collider>() == null)
-            {
-                var meshFilter = go.GetComponent<MeshFilter>();
-                if (meshFilter != null && meshFilter.sharedMesh != null)
-                {
-                    var meshCollider = go.AddComponent<MeshCollider>();
-                    meshCollider.convex = true;  // XR交互需要凸包Collider
-                }
-                else
-                {
-                    // 如果没网格，给BoxCollider作为兜底
-                    go.AddComponent<BoxCollider>();
-                }
-            }
-            // 只给parent加XRGrabInteractable即可，或者根据需求加在需要抓取的物体上
-        }
 
-        var rb = parent.GetComponent<Rigidbody>();
-        if (rb == null) rb = parent.AddComponent<Rigidbody>();
-        rb.useGravity = false;
-        rb.isKinematic = false;  // XR抓取通常要非kinematic
-
-        var grab = parent.GetComponent<XRGrabInteractable>();
-        if (grab == null) grab = parent.AddComponent<XRGrabInteractable>();
-
-        var renderers = parent.GetComponentsInChildren<MeshRenderer>();
-        foreach (var r in renderers)
-        {
-            foreach (var mat in r.sharedMaterials)
-            {
-                if (mat == null)
-                    Debug.LogWarning($"{r.name} 有空材质");
-                else if (mat.shader == null)
-                    Debug.LogWarning($"{r.name} 材质没shader");
-                else
-                    Debug.Log($"{r.name} 材质: {mat.name}, Shader: {mat.shader.name}");
-            }
-        }
-
-        if (Camera.main == null)
-        {
-            Debug.LogError("[错误] 找不到主摄像机");
-            return;
-        }
-
-        Transform cam = Camera.main.transform;
-        Vector3 spawnPos = cam.position + cam.forward * 2f;
-        parent.transform.position = spawnPos;
-        parent.transform.localScale = Vector3.one * 0.2f;
-
-        var gltf = new GltfImport();
+        GltfImport gltf = null;
+        bool loaded = false;
 
         try
         {
-            byte[] fileData = File.ReadAllBytes(path);
+            string directory = Path.GetDirectoryName(path);
+            if (string.IsNullOrEmpty(directory))
+            {
+                Debug.LogError("❌ 无效的文件路径，无法获取目录");
+                Destroy(parent);
+                return;
+            }
+            directory = directory.Replace("\\", "/");
+            Debug.Log($"[路径] gltf 文件目录: {directory}");
 
-            bool loaded = false;
             if (path.EndsWith(".glb", StringComparison.OrdinalIgnoreCase))
             {
-                loaded = await gltf.LoadGltfBinary(fileData);
+                gltf = new GltfImport();
+                loaded = await gltf.Load(path);
             }
-            else if (path.EndsWith(".gltf", StringComparison.OrdinalIgnoreCase))
-            {
-                string directory = Path.GetDirectoryName(path);
-                var import = new GltfImport(new LocalDownloadProvider(directory));
-
-                loaded = await import.Load(path);  // ← 不要重新声明 loaded，只赋值
-
-                if (!loaded)
-                {
-                    Debug.LogError("[失败] GLTF 加载失败！");
-                    return;
-                }
-
-                gltf = import; // 把 import 赋值回外部的 gltf
-            }
-
-
             else
             {
-                Debug.LogError("不支持的文件格式（不是 glb 或 gltf）");
+                Debug.LogError("❌ 只支持 .glb 文件格式");
+                Destroy(parent);
                 return;
             }
 
-            if (!loaded)
-            {
-                Debug.LogError("[失败] GLTF 加载失败！");
-                return;
-            }
         }
         catch (Exception ex)
         {
-            Debug.LogError($"GLTF 加载异常: {ex.Message}");
+            Debug.LogError($"❌ [异常] GLTF 加载失败: {ex.Message}\n{ex.StackTrace}");
+            Destroy(parent);
+            return;
+        }
+
+        if (!loaded)
+        {
+            Debug.LogError("❌ [失败] GLTF 加载失败！");
+            Destroy(parent);
             return;
         }
 
         bool instantiated = await gltf.InstantiateMainSceneAsync(parent.transform);
         if (!instantiated)
         {
-            Debug.LogError("[失败] 实例化失败！");
+            Debug.LogError("❌ [失败] GLTF 实例化失败！");
+            Destroy(parent);
             return;
         }
-        // 获取 texture 目录路径（你是把它们 copy 到 model 同目录的）
-        string modelDir = Path.GetDirectoryName(path);
-        string textureFolderPath = Path.Combine(modelDir, "texture");
 
-        BindExternalTextures(parent, textureFolderPath);
+        // ✅ 文件目录验证
+        string modelDir = Path.GetDirectoryName(path)?.Replace("\\", "/");
+        Debug.Log($"[验证] 模型目录：{modelDir}");
 
+       
 
-        // Step 2: 自动调整缩放（可选，统一模型大小）
-        NormalizeModelScale(parent);
+        // ✅ 自动归一化缩放
+        NormalizeModelScale(parent, 1f);
 
         if (instantiated)
         {
-            // Step 3: 添加精确 BoxCollider
             AddAccurateBoxCollider(parent);
-
-            // Step 4: 确保材质贴图正常显示
             ForceAssignWhiteTexture(parent);
-
-            // Step 5: 设置 XRGrabInteractable / RigidBody
             SetupRigidbodyAndGrab(parent);
         }
 
-        Debug.Log("[完成] 模型加载完成");
         ReplaceShadersToStandard(parent);
         PrintLoadedMaterialsAndTextures(parent);
 
-
-    }
-
-    void PrintLoadedMaterialsAndTextures(GameObject root)
-    {
-        var renderers = root.GetComponentsInChildren<Renderer>();
-        foreach (var renderer in renderers)
+        // ✅ 设置位置
+        if (Camera.main != null)
         {
-            Debug.Log($"物体：{renderer.gameObject.name} 有 {renderer.sharedMaterials.Length} 个材质");
-            for (int i = 0; i < renderer.sharedMaterials.Length; i++)
-            {
-                var mat = renderer.sharedMaterials[i];
-                if (mat == null)
-                {
-                    Debug.LogWarning($"材质 #{i} 为空");
-                    continue;
-                }
-                Debug.Log($"材质 #{i} 名字：{mat.name}，Shader：{mat.shader.name}");
-                var mainTex = mat.mainTexture;
-                if (mainTex == null)
-                {
-                    Debug.LogWarning($"材质 {mat.name} 没有主贴图 (mainTexture为空)");
-                }
-                else
-                {
-                    Debug.Log($"材质 {mat.name} 主贴图名称：{mainTex.name}，大小：{mainTex.width}x{mainTex.height}");
-                }
-            }
+            var cam = Camera.main.transform;
+            parent.transform.position = cam.position + cam.forward * 2f;
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ 无主摄像机，模型不会自动定位");
         }
 
+        Debug.Log("✅ 模型加载完成");
     }
-    void ReplaceShadersToStandard(GameObject go)
+
+
+    // LoadZipModel 改成：
+    public async Task LoadZipModel(string zipPath)
     {
-        foreach (var renderer in go.GetComponentsInChildren<Renderer>())
+        string extractPath = Path.Combine(Application.temporaryCachePath, "unzipped_model");
+        if (Directory.Exists(extractPath))
+            Directory.Delete(extractPath, true);
+
+        Directory.CreateDirectory(extractPath);
+
+        System.IO.Compression.ZipFile.ExtractToDirectory(zipPath, extractPath);
+
+        // 查找 gltf 或 glb 文件
+        string[] glbFiles = Directory.GetFiles(extractPath, "*.glb", SearchOption.AllDirectories);
+        string modelPath = (glbFiles.Length > 0) ? glbFiles[0] : null;
+
+        if (modelPath == null)
         {
-            var materials = renderer.sharedMaterials;
-            for (int i = 0; i < materials.Length; i++)
-            {
-                var mat = materials[i];
-                if (mat == null || mat.shader == null)
-                    continue;
-
-                // 如果是 glTF 系列的 Shader，就替换为 Standard
-                if (mat.shader.name.Contains("glTF"))
-                {
-                    /*var newMat = new Material(Shader.Find("Standard"));
-
-                    // 拷贝主贴图
-                    if (mat.mainTexture != null)
-                    {
-                        newMat.mainTexture = mat.mainTexture;
-                        newMat.SetTexture("_MainTex", mat.mainTexture);
-                    }
-
-                    // 拷贝颜色（如果有）
-                    if (mat.HasProperty("_Color"))
-                        newMat.color = mat.color;
-
-                    materials[i] = newMat;*/
-                    var mobileShader = Shader.Find("Mobile/Diffuse");
-                    if (mobileShader != null)
-                    {
-                        var newMat = new Material(mobileShader);
-                        if (mat.mainTexture != null)
-                        {
-                            newMat.mainTexture = mat.mainTexture;
-                        }
-                        if (mat.HasProperty("_Color"))
-                            newMat.color = mat.color;
-                        materials[i] = newMat;
-                    }
-                    else
-                    {
-                        Debug.LogWarning("找不到 Mobile/Diffuse Shader");
-                    }
-
-                }
-            }
-            renderer.sharedMaterials = materials;
+            Debug.LogError("Zip 文件中未找到 .glb 文件");
+            return;
         }
+
+        await LoadModel(modelPath);
+
     }
-    void ForceAssignWhiteTexture(GameObject go)
+
+    void NormalizeModelScale(GameObject model, float maxSize = 1f)
     {
-        Texture2D defaultTex = Texture2D.whiteTexture;
-        var renderers = go.GetComponentsInChildren<Renderer>();
-        foreach (var renderer in renderers)
-        {
-            foreach (var mat in renderer.sharedMaterials)
-            {
-                if (mat != null && mat.shader.name == "Standard")
-                {
-                    if (!mat.HasProperty("_MainTex") || mat.mainTexture == null)
-                    {
-                        Debug.LogWarning($"材质 {mat.name} 没有贴图，强制赋白贴图");
-                        mat.mainTexture = defaultTex;
-                    }
-                }
-            }
-        }
+        var renderers = model.GetComponentsInChildren<Renderer>();
+        if (renderers.Length == 0) return;
+
+        Bounds bounds = renderers[0].bounds;
+        foreach (var r in renderers)
+            bounds.Encapsulate(r.bounds);
+
+        float maxDimension = Mathf.Max(bounds.size.x, Mathf.Max(bounds.size.y, bounds.size.z));
+        if (maxDimension <= 0) return;
+
+        float scaleFactor = maxSize / maxDimension;
+        model.transform.localScale *= scaleFactor;
     }
 
-
-    // 新增简化碰撞体方法，替代 AddMeshCollidersRecursive
-    /* void AddColliderToParentOnly(GameObject root)
-     {
-         if (root.GetComponent<Collider>() != null)
-             return; // 已有碰撞体则不重复添加
-
-         var meshFilter = root.GetComponent<MeshFilter>();
-         if (meshFilter != null && meshFilter.sharedMesh != null)
-         {
-             var meshCollider = root.AddComponent<MeshCollider>();
-             meshCollider.convex = true;  // 父物体加凸包碰撞体
-         }
-         else
-         {
-             root.AddComponent<BoxCollider>();
-         }
-     }*/
     void AddAccurateBoxCollider(GameObject go)
     {
         var renderers = go.GetComponentsInChildren<Renderer>();
@@ -312,31 +205,22 @@ public class VRModelLoader : MonoBehaviour
             return;
         }
 
-        // Step 1: 合并包围盒（用世界坐标，但等会转回本地）
         Bounds worldBounds = renderers[0].bounds;
         for (int i = 1; i < renderers.Length; i++)
-        {
             worldBounds.Encapsulate(renderers[i].bounds);
-        }
 
-        // Step 2: 创建 BoxCollider
         BoxCollider boxCollider = go.GetComponent<BoxCollider>();
         if (boxCollider == null)
             boxCollider = go.AddComponent<BoxCollider>();
 
-        // Step 3: 转换世界包围盒中心到本地坐标
         Vector3 localCenter = go.transform.InverseTransformPoint(worldBounds.center);
         boxCollider.center = localCenter;
 
-        // Step 4: 缩放调整
         Vector3 worldSize = worldBounds.size;
         Vector3 localSize = go.transform.InverseTransformVector(worldSize);
         boxCollider.size = new Vector3(Mathf.Abs(localSize.x), Mathf.Abs(localSize.y), Mathf.Abs(localSize.z));
     }
 
-
-
-    // 修改 SetupRigidbodyAndGrab 只给父物体添加刚体和抓取组件
     void SetupRigidbodyAndGrab(GameObject go)
     {
         var rb = go.GetComponent<Rigidbody>();
@@ -347,173 +231,119 @@ public class VRModelLoader : MonoBehaviour
         var grab = go.GetComponent<XRGrabInteractable>();
         if (grab == null) grab = go.AddComponent<XRGrabInteractable>();
 
-        // 抓取组件的colliders只添加根物体的碰撞器即可
         grab.colliders.Clear();
         var col = go.GetComponent<Collider>();
         if (col != null)
-        {
             grab.colliders.Add(col);
-        }
 
         var manager = UnityEngine.Object.FindFirstObjectByType<XRInteractionManager>();
         if (manager != null)
-        {
             grab.interactionManager = manager;
-        }
 
+        // 重置组件启用状态，防止不响应
         grab.enabled = false;
         grab.enabled = true;
     }
 
-    public static string CopyFileToPersistentPath(string srcPath)
+    void ReplaceShadersToStandard(GameObject go)
     {
-        string fileName = Path.GetFileName(srcPath);
-        string destPath = Path.Combine(Application.persistentDataPath, fileName);
-
-        File.Copy(srcPath, destPath, true);
-        return destPath;
-    }
-    public async Task LoadZipModel(string zipPath)
-    {
-        string extractPath = Path.Combine(Application.temporaryCachePath, "unzipped_model");
-        if (Directory.Exists(extractPath))
-            Directory.Delete(extractPath, true);
-
-        Directory.CreateDirectory(extractPath);
-
-        // 使用 SharpZipLib 或 System.IO.Compression 解压
-        System.IO.Compression.ZipFile.ExtractToDirectory(zipPath, extractPath);
-
-        // 查找 gltf 或 glb 文件
-        string[] gltfFiles = Directory.GetFiles(extractPath, "*.gltf", SearchOption.AllDirectories);
-        string[] glbFiles = Directory.GetFiles(extractPath, "*.glb", SearchOption.AllDirectories);
-        string modelPath = (gltfFiles.Length > 0) ? gltfFiles[0] :
-                           (glbFiles.Length > 0) ? glbFiles[0] : null;
-
-        if (modelPath == null)
+        Shader standardShader = Shader.Find("Standard");
+        if (standardShader == null)
         {
-            Debug.LogError("Zip 文件中未找到 gltf 或 glb 文件");
+            Debug.LogError("找不到 Standard Shader");
             return;
         }
 
-        if (modelPath != null)
+        foreach (var renderer in go.GetComponentsInChildren<Renderer>())
         {
-            string modelDir = Path.GetDirectoryName(modelPath);
-
-            // 支持的贴图格式
-            string[] imageExts = new[] { ".png", ".jpg", ".jpeg", ".webp", ".bmp" };
-            string[] allFiles = Directory.GetFiles(extractPath, "*.*", SearchOption.AllDirectories);
-
-            foreach (var file in allFiles)
+            var materials = renderer.sharedMaterials;
+            for (int i = 0; i < materials.Length; i++)
             {
-                string ext = Path.GetExtension(file).ToLowerInvariant();
-                if (Array.Exists(imageExts, e => e == ext))
+                var mat = materials[i];
+                if (mat == null) continue;
+
+                var newMat = new Material(standardShader);
+                if (mat.mainTexture != null)
                 {
-                    string destPath = Path.Combine(modelDir, Path.GetFileName(file));
-                    if (!File.Exists(destPath))  // 避免重复拷贝
-                    {
-                        File.Copy(file, destPath);
-                        Debug.Log($"已移动贴图到模型目录: {destPath}");
-                    }
+                    newMat.mainTexture = mat.mainTexture;
                 }
+                materials[i] = newMat;
+
+                Debug.Log($"材质 '{mat.name}' 替换为 Standard Shader");
             }
-        }
-
-        await LoadModel(modelPath);
-    }
-
-    private async Task LoadByExtension(string path)
-    {
-        string ext = Path.GetExtension(path).ToLowerInvariant();
-
-        if (ext == ".zip")
-        {
-            await LoadZipModel(path);
-        }
-        else if (ext == ".glb" || ext == ".gltf")
-        {
-            await LoadModel(path);
-        }
-        else
-        {
-            Debug.LogError($"不支持的文件格式: {ext}");
+            renderer.sharedMaterials = materials;
         }
     }
 
-    void NormalizeModelScale(GameObject model, float maxSize = 1f)
+
+    void ForceAssignWhiteTexture(GameObject go)
     {
-        // 计算模型的包围盒
-        var renderers = model.GetComponentsInChildren<Renderer>();
-        if (renderers.Length == 0) return;
-
-        Bounds bounds = renderers[0].bounds;
-        foreach (var r in renderers)
-        {
-            bounds.Encapsulate(r.bounds);
-        }
-
-        // 计算最大边长
-        float maxDimension = Mathf.Max(bounds.size.x, Mathf.Max(bounds.size.y, bounds.size.z));
-        if (maxDimension <= 0) return;
-
-        // 计算缩放比例
-        float scaleFactor = maxSize / maxDimension;
-
-        model.transform.localScale = model.transform.localScale * scaleFactor;
-    }
-
-    void BindExternalTextures(GameObject modelRoot, string textureFolder)
-    {
-        if (!Directory.Exists(textureFolder))
-        {
-            Debug.LogWarning($"贴图目录不存在：{textureFolder}");
-            return;
-        }
-
-        // 1. 加载贴图文件到字典
-        Dictionary<string, Texture2D> textureDict = new Dictionary<string, Texture2D>();
-        var imageFiles = Directory.GetFiles(textureFolder, "*.*", SearchOption.AllDirectories)
-                                  .Where(f => f.EndsWith(".png") || f.EndsWith(".jpg") || f.EndsWith(".jpeg"));
-
-        foreach (var file in imageFiles)
-        {
-            try
-            {
-                byte[] bytes = File.ReadAllBytes(file);
-                Texture2D tex = new Texture2D(2, 2);
-                tex.LoadImage(bytes);
-                string key = Path.GetFileNameWithoutExtension(file).ToLowerInvariant();
-                textureDict[key] = tex;
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"贴图加载失败：{file}, 错误：{e.Message}");
-            }
-        }
-
-        // 2. 遍历材质，尝试绑定贴图
-        var renderers = modelRoot.GetComponentsInChildren<Renderer>();
-        foreach (var renderer in renderers)
+        var whiteTex = Texture2D.whiteTexture;
+        foreach (var renderer in go.GetComponentsInChildren<Renderer>())
         {
             foreach (var mat in renderer.materials)
             {
                 if (mat == null) continue;
-
-                string matName = mat.name.Replace(" (Instance)", "").ToLowerInvariant();
-
-                // 精确匹配或包含关系匹配
-                var match = textureDict.FirstOrDefault(kv => matName.Contains(kv.Key));
-                if (match.Value != null)
+                if (mat.mainTexture == null)
                 {
-                    mat.mainTexture = match.Value;
-                    Debug.Log($"✔ 成功为材质 '{mat.name}' 绑定贴图 '{match.Key}'");
-                }
-                else
-                {
-                    Debug.LogWarning($"✘ 找不到匹配贴图：材质名 = {mat.name}");
+                    mat.mainTexture = whiteTex;
                 }
             }
         }
     }
+
+    void PrintLoadedMaterialsAndTextures(GameObject go)
+    {
+        foreach (var renderer in go.GetComponentsInChildren<Renderer>())
+        {
+            foreach (var mat in renderer.materials)
+            {
+                if (mat == null) continue;
+                Debug.Log($"材质: {mat.name}, Shader: {mat.shader.name}, 贴图: {mat.mainTexture?.name ?? "无"}");
+            }
+        }
+    }
+
+    // 复制content uri到持久目录，方便文件访问
+    string CopyFileToPersistentPath(string contentUri)
+    {
+        string fileName = Path.GetFileName(contentUri); // 取文件名
+        string persistentPath = Path.Combine(Application.persistentDataPath, fileName);
+
+        if (File.Exists(persistentPath))
+            return persistentPath;
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+    try
+    {
+        using (AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        {
+            AndroidJavaObject activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+            AndroidJavaObject contentResolver = activity.Call<AndroidJavaObject>("getContentResolver");
+            AndroidJavaObject inputStream = contentResolver.Call<AndroidJavaObject>("openInputStream", new AndroidJavaObject("android.net.Uri", contentUri));
+            using (var fileStream = new FileStream(persistentPath, FileMode.Create, FileAccess.Write))
+            {
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = inputStream.Call<int>("read", buffer, 0, buffer.Length)) > 0)
+                {
+                    fileStream.Write(buffer, 0, bytesRead);
+                }
+            }
+            inputStream.Call("close");
+        }
+        return persistentPath;
+    }
+    catch (Exception e)
+    {
+        Debug.LogError($"复制 contentUri 文件失败: {e.Message}");
+        return null;
+    }
+#else
+        Debug.LogWarning("CopyFileToPersistentPath 在非Android平台未实现");
+        return null;
+#endif
+    }
+
 
 }
