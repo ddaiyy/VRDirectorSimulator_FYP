@@ -1,16 +1,19 @@
+ï»¿using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
+using static CameraController;
+using MyGame.Selection;
 
-public class CameraController : MonoBehaviour
+public class CameraController : MonoBehaviour, ICustomSelectable
 {
-    public GameObject worldCanvas; // °´Å¥Canvas£¬¹ÒÔØÔÚÉãÏñ»úPrefabÏÂ
+    public GameObject worldCanvas; // Â°Â´Ã…Â¥CanvasÂ£Â¬Â¹Ã’Ã”Ã˜Ã”ÃšÃ‰Ã£ÃÃ±Â»ÃºPrefabÃÃ‚
     public Camera mainPlayerCamera;
-    public PostProcessVolume postProcessVolume;  // ĞÂÔö£ººóÆÚ´¦ÀíVolumeÒıÓÃ
-    public DepthOfField dof;  // DepthOfFieldÉèÖÃ»º´æ
-    private float focusDistance = 5f; // Ä¬ÈÏ5
+    public PostProcessVolume postProcessVolume;  // ÃÃ‚Ã”Ã¶Â£ÂºÂºÃ³Ã†ÃšÂ´Â¦Ã€Ã­VolumeÃ’Ã½Ã“Ãƒ
+    public DepthOfField dof;  // DepthOfFieldÃ‰Ã¨Ã–ÃƒÂ»ÂºÂ´Ã¦
+    private float focusDistance = 5f; // Ã„Â¬ÃˆÃ5
     private Camera cam;
     [HideInInspector]
-    public GameObject rigRoot; // Ìí¼Ó£ºÕû¸ö VirtualCameraRig µÄÒıÓÃ
+    public GameObject rigRoot; // ÃŒÃ­Â¼Ã“Â£ÂºÃ•Ã»Â¸Ã¶ VirtualCameraRig ÂµÃ„Ã’Ã½Ã“Ãƒ
     private void Awake()
     {
         if (mainPlayerCamera == null)
@@ -20,7 +23,7 @@ public class CameraController : MonoBehaviour
 
         cam = GetComponent<Camera>();
 
-        // ÆôÓÃÉãÏñ»ú£¬µ«Ä¬ÈÏ²»Ğ´Èë RT£¬·ÀÖ¹ºÚÆÁ bug
+        // Ã†Ã´Ã“ÃƒÃ‰Ã£ÃÃ±Â»ÃºÂ£Â¬ÂµÂ«Ã„Â¬ÃˆÃÂ²Â»ÃÂ´ÃˆÃ« RTÂ£Â¬Â·Ã€Ã–Â¹ÂºÃšÃ†Ã bug
         cam.enabled = true;
         cam.targetTexture = null;
 
@@ -32,7 +35,7 @@ public class CameraController : MonoBehaviour
 
             if (!postProcessVolume.profile.TryGetSettings(out dof))
             {
-                Debug.LogError("PostProcessProfile ÖĞÃ»ÓĞÕÒµ½ DepthOfField ÉèÖÃ£¡");
+                Debug.LogError("PostProcessProfile Ã–ÃÃƒÂ»Ã“ÃÃ•Ã’ÂµÂ½ DepthOfField Ã‰Ã¨Ã–ÃƒÂ£Â¡");
             }
         }
 
@@ -41,7 +44,7 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
-        // Ö÷ÉãÏñ»ú±£³ÖÖ÷»­Ãæ
+        // Ã–Ã·Ã‰Ã£ÃÃ±Â»ÃºÂ±Â£Â³Ã–Ã–Ã·Â»Â­ÃƒÃ¦
         mainPlayerCamera.enabled = true;
         mainPlayerCamera.targetTexture = null;
 
@@ -58,9 +61,12 @@ public class CameraController : MonoBehaviour
    
     public void EnablePreview(RenderTexture rt)
     {
+        Debug.Log($"å¯ç”¨é¢„è§ˆ {gameObject.name}");
+        cam.enabled = false;
+        cam.targetTexture = null;  // å…ˆæ¸…ç©ºä¸€ä¸‹ï¼Œç¡®ä¿åˆ·æ–°
         cam.targetTexture = rt;
 
-        // ·ÀÖ¹Êä³öµ½Ö÷ÆÁÄ»£ºÖ»ÓĞÉèÖÃ targetTexture ºóÔÙÆôÓÃÉãÏñ»ú
+        // Â·Ã€Ã–Â¹ÃŠÃ¤Â³Ã¶ÂµÂ½Ã–Ã·Ã†ÃÃ„Â»Â£ÂºÃ–Â»Ã“ÃÃ‰Ã¨Ã–Ãƒ targetTexture ÂºÃ³Ã”Ã™Ã†Ã´Ã“ÃƒÃ‰Ã£ÃÃ±Â»Ãº
         if (rt != null)
         {
             cam.enabled = true;
@@ -73,11 +79,9 @@ public class CameraController : MonoBehaviour
 
     public void DisablePreview()
     {
-        cam.targetTexture = null;
         cam.enabled = false;
-
-        /*if (worldCanvas != null)
-            worldCanvas.SetActive(false);*/
+        cam.targetTexture = null;
+        Debug.Log($"DisablePreview called on {gameObject.name}");
     }
 
 
@@ -106,22 +110,22 @@ public class CameraController : MonoBehaviour
     {
         if (worldCanvas == null)
         {
-            Debug.LogWarning("worldCanvas Î´¸³Öµ");
+            Debug.LogWarning("worldCanvas ÃÂ´Â¸Â³Ã–Âµ");
             return;
         }
 
         bool isActive = worldCanvas.activeSelf;
         worldCanvas.SetActive(!isActive);
 
-        Debug.Log($"worldCanvas ×´Ì¬ÇĞ»»Îª {!isActive}");
+        Debug.Log($"worldCanvas Ã—Â´ÃŒÂ¬Ã‡ÃÂ»Â»ÃÂª {!isActive}");
     }*/
     public void SetFocusDistance(float value)
     {
         if (dof != null)
         {
             dof.focusDistance.value = value;
-            dof.enabled.value = true;  // È·±£¾°Éî¿ªÆô
-            Debug.Log($"ÉèÖÃ¾°Éî½¹¾àÎª {value}");
+            dof.enabled.value = true;  // ÃˆÂ·Â±Â£Â¾Â°Ã‰Ã®Â¿ÂªÃ†Ã´
+            Debug.Log($"Ã‰Ã¨Ã–ÃƒÂ¾Â°Ã‰Ã®Â½Â¹Â¾Ã ÃÂª {value}");
         }
     }
     public float GetFocusDistance()
@@ -137,4 +141,31 @@ public class CameraController : MonoBehaviour
     {
         SetFocusDistance(3f);
     }
+
+    public void OnSelect()
+    {
+        Debug.Log($"{gameObject.name} è¢«é€‰ä¸­ï¼šOnSelect è¢«è°ƒç”¨");
+
+        worldCanvas?.SetActive(true);
+        CameraManager.Instance.SelectCamera(this);
+    }
+
+
+    public void OnDeselect()
+    {
+        Debug.Log($"{gameObject.name} ÃˆÂ¡ÃÃ»Ã‘Â¡Ã–Ã");
+    }
+
+    [ContextMenu("Test OnSelect")]
+    private void TestOnSelect()
+    {
+        OnSelect();
+    }
+
+    [ContextMenu("Test OnDeselect")]
+    private void TestOnDeselect()
+    {
+        OnDeselect();
+    }
+
 }
