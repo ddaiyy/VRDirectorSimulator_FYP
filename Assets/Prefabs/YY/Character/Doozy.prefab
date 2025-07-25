@@ -1102,6 +1102,7 @@ GameObject:
   - component: {fileID: 4651477063809589424}
   - component: {fileID: 2848972011937757050}
   - component: {fileID: -3360757188847311642}
+  - component: {fileID: 7657581912845102591}
   m_Layer: 0
   m_Name: Doozy
   m_TagString: Untagged
@@ -1386,7 +1387,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerForThisCharacter: {fileID: 4651477063809589424}
-  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  propUI: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
   characterTransform: {fileID: 3435689413019917439}
 --- !u!114 &-3360757188847311642
 MonoBehaviour:
@@ -1400,6 +1401,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4746b596b1674d419c8c06b7a33c83b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7657581912845102591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4199056328295280206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9484cfafecf6b8d4bad5d2fb32788a1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clips: []
+  currentTime: 0
+  isPlaying: 0
+  duration: 0
+  isControlledByMaster: 0
+  volume: {fileID: 0}
 --- !u!1 &4328014924097770974
 GameObject:
   m_ObjectHideFlags: 0
@@ -2375,7 +2394,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerForThisCharacter: {fileID: 4651477063809589424}
-  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  propUI: {fileID: 0}
   characterTransform: {fileID: 3435689413019917439}
 --- !u!1 &8021004552038078568
 GameObject:

@@ -25,7 +25,8 @@ public class RoleSpawnProxy : MonoBehaviour
         GameObject newCharacter = Instantiate(originalPrefab, position, rotation);
 
         Debug.Log("✅ 在 " + position + " 生成角色: " + newCharacter.name);
-
+        //注册Timeline
+        TimelineManager.Instance.RegisterTrack(newCharacter.GetComponent<TimelineTrack>());
         // 添加 XRGrabInteractable
         if (newCharacter.GetComponent<XRGrabInteractable>() == null)
             newCharacter.AddComponent<XRGrabInteractable>();

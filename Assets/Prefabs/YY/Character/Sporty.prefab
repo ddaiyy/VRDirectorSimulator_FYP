@@ -2286,6 +2286,7 @@ GameObject:
   - component: {fileID: 2235182043282927433}
   - component: {fileID: 440624756583886050}
   - component: {fileID: 588424563163000953}
+  - component: {fileID: 4630201259409956005}
   m_Layer: 0
   m_Name: Sporty
   m_TagString: Untagged
@@ -2585,7 +2586,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerForThisCharacter: {fileID: 2235182043282927433}
-  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  propUI: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
   characterTransform: {fileID: 4838346088289295311}
 --- !u!114 &588424563163000953
 MonoBehaviour:
@@ -2599,6 +2600,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4746b596b1674d419c8c06b7a33c83b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4630201259409956005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4051780915273838970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9484cfafecf6b8d4bad5d2fb32788a1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clips: []
+  currentTime: 0
+  isPlaying: 0
+  duration: 0
+  isControlledByMaster: 0
+  volume: {fileID: 0}
 --- !u!1 &4226887411249802471
 GameObject:
   m_ObjectHideFlags: 0
@@ -4428,7 +4447,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerForThisCharacter: {fileID: 2235182043282927433}
-  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  propUI: {fileID: 0}
   characterTransform: {fileID: 4838346088289295311}
 --- !u!1 &9051803386369545243
 GameObject:

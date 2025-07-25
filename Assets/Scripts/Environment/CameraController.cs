@@ -148,6 +148,11 @@ public class CameraController : MonoBehaviour, ICustomSelectable
 
         worldCanvas?.SetActive(true);
         CameraManager.Instance.SelectCamera(this);
+        TimelineTrack track = this.gameObject.GetComponentInParent<TimelineTrack>();
+        if (track != null)
+        {
+            TimelineManager.Instance.timelinePanel.ShowPanel(track);
+        }
     }
 
 

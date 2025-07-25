@@ -1371,7 +1371,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerForThisCharacter: {fileID: 4433001819264539225}
-  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  propUI: {fileID: 0}
   characterTransform: {fileID: 6453260705212723694}
 --- !u!1 &365233797502475396
 GameObject:
@@ -14259,7 +14259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerForThisCharacter: {fileID: 7174569213926764506}
-  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  propUI: {fileID: 0}
   characterTransform: {fileID: 2861142239508409376}
 --- !u!1 &3560230212860270578
 GameObject:
@@ -14794,7 +14794,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerForThisCharacter: {fileID: 3131227996932405456}
-  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  propUI: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
   characterTransform: {fileID: 141698069928482373}
 --- !u!1 &3672892137147169692
 GameObject:
@@ -18831,7 +18831,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerForThisCharacter: {fileID: 5274062974041904030}
-  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  propUI: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
   characterTransform: {fileID: 4673803912909383166}
 --- !u!1 &4609530837192914389
 GameObject:
@@ -21165,7 +21165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerForThisCharacter: {fileID: 337723825306941750}
-  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  propUI: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
   characterTransform: {fileID: 6231765806327750858}
 --- !u!1 &5149458225007378258
 GameObject:
@@ -22005,7 +22005,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerForThisCharacter: {fileID: 3131227996932405456}
-  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  propUI: {fileID: 0}
   characterTransform: {fileID: 141698069928482373}
 --- !u!1 &5394291637013781957
 GameObject:
@@ -22501,7 +22501,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerForThisCharacter: {fileID: 7790252096496337549}
-  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  propUI: {fileID: 0}
   characterTransform: {fileID: 5090997217714262043}
 --- !u!1 &5437067231879304234
 GameObject:
@@ -27921,7 +27921,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerForThisCharacter: {fileID: 337723825306941750}
-  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  propUI: {fileID: 0}
   characterTransform: {fileID: 6231765806327750858}
 --- !u!1 &6684874635866007973
 GameObject:
@@ -29170,7 +29170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerForThisCharacter: {fileID: 5274062974041904030}
-  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  propUI: {fileID: 0}
   characterTransform: {fileID: 4673803912909383166}
 --- !u!1 &7004386275046233266
 GameObject:
@@ -30202,7 +30202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerForThisCharacter: {fileID: 4433001819264539225}
-  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  propUI: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
   characterTransform: {fileID: 6453260705212723694}
 --- !u!1 &7156864474322172472
 GameObject:
@@ -31288,7 +31288,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerForThisCharacter: {fileID: 7174569213926764506}
-  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  propUI: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
   characterTransform: {fileID: 2861142239508409376}
 --- !u!1 &7313530030748399423
 GameObject:
@@ -38905,7 +38905,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerForThisCharacter: {fileID: 7790252096496337549}
-  actionSelectionCanvasPrefab: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  propUI: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
   characterTransform: {fileID: 5090997217714262043}
 --- !u!1 &9025957813907464885
 GameObject:
