@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using System.IO;
 using System;
 using UnityEngine.XR.Interaction.Toolkit;
+using System.Collections.Generic;
+using System.Linq;
 
 
 public class VRModelLoader : MonoBehaviour
@@ -156,6 +158,13 @@ public class VRModelLoader : MonoBehaviour
             Debug.LogError("[失败] 实例化失败！");
             return;
         }
+        // 获取 texture 目录路径（你是把它们 copy 到 model 同目录的）
+        string modelDir = Path.GetDirectoryName(path);
+        string textureFolderPath = Path.Combine(modelDir, "texture");
+
+        BindExternalTextures(parent, textureFolderPath);
+
+
         // Step 2: 自动调整缩放（可选，统一模型大小）
         NormalizeModelScale(parent);
 
@@ -174,7 +183,7 @@ public class VRModelLoader : MonoBehaviour
         Debug.Log("[完成] 模型加载完成");
         ReplaceShadersToStandard(parent);
         PrintLoadedMaterialsAndTextures(parent);
-        
+
 
     }
 
@@ -220,7 +229,7 @@ public class VRModelLoader : MonoBehaviour
                 // 如果是 glTF 系列的 Shader，就替换为 Standard
                 if (mat.shader.name.Contains("glTF"))
                 {
-                    var newMat = new Material(Shader.Find("Standard"));
+                    /*var newMat = new Material(Shader.Find("Standard"));
 
                     // 拷贝主贴图
                     if (mat.mainTexture != null)
@@ -233,7 +242,24 @@ public class VRModelLoader : MonoBehaviour
                     if (mat.HasProperty("_Color"))
                         newMat.color = mat.color;
 
-                    materials[i] = newMat;
+                    materials[i] = newMat;*/
+                    var mobileShader = Shader.Find("Mobile/Diffuse");
+                    if (mobileShader != null)
+                    {
+                        var newMat = new Material(mobileShader);
+                        if (mat.mainTexture != null)
+                        {
+                            newMat.mainTexture = mat.mainTexture;
+                        }
+                        if (mat.HasProperty("_Color"))
+                            newMat.color = mat.color;
+                        materials[i] = newMat;
+                    }
+                    else
+                    {
+                        Debug.LogWarning("找不到 Mobile/Diffuse Shader");
+                    }
+
                 }
             }
             renderer.sharedMaterials = materials;
@@ -286,28 +312,26 @@ public class VRModelLoader : MonoBehaviour
             return;
         }
 
-        // 计算世界空间下的包围盒
+        // Step 1: 合并包围盒（用世界坐标，但等会转回本地）
         Bounds worldBounds = renderers[0].bounds;
         for (int i = 1; i < renderers.Length; i++)
         {
             worldBounds.Encapsulate(renderers[i].bounds);
         }
 
-        // 将中心从世界坐标转换到本地坐标
+        // Step 2: 创建 BoxCollider
+        BoxCollider boxCollider = go.GetComponent<BoxCollider>();
+        if (boxCollider == null)
+            boxCollider = go.AddComponent<BoxCollider>();
+
+        // Step 3: 转换世界包围盒中心到本地坐标
         Vector3 localCenter = go.transform.InverseTransformPoint(worldBounds.center);
+        boxCollider.center = localCenter;
 
-        // 将包围盒 size 从世界空间转换到本地空间（考虑缩放）
-        Vector3 localSize = go.transform.InverseTransformVector(worldBounds.size + Vector3.zero); // +0 防止引用错误
-
-        // 防止负值
-        localSize = new Vector3(Mathf.Abs(localSize.x), Mathf.Abs(localSize.y), Mathf.Abs(localSize.z));
-
-        BoxCollider box = go.GetComponent<BoxCollider>();
-        if (box == null)
-            box = go.AddComponent<BoxCollider>();
-
-        box.center = localCenter;
-        box.size = localSize;
+        // Step 4: 缩放调整
+        Vector3 worldSize = worldBounds.size;
+        Vector3 localSize = go.transform.InverseTransformVector(worldSize);
+        boxCollider.size = new Vector3(Mathf.Abs(localSize.x), Mathf.Abs(localSize.y), Mathf.Abs(localSize.z));
     }
 
 
@@ -436,6 +460,60 @@ public class VRModelLoader : MonoBehaviour
         float scaleFactor = maxSize / maxDimension;
 
         model.transform.localScale = model.transform.localScale * scaleFactor;
+    }
+
+    void BindExternalTextures(GameObject modelRoot, string textureFolder)
+    {
+        if (!Directory.Exists(textureFolder))
+        {
+            Debug.LogWarning($"贴图目录不存在：{textureFolder}");
+            return;
+        }
+
+        // 1. 加载贴图文件到字典
+        Dictionary<string, Texture2D> textureDict = new Dictionary<string, Texture2D>();
+        var imageFiles = Directory.GetFiles(textureFolder, "*.*", SearchOption.AllDirectories)
+                                  .Where(f => f.EndsWith(".png") || f.EndsWith(".jpg") || f.EndsWith(".jpeg"));
+
+        foreach (var file in imageFiles)
+        {
+            try
+            {
+                byte[] bytes = File.ReadAllBytes(file);
+                Texture2D tex = new Texture2D(2, 2);
+                tex.LoadImage(bytes);
+                string key = Path.GetFileNameWithoutExtension(file).ToLowerInvariant();
+                textureDict[key] = tex;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"贴图加载失败：{file}, 错误：{e.Message}");
+            }
+        }
+
+        // 2. 遍历材质，尝试绑定贴图
+        var renderers = modelRoot.GetComponentsInChildren<Renderer>();
+        foreach (var renderer in renderers)
+        {
+            foreach (var mat in renderer.materials)
+            {
+                if (mat == null) continue;
+
+                string matName = mat.name.Replace(" (Instance)", "").ToLowerInvariant();
+
+                // 精确匹配或包含关系匹配
+                var match = textureDict.FirstOrDefault(kv => matName.Contains(kv.Key));
+                if (match.Value != null)
+                {
+                    mat.mainTexture = match.Value;
+                    Debug.Log($"✔ 成功为材质 '{mat.name}' 绑定贴图 '{match.Key}'");
+                }
+                else
+                {
+                    Debug.LogWarning($"✘ 找不到匹配贴图：材质名 = {mat.name}");
+                }
+            }
+        }
     }
 
 }
