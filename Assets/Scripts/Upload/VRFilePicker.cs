@@ -156,18 +156,25 @@ public class VRModelLoader : MonoBehaviour
             Debug.LogError("[失败] 实例化失败！");
             return;
         }
-        // 统一缩放模型到最大边长1米以内
-        NormalizeModelScale(parent, 1f);
+        // Step 2: 自动调整缩放（可选，统一模型大小）
+        NormalizeModelScale(parent);
+
         if (instantiated)
         {
-            AddColliderToParentOnly(parent);
+            // Step 3: 添加精确 BoxCollider
+            AddAccurateBoxCollider(parent);
+
+            // Step 4: 确保材质贴图正常显示
+            ForceAssignWhiteTexture(parent);
+
+            // Step 5: 设置 XRGrabInteractable / RigidBody
             SetupRigidbodyAndGrab(parent);
         }
 
         Debug.Log("[完成] 模型加载完成");
         ReplaceShadersToStandard(parent);
         PrintLoadedMaterialsAndTextures(parent);
-        ForceAssignTestTexture(parent);
+        
 
     }
 
@@ -232,39 +239,78 @@ public class VRModelLoader : MonoBehaviour
             renderer.sharedMaterials = materials;
         }
     }
-    void ForceAssignTestTexture(GameObject root)
+    void ForceAssignWhiteTexture(GameObject go)
     {
-        Texture2D fallbackTex = Texture2D.whiteTexture;
-        foreach (var renderer in root.GetComponentsInChildren<Renderer>())
+        Texture2D defaultTex = Texture2D.whiteTexture;
+        var renderers = go.GetComponentsInChildren<Renderer>();
+        foreach (var renderer in renderers)
         {
-            foreach (var mat in renderer.materials)
+            foreach (var mat in renderer.sharedMaterials)
             {
-                if (mat != null && mat.mainTexture == null)
+                if (mat != null && mat.shader.name == "Standard")
                 {
-                    Debug.LogWarning($"材质 {mat.name} 没有贴图，强行赋值白贴图");
-                    mat.mainTexture = fallbackTex;
+                    if (!mat.HasProperty("_MainTex") || mat.mainTexture == null)
+                    {
+                        Debug.LogWarning($"材质 {mat.name} 没有贴图，强制赋白贴图");
+                        mat.mainTexture = defaultTex;
+                    }
                 }
             }
         }
     }
 
-    // 新增简化碰撞体方法，替代 AddMeshCollidersRecursive
-    void AddColliderToParentOnly(GameObject root)
-    {
-        if (root.GetComponent<Collider>() != null)
-            return; // 已有碰撞体则不重复添加
 
-        var meshFilter = root.GetComponent<MeshFilter>();
-        if (meshFilter != null && meshFilter.sharedMesh != null)
+    // 新增简化碰撞体方法，替代 AddMeshCollidersRecursive
+    /* void AddColliderToParentOnly(GameObject root)
+     {
+         if (root.GetComponent<Collider>() != null)
+             return; // 已有碰撞体则不重复添加
+
+         var meshFilter = root.GetComponent<MeshFilter>();
+         if (meshFilter != null && meshFilter.sharedMesh != null)
+         {
+             var meshCollider = root.AddComponent<MeshCollider>();
+             meshCollider.convex = true;  // 父物体加凸包碰撞体
+         }
+         else
+         {
+             root.AddComponent<BoxCollider>();
+         }
+     }*/
+    void AddAccurateBoxCollider(GameObject go)
+    {
+        var renderers = go.GetComponentsInChildren<Renderer>();
+        if (renderers.Length == 0)
         {
-            var meshCollider = root.AddComponent<MeshCollider>();
-            meshCollider.convex = true;  // 父物体加凸包碰撞体
+            Debug.LogWarning("No renderer found, skipping collider.");
+            return;
         }
-        else
+
+        // 计算世界空间下的包围盒
+        Bounds worldBounds = renderers[0].bounds;
+        for (int i = 1; i < renderers.Length; i++)
         {
-            root.AddComponent<BoxCollider>();
+            worldBounds.Encapsulate(renderers[i].bounds);
         }
+
+        // 将中心从世界坐标转换到本地坐标
+        Vector3 localCenter = go.transform.InverseTransformPoint(worldBounds.center);
+
+        // 将包围盒 size 从世界空间转换到本地空间（考虑缩放）
+        Vector3 localSize = go.transform.InverseTransformVector(worldBounds.size + Vector3.zero); // +0 防止引用错误
+
+        // 防止负值
+        localSize = new Vector3(Mathf.Abs(localSize.x), Mathf.Abs(localSize.y), Mathf.Abs(localSize.z));
+
+        BoxCollider box = go.GetComponent<BoxCollider>();
+        if (box == null)
+            box = go.AddComponent<BoxCollider>();
+
+        box.center = localCenter;
+        box.size = localSize;
     }
+
+
 
     // 修改 SetupRigidbodyAndGrab 只给父物体添加刚体和抓取组件
     void SetupRigidbodyAndGrab(GameObject go)
@@ -324,6 +370,29 @@ public class VRModelLoader : MonoBehaviour
         {
             Debug.LogError("Zip 文件中未找到 gltf 或 glb 文件");
             return;
+        }
+
+        if (modelPath != null)
+        {
+            string modelDir = Path.GetDirectoryName(modelPath);
+
+            // 支持的贴图格式
+            string[] imageExts = new[] { ".png", ".jpg", ".jpeg", ".webp", ".bmp" };
+            string[] allFiles = Directory.GetFiles(extractPath, "*.*", SearchOption.AllDirectories);
+
+            foreach (var file in allFiles)
+            {
+                string ext = Path.GetExtension(file).ToLowerInvariant();
+                if (Array.Exists(imageExts, e => e == ext))
+                {
+                    string destPath = Path.Combine(modelDir, Path.GetFileName(file));
+                    if (!File.Exists(destPath))  // 避免重复拷贝
+                    {
+                        File.Copy(file, destPath);
+                        Debug.Log($"已移动贴图到模型目录: {destPath}");
+                    }
+                }
+            }
         }
 
         await LoadModel(modelPath);
