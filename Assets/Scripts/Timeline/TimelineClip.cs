@@ -26,4 +26,12 @@ public class TimelineClip
 
     //记录摄像机的ID
     public int activeCameraID;
+    
+    //
+    public enum ClipType
+    {
+        Null,
+        AnimationClip,
+    }
+    public ClipType clipType= ClipType.Null;
 } 

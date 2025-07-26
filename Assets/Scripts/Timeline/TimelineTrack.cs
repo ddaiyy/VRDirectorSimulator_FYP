@@ -163,7 +163,57 @@ public class TimelineTrack : MonoBehaviour
         
         objectTimelineUI.RefreshAll();
     }
-    
+
+    public void AddAnimationClip(float animationDuration)
+    {
+        TimelineClip preClip = new TimelineClip();
+        preClip.time = currentTime; //TODO：暂时需自定义
+        preClip.position = transform.position;
+        preClip.rotation = transform.rotation;
+        preClip.scale = transform.localScale;
+        
+        preClip.clipType = TimelineClip.ClipType.AnimationClip;
+        clips.Add(preClip);
+        
+        TimelineClip autoClip = new TimelineClip();
+        autoClip.time = currentTime+animationDuration;
+        autoClip.position = transform.position;
+        autoClip.rotation = transform.rotation;
+        autoClip.scale = transform.localScale;
+        autoClip.clipType = TimelineClip.ClipType.AnimationClip;
+        
+        clips.Add(autoClip);
+        clips = clips.OrderBy(c => c.time).ToList();
+        
+        objectTimelineUI.RefreshAll();
+        MasterTimelineUI.Instance?.RefreshTimelineUI();
+    }
+    [ContextMenu("添加动画关键帧")]
+    public void AddAnimationClip()
+    {
+        float animationDuration = 5f;
+        TimelineClip preClip = new TimelineClip();
+        preClip.time = currentTime; //TODO：暂时需自定义
+        preClip.position = transform.position;
+        preClip.rotation = transform.rotation;
+        preClip.scale = transform.localScale;
+        
+        preClip.clipType = TimelineClip.ClipType.AnimationClip;
+        clips.Add(preClip);
+        
+        TimelineClip autoClip = new TimelineClip();
+        autoClip.time = currentTime+animationDuration;
+        autoClip.position = transform.position;
+        autoClip.rotation = transform.rotation;
+        autoClip.scale = transform.localScale;
+        autoClip.clipType = TimelineClip.ClipType.AnimationClip;
+        
+        clips.Add(autoClip);
+        clips = clips.OrderBy(c => c.time).ToList();
+        
+        objectTimelineUI.RefreshAll();
+        MasterTimelineUI.Instance?.RefreshTimelineUI();
+    }
     void InitializeTimelineUI()
     {
         Debug.Log($"[{gameObject.name}] 开始初始化UI");

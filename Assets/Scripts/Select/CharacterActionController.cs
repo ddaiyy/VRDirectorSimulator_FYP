@@ -127,6 +127,8 @@ public class CharacterActionController : MonoBehaviour
     {
         actionSequence.Add(action);
         Debug.Log($"添加了动作: {action.actionName}，当前序列长度: {actionSequence.Count}");
+        TimelineTrack track=GetComponent<TimelineTrack>();
+        track.AddAnimationClip(action.duration);
     }
 
     public void ClearActions()
