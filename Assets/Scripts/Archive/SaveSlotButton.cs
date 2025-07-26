@@ -9,6 +9,8 @@ public class SaveSlotButton : MonoBehaviour
     public bool isNewSlot;
 
     private SaveData currentData;
+    public GameObject deleteButtonGO; // 拖入 DeleteButton
+
 
     public void SetupExistingSlot(SaveData data)
     {
@@ -18,20 +20,27 @@ public class SaveSlotButton : MonoBehaviour
         isNewSlot = false;
 
         if (label != null)
-            /*label.text = data.saveName + "\n" + data.saveTime.ToString("g");*/
-            label.text = "";  // 不显示任何内容
+            label.text = $"{data.saveName}: {data.lastScene}\n{data.saveTime:MM/dd HH:mm}";
 
+        if (deleteButtonGO != null)
+            deleteButtonGO.SetActive(true);
     }
 
-    public void SetupNewSlot()
+    public void SetupNewSlot(bool disabled = false)
     {
         currentData = null;
         isNewSlot = true;
         saveId = "";
 
         if (label != null)
-            label.text = "+";
+            label.text = disabled ? "Archive is full" : "+";
+
+        GetComponent<UnityEngine.UI.Button>().interactable = !disabled;
+
+        if (deleteButtonGO != null)
+            deleteButtonGO.SetActive(false);
     }
+
 
     public void OnClick()
     {
@@ -39,11 +48,13 @@ public class SaveSlotButton : MonoBehaviour
 
         if (isNewSlot)
         {
+            string newSaveName = "P " + (SaveSystem.LoadAll().Count + 1);
             // 创建新存档并跳转
             SaveData newData = new SaveData
             {
                 saveId = System.Guid.NewGuid().ToString(),
-                saveName = "New Save " + System.DateTime.Now.ToString("HH:mm"),
+                /*saveName = "New Save " + System.DateTime.Now.ToString("HH:mm"),*/
+                saveName = newSaveName,
                 lastScene = "EnvironmentSelect",
                 saveTime = System.DateTime.Now
             };
@@ -64,6 +75,21 @@ public class SaveSlotButton : MonoBehaviour
             SceneManager.LoadScene(currentData.lastScene);
         }
     }
+
+    public void OnDeleteButtonClick()
+    {
+        if (currentData == null) return;
+
+        // 简单确认对话框（可换成你自己的 UI）
+        bool confirmed = true; // 你可以改成弹窗确认
+        if (confirmed)
+        {
+            SaveSystem.Delete(currentData.saveId);
+            // 刷新整个列表
+            FindObjectOfType<SaveSlotUIManager>().LoadAllSlots();
+        }
+    }
+
 
 
 }

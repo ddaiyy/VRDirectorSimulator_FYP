@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,11 +9,11 @@ public class SaveSlotUIManager : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("ÕıÔÚ¼ÓÔØËùÓĞ´æµµ°´Å¥");
+        Debug.Log("æ­£åœ¨åŠ è½½æ‰€æœ‰å­˜æ¡£æŒ‰é’®");
         LoadAllSlots();
     }
 
-    void LoadAllSlots()
+    public void LoadAllSlots()
     {
         foreach (Transform child in slotContainer)
             Destroy(child.gameObject);
@@ -31,15 +31,29 @@ public class SaveSlotUIManager : MonoBehaviour
 
         }
 
-        // ×îºóÌí¼ÓÒ»¸ö + ĞÂ½¨°´Å¥
+        /*// æœ€åæ·»åŠ ä¸€ä¸ª + æ–°å»ºæŒ‰é’®
         GameObject add = Instantiate(saveSlotPrefab, slotContainer);
         var addSlot = add.GetComponent<SaveSlotButton>();
         //addSlot.label.text = "+";
         //addSlot.isNewSlot = true;
-        addSlot.SetupNewSlot();
+        addSlot.SetupNewSlot();*/
+
+        if (all.Count < 5)
+        {
+            GameObject add = Instantiate(saveSlotPrefab, slotContainer);
+            var addSlot = add.GetComponent<SaveSlotButton>();
+            addSlot.SetupNewSlot();
+        }
+        else
+        {
+            GameObject add = Instantiate(saveSlotPrefab, slotContainer);
+            var addSlot = add.GetComponent<SaveSlotButton>();
+            addSlot.SetupNewSlot(disabled: true); // ğŸ‘ˆ æ–°å¢å‚æ•°ï¼Œè¡¨ç¤ºæŒ‰é’®ä¸èƒ½ç”¨
+        }
+
     }
 
-    [ContextMenu("Çå¿ÕËùÓĞ´æµµ")]
+    [ContextMenu("æ¸…ç©ºæ‰€æœ‰å­˜æ¡£")]
     public void ClearAllSavesForTest()
     {
         SaveSystem.DeleteAllSaves();
