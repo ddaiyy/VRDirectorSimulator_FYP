@@ -40,7 +40,7 @@ public class ObjectTimelineUI : MonoBehaviour
         timeSlider.onValueChanged.AddListener(OnSliderChanged);
         addKeyframeButton.onClick.AddListener(OnAddKeyframeClicked);
 
-        HidePanel();
+        //HidePanel();
     }
 
     public void ShowPanel(TimelineTrack track)
@@ -60,7 +60,6 @@ public class ObjectTimelineUI : MonoBehaviour
     public void HidePanel()
     {
         gameObject.SetActive(false);
-        currentTrack = null;
     }
 
     void Update()
@@ -79,37 +78,6 @@ public class ObjectTimelineUI : MonoBehaviour
 
     void RefreshKeyframeList()
     {
-        /*// 清空旧的
-        foreach (Transform child in timelineContent)
-            Destroy(child.gameObject);
-
-        foreach (var clip in currentTrack.clips)
-        {
-            GameObject point = Instantiate(keyframeItemPrefab, timelineContent);
-            float normalizedTime = Mathf.Clamp01(clip.time / maxTime);
-            float x = normalizedTime * timelineWidth;
-
-            var rect = point.GetComponent<RectTransform>();
-            rect.anchoredPosition = new Vector2(x, 0); // 只设置X，Y可以固定
-
-            // 可选：显示时间
-            var text = point.GetComponentInChildren<TextMeshProUGUI>();
-            if (text != null)
-                text.text = $"{clip.time:F2}";
-
-            // 可选：点击跳转
-            var btn = point.GetComponent<Button>();
-            if (btn != null)
-            {
-                float t = clip.time;
-                btn.onClick.AddListener(() =>
-                {
-                    currentTrack.SetTime(t);
-                    RefreshTime();
-                });
-            }
-        }*/
-
         // 清空旧的
         foreach (Transform child in keyframeListContent)
             Destroy(child.gameObject);
@@ -189,5 +157,37 @@ public class ObjectTimelineUI : MonoBehaviour
     void AddKeyframeAtTime(TimelineTrack track, float time)
     {
         track.AddClip(time);
+    }
+
+    public void Initialize(TimelineTrack track)
+    {
+        currentTrack = track; // 保存对 TimelineTrack 的引用
+
+        gameObject.SetActive(true); // 激活UI
+        titleText.text = "Timeline- " + track.gameObject.name; // 设置标题
+        timeSlider.minValue = 0; // 设置时间轴范围
+        timeSlider.maxValue = 20f;
+        timeSlider.value = track.currentTime; // 设置当前时间
+
+        RefreshKeyframeList(); // 刷新关键帧列表
+        RefreshTime(); // 刷新时间显示
+    }
+
+    public void RefreshAll()
+    {
+        if (currentTrack == null) return;
+
+        Debug.Log("[ObjectTimelineUI] 刷新所有UI内容");
+        
+        // 更新时间轴范围
+        timeSlider.minValue = 0;
+        timeSlider.maxValue = 20f;//TODO:可能需要更改
+        timeSlider.value = currentTrack.currentTime;
+
+        // 刷新关键帧列表
+        RefreshKeyframeList();
+
+        // 刷新时间显示
+        RefreshTime();
     }
 }

@@ -88,7 +88,8 @@ public class CharacterSelectionAndActionUI : MonoBehaviour, ICustomSelectable
             TimelineTrack track = gameObject.GetComponent<TimelineTrack>();
             if (track != null)
             {
-                TimelineManager.Instance.timelinePanel.ShowPanel(track);
+                Debug.Log("[CharacterSelect]:显示对应UI");
+                track.showUI();
             }
         }
         

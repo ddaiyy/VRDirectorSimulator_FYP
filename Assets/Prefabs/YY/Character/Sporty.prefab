@@ -2618,6 +2618,8 @@ MonoBehaviour:
   duration: 0
   isControlledByMaster: 0
   volume: {fileID: 0}
+  objectTimelineUI: {fileID: 0}
+  objectTimelineUIPrefab: {fileID: 570588088872022994, guid: 490edafdc819bc440a89a8cb59aa1d04, type: 3}
 --- !u!1 &4226887411249802471
 GameObject:
   m_ObjectHideFlags: 0

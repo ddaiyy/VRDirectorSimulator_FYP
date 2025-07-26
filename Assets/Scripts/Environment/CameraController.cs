@@ -151,7 +151,7 @@ public class CameraController : MonoBehaviour, ICustomSelectable
         TimelineTrack track = this.gameObject.GetComponentInParent<TimelineTrack>();
         if (track != null)
         {
-            TimelineManager.Instance.timelinePanel.ShowPanel(track);
+            track.showUI();
         }
     }
 

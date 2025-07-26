@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.Serialization;
 
 
 public class TimelineTrack : MonoBehaviour
@@ -15,6 +16,11 @@ public class TimelineTrack : MonoBehaviour
     public PostProcessVolume volume;  // Inspector 里拖入
     private DepthOfField dof;
 
+    
+    [Header("UI相关配置")]
+    public ObjectTimelineUI objectTimelineUI;
+    public GameObject objectTimelineUIPrefab;
+    
     void Start()
     {
         if (volume != null)
@@ -28,6 +34,10 @@ public class TimelineTrack : MonoBehaviour
         {
             Debug.LogWarning("未设置PostProcessVolume引用！");
         }
+
+        //初始化UI
+        InitializeTimelineUI();
+
     }
 
     void Update()
@@ -99,6 +109,7 @@ public class TimelineTrack : MonoBehaviour
         MasterTimelineUI.Instance?.RefreshTimelineUI();
         clips = clips.OrderBy(c => c.time).ToList();
 
+        objectTimelineUI.RefreshAll();
     }
 
     public void AddClip(float time)
@@ -148,10 +159,41 @@ public class TimelineTrack : MonoBehaviour
         }
         MasterTimelineUI.Instance?.RefreshTimelineUI();
         clips = clips.OrderBy(c => c.time).ToList();
-
+        
+        
+        objectTimelineUI.RefreshAll();
     }
-
-
+    
+    void InitializeTimelineUI()
+    {
+        Debug.Log($"[{gameObject.name}] 开始初始化UI");
+        
+        // 如果没有设置UI，尝试自动创建
+        if (objectTimelineUI == null && objectTimelineUIPrefab != null)
+        {
+            Debug.Log($"[{gameObject.name}] 创建新的UI实例");
+            // 直接实例化prefab并挂载到当前物体下
+            GameObject uiInstance = Instantiate(objectTimelineUIPrefab, transform);
+            objectTimelineUI = uiInstance.GetComponent<ObjectTimelineUI>();
+            // 初始化UI并绑定到当前轨道
+            objectTimelineUI.Initialize(this);
+            // 初始化后默认隐藏UI，等待用户选择时显示
+            hideUI();
+        }
+        else if (objectTimelineUI != null)
+        {
+            Debug.Log($"[{gameObject.name}] 使用现有UI实例");
+            // 如果已经设置了UI，直接初始化
+            objectTimelineUI.Initialize(this);
+            // 初始化后默认隐藏UI，等待用户选择时显示
+            //hideUI();
+        }
+        else
+        {
+            Debug.LogWarning($"[{gameObject.name}] 无法初始化UI：objectTimelineUI为空且objectTimelineUIPrefab为空");
+        }
+    }
+    
     [ContextMenu("播放")]
     public void Play()
     {
@@ -284,7 +326,7 @@ public class TimelineTrack : MonoBehaviour
         if (clips.Count == 0) return 0f;
         float maxTime = 0f;
         foreach (var clip in clips)
-        {
+        { 
             if (clip.time > maxTime)
                 maxTime = clip.time;
         }
@@ -295,5 +337,29 @@ public class TimelineTrack : MonoBehaviour
     {
         currentTime = time;
         ApplyClipAtTime(time);
+    }
+
+    public void showUI()
+    {
+        Debug.Log("显示UI预制体");
+        //objectTimelineUI.gameObject.SetActive(true);
+        //objectTimelineUI.ShowPanel(this);
+        
+        if (objectTimelineUI != null)
+        {
+            objectTimelineUI.gameObject.SetActive(true); // ✅ 显示它
+            objectTimelineUI.ShowPanel(this);            // ✅ 初始化内容
+        }
+        else
+        {
+            Debug.LogWarning("objectTimelineUI 为空，无法显示UI");
+        }
+    }
+
+    public void hideUI()
+    {
+        Debug.Log("隐藏UI实例");
+        objectTimelineUI.HidePanel();
+        
     }
 } 
