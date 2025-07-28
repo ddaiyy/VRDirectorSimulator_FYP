@@ -6,9 +6,23 @@ using System;
 using UnityEngine.XR.Interaction.Toolkit;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
+using System.Collections;
 
 public class VRModelLoader : MonoBehaviour
 {
+    [Header("UI References")]
+    public TMP_Text vrMessageText;
+
+    void Start()
+    {
+        // 一开始隐藏
+        if (vrMessageText != null)
+            vrMessageText.gameObject.SetActive(false);
+        // if (vrMessagePanel != null)
+        //    vrMessagePanel.SetActive(false);
+    }
+
     public async void OpenModelPicker()
     {
         Debug.Log("[测试] OpenModelPicker 被调用了");
@@ -40,6 +54,22 @@ public class VRModelLoader : MonoBehaviour
         }, null);
     }
 
+    public void ShowVRMessage(string message, float duration = 3f)
+    {
+        if (vrMessageText == null) return;
+
+        // 激活并设文本
+        vrMessageText.gameObject.SetActive(true);
+        vrMessageText.text = message;
+
+        // 如果你有一个 Panel，先激活
+        // if (vrMessagePanel != null)
+        //    vrMessagePanel.SetActive(true);
+
+        // 可选：几秒后自动隐藏
+        StopAllCoroutines();
+        StartCoroutine(HideAfterDelay(duration));
+    }
     private async Task LoadByExtension(string path)
     {
         string ext = Path.GetExtension(path).ToLowerInvariant();
@@ -53,10 +83,18 @@ public class VRModelLoader : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"只支持 .glb 格式，当前文件格式为: {ext}");
+            Debug.LogError("❌ Currently only .glb files are supported.");
+            ShowVRMessage("Currently only .glb files are supported.", 5f);
         }
     }
 
+    IEnumerator HideAfterDelay(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        vrMessageText.gameObject.SetActive(false);
+        // if (vrMessagePanel != null)
+        //    vrMessagePanel.SetActive(false);
+    }
 
     public async Task LoadModel(string path)
     {
@@ -145,6 +183,11 @@ public class VRModelLoader : MonoBehaviour
         {
             var cam = Camera.main.transform;
             parent.transform.position = cam.position + cam.forward * 2f;
+
+            // ✅ 让模型朝向用户
+            Vector3 lookAtPosition = new Vector3(cam.position.x, parent.transform.position.y, cam.position.z);
+            parent.transform.LookAt(lookAtPosition);
+
         }
         else
         {
@@ -172,9 +215,12 @@ public class VRModelLoader : MonoBehaviour
 
         if (modelPath == null)
         {
-            Debug.LogError("Zip 文件中未找到 .glb 文件");
+            string errorMsg = " No .glb file found in the Zip archive.";
+            Debug.LogError(errorMsg);
+            ShowVRMessage(errorMsg, 5f); // ✅ 在 VR 头显中显示错误提示
             return;
         }
+
 
         await LoadModel(modelPath);
 
