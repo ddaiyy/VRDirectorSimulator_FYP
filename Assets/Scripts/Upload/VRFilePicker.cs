@@ -195,6 +195,8 @@ public class VRModelLoader : MonoBehaviour
         }
 
         Debug.Log("✅ 模型加载完成");
+        ShowVRMessage("Model loaded successfully.", 5f);
+
     }
 
 
