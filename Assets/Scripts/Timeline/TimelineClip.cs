@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -31,7 +32,14 @@ public class TimelineClip
     public enum ClipType
     {
         Null,
+        ObjectClip, 
+        CameraClip,
         AnimationClip,
+        AutoAnimationClip,//不可以删除除非对应的前面的Clip删除了
     }
     public ClipType clipType= ClipType.Null;
+
+    public string animationName;
+    public float animationDuration;
+    //public bool animationPlayed=false;
 } 
