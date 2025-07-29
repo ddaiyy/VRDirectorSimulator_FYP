@@ -399,6 +399,13 @@ public class TimelineTrack : MonoBehaviour
         isPlaying = true;
         currentTime = 0f;
 
+        if (!HasClipAtTime(currentTime))
+        {
+            TimelineClip zeroClip = new TimelineClip();
+            zeroClip.time = currentTime;
+            zeroClip.position = startPosition;
+            zeroClip.rotation = startRotation;
+            zeroClip.scale = startScale;
             zeroClip.clipType = TimelineClip.ClipType.Null;
             clips.Add(zeroClip);
             //TODO：相机没有0s帧的处理
