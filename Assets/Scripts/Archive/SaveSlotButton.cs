@@ -55,13 +55,13 @@ public class SaveSlotButton : MonoBehaviour
                 saveId = System.Guid.NewGuid().ToString(),
                 /*saveName = "New Save " + System.DateTime.Now.ToString("HH:mm"),*/
                 saveName = newSaveName,
-                lastScene = "EnvironmentSelect",
+                lastScene = "Environment",
                 saveTime = System.DateTime.Now
             };
 
             SaveSystem.Save(newData);
             PlayerPrefs.SetString("CurrentSaveId", newData.saveId);
-            SceneManager.LoadScene("EnvironmentSelect");
+            SceneManager.LoadScene("Environment");
         }
         else
         {
