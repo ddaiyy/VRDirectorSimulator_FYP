@@ -757,7 +757,7 @@ GameObject:
   - component: {fileID: 233951901}
   - component: {fileID: 233951900}
   - component: {fileID: 233951899}
-  - component: {fileID: 233951898}
+  - component: {fileID: 233951902}
   m_Layer: 5
   m_Name: UploadButton
   m_TagString: Untagged
@@ -785,19 +785,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &233951898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 233951896}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7026a09bf033b7488c97b7243412754, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  vrMessageText: {fileID: 2074967282}
 --- !u!114 &233951899
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -842,7 +829,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 233951898}
+      - m_Target: {fileID: 233951902}
         m_TargetAssemblyTypeName: VRModelLoader, Assembly-CSharp
         m_MethodName: OpenModelPicker
         m_Mode: 1
@@ -892,6 +879,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 233951896}
   m_CullTransparentMesh: 1
+--- !u!114 &233951902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 233951896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50c19a796d3e8d441aca23d1e43b154d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vrMessageText: {fileID: 2074967282}
 --- !u!1 &306162306
 GameObject:
   m_ObjectHideFlags: 0

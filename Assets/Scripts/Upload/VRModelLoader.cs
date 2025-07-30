@@ -15,10 +15,10 @@ public class VRModelLoader : MonoBehaviour
     public TMP_Text vrMessageText;
 
     void Start()
-    {
-        // 一开始隐藏
+    {// 一开始隐藏
         if (vrMessageText != null)
             vrMessageText.gameObject.SetActive(false);
+
         // if (vrMessagePanel != null)
         //    vrMessagePanel.SetActive(false);
     }
@@ -163,7 +163,7 @@ public class VRModelLoader : MonoBehaviour
         string modelDir = Path.GetDirectoryName(path)?.Replace("\\", "/");
         Debug.Log($"[验证] 模型目录：{modelDir}");
 
-       
+
 
         // ✅ 自动归一化缩放
         NormalizeModelScale(parent, 1f);
@@ -171,12 +171,14 @@ public class VRModelLoader : MonoBehaviour
         if (instantiated)
         {
             AddAccurateBoxCollider(parent);
-            ForceAssignWhiteTexture(parent);
+            
             SetupRigidbodyAndGrab(parent);
         }
 
         ReplaceShadersToStandard(parent);
         PrintLoadedMaterialsAndTextures(parent);
+        ForceAssignWhiteTexture(parent);
+        
 
         // ✅ 设置位置
         if (Camera.main != null)
@@ -352,7 +354,6 @@ public class VRModelLoader : MonoBehaviour
         }
     }
 
-    // 复制content uri到持久目录，方便文件访问
     string CopyFileToPersistentPath(string contentUri)
     {
         string fileName = Path.GetFileName(contentUri); // 取文件名
