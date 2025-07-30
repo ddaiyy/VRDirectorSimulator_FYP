@@ -153,55 +153,7 @@ public class TimelineTrack : MonoBehaviour
     //一般关键帧的添加
     public void AddClip(float time)
     {
-        TimelineClip clip = new TimelineClip();
-        clip.time = time;
-        clip.position = transform.position;
-        clip.rotation = transform.rotation;
-        clip.scale = transform.localScale;
-
-        Camera cam = GetComponentInChildren<Camera>();
-        if (cam != null)
-        {
-            clip.fov = cam.fieldOfView;
-
-            if (dof != null)
-            {
-                clip.focusDistance = dof.focusDistance.value;
-            }
-            else
-            {
-                clip.focusDistance = 5f;
-            }
-        }
-        else
-        {
-            clip.fov = 60f;
-            clip.focusDistance = 5f;
-        }
-
-        // 记录当前激活的摄像机ID（假设用 InstanceID）
-        if (CameraManager.Instance != null && CameraManager.Instance.GetCurrentSelectedCamera() != null)
-        {
-            clip.activeCameraID = CameraManager.Instance.GetCurrentSelectedCamera().GetInstanceID();
-        }
-        else
-        {
-            clip.activeCameraID = -1; // 没有选中摄像机
-        }
-
-        clips.Add(clip);
-
-        if (clips.Count > 1)
-        {
-            Debug.Log("计算duration");
-            duration = GetDuration();
-        }
-
-        MasterTimelineUI.Instance?.RefreshTimelineUI();
-        clips = clips.OrderBy(c => c.time).ToList();
-
-
-        objectTimelineUI.RefreshAll();
+        
     }
 
 

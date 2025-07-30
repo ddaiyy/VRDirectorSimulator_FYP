@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class PillarTriggerCanvas : MonoBehaviour
+public class ConsoleTriggerCanvas : MonoBehaviour
 {
     public GameObject targetCanvas; // 拖入你的 UI Canvas
 
