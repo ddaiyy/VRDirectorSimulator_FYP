@@ -6,18 +6,27 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Start.unity
-    guid: 4603321ffbb67814e9d0fbb34ec174c2
+    path: Assets/Scenes/Select.unity
+    guid: 21dc81671b1f6874791dc29ba559f982
   - enabled: 1
-    path: Assets/Scenes/EnvironmentSelect.unity
-    guid: 06403d22ec350234798c5478f802bbfd
+    path: Assets/Scenes/Enviroment.unity
+    guid: ce80d618b23e81547a8da475776a46e6
   - enabled: 1
-    path: Assets/Scenes/Forest.unity
-    guid: 4a2833a882ec2e146b972faf824026cb
+    path: Assets/Scenes/ChooseEnviroment/_PrototypeStarter.unity
+    guid: a37f1dd48a6dba446b40a0462e15a5a0
   - enabled: 1
-    path: Assets/Scenes/Modern.unity
-    guid: 2c431d07a43ab2b438295e363cc1c625
+    path: Assets/Scenes/ChooseEnviroment/Desert.unity
+    guid: e2c783585d7274da49a1c146d174e956
+  - enabled: 1
+    path: Assets/Scenes/ChooseEnviroment/house.unity
+    guid: 06db8b40c9740a44ea32f0266002716d
+  - enabled: 1
+    path: Assets/Scenes/ChooseEnviroment/Space_Forest.unity
+    guid: 925ac71831835c94c9bc00ab547d076d
+  - enabled: 1
+    path: Assets/Scenes/ChooseEnviroment/Winter.unity
+    guid: 276d82ce49db94f5bbb80eb03ad778c1
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 082c130a2fb56c54fab73d25b862722b, type: 2}
-    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 6b7bcef4dc7ac094ca2519e11b13a073, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 9fcc4f282678c1848863f06a04ede893, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: ae706505fb6d99d43928df1f4bb767e1, type: 2}

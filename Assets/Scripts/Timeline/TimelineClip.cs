@@ -16,8 +16,14 @@ public class TimelineClip
     public float fov = 60f;
     
     //缩放
-    public float scale = 1f;
+    public Vector3 scale;
     
     //是否激活
     public bool isActive = true;
+
+    // 记录景深焦距
+    public float focusDistance = 5f;
+
+    //记录摄像机的ID
+    public int activeCameraID;
 } 

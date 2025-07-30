@@ -1,55 +1,50 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ITimelineManager
+public class TimelineManager : MonoBehaviour
 {
-    void AddTrack(TimelineTrack track);
-    void RemoveTrack(TimelineTrack track);
-    void PlayAll();
-    void StopAll();
-    void PauseAll();
-    void PreviewTrack(TimelineTrack track);
-    List<TimelineTrack> GetTracks();
-    TimelineTrack GetTrackByTarget(GameObject target);
-    void ClearAllTracks();
-    void ExportTimelineData();
-    void ImportTimelineData();
+    public static TimelineManager Instance { get; private set; }
+
+    public MasterTimelineTrack masterTrack;
+    public List<TimelineTrack> tracks = new List<TimelineTrack>();
+    public ObjectTimelineUI timelinePanel;
+    
+    void Awake()
+    {
+        Instance = this;
+        // 自动收集场景中的所有TimelineTrack（不包括masterTrack本身）
+        tracks.Clear();
+        foreach (var track in FindObjectsOfType<TimelineTrack>())
+        {
+            if (track != masterTrack)
+                tracks.Add(track);
+        }
+    }
+
+    public void RegisterTrack(TimelineTrack track)
+    {
+        if (!tracks.Contains(track) && track != masterTrack){
+            tracks.Add(track);
+            MasterTimelineUI.Instance?.RefreshTimelineUI();
+            //Debug.Log("添加");
+        }
 }
 
-public class TimelineManager : MonoBehaviour, ITimelineManager
-{
-    public List<TimelineTrack> tracks = new List<TimelineTrack>();
+    public void UnregisterTrack(TimelineTrack track)
+    {
+        if (tracks.Contains(track))
+        {
+            tracks.Remove(track);
+            MasterTimelineUI.Instance?.RefreshTimelineUI();
+            //Debug.Log("删除");
+        }
+            
+    }
 
-    //添加轨道
-    public void AddTrack(TimelineTrack track) { /* TODO */ }
+    public List<TimelineTrack> GetAllTracks()
+    {
+        return tracks;
+    }
     
-    //移除轨道
-    public void RemoveTrack(TimelineTrack track) { /*TODO*/ }
     
-    //播放所有轨道
-    public void PlayAll() { /*TODO*/ }
-    
-    //停止所有轨道
-    public void StopAll() { /*TODO*/ }
-    
-    //暂停所有轨道
-    public void PauseAll() { /*TODO*/ }
-    
-    //预览指定轨道
-    public void PreviewTrack(TimelineTrack track) { /*TODO*/ }
-    
-    //获取所有轨道
-    public List<TimelineTrack> GetTracks() => tracks;
-    
-    //获取指定物体轨道
-    public TimelineTrack GetTrackByTarget(GameObject target) { /*TODO*/ return null; }
-    
-    //清除所有轨道
-    public void ClearAllTracks() { /*TODO*/ }
-    
-    //导出时间轴数据
-    public void ExportTimelineData() { /*TODO*/ }
-    
-    //导入时间轴数据
-    public void ImportTimelineData() { /*TODO*/ }
-} 
+}
