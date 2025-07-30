@@ -455,7 +455,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5207308287392423784}
-        m_TargetAssemblyTypeName: VRFilePicker, Assembly-CSharp
+        m_TargetAssemblyTypeName: VRModelLoader, Assembly-CSharp
         m_MethodName: OpenModelPicker
         m_Mode: 1
         m_Arguments:
