@@ -20,7 +20,8 @@ public class SaveSlotButton : MonoBehaviour
         isNewSlot = false;
 
         if (label != null)
-            label.text = $"{data.saveName}: {data.lastScene}\n{data.saveTime:MM/dd HH:mm}";
+            label.text = $"{data.saveName}\n{data.saveTime:MM/dd HH:mm}";
+
 
         if (deleteButtonGO != null)
             deleteButtonGO.SetActive(true);
@@ -44,7 +45,7 @@ public class SaveSlotButton : MonoBehaviour
 
     public void OnClick()
     {
-        Debug.Log($"按钮被点击，isNewSlot: {isNewSlot}, saveId: {saveId}");
+        /*Debug.Log($"按钮被点击，isNewSlot: {isNewSlot}, saveId: {saveId}");
 
         if (isNewSlot)
         {
@@ -53,15 +54,32 @@ public class SaveSlotButton : MonoBehaviour
             SaveData newData = new SaveData
             {
                 saveId = System.Guid.NewGuid().ToString(),
-                /*saveName = "New Save " + System.DateTime.Now.ToString("HH:mm"),*/
+                *//*saveName = "New Save " + System.DateTime.Now.ToString("HH:mm"),*//*
                 saveName = newSaveName,
-                lastScene = "Environment",
+                lastScene = "EnvironmentSelect",
                 saveTime = System.DateTime.Now
             };
 
             SaveSystem.Save(newData);
             PlayerPrefs.SetString("CurrentSaveId", newData.saveId);
-            SceneManager.LoadScene("Environment");
+            SceneManager.LoadScene("EnvironmentSelect");
+        }
+        else
+        {
+            if (currentData == null)
+            {
+                Debug.LogError("当前存档数据为空（currentData is null），请检查是否调用了 SetupExistingSlot。");
+                return;
+            }
+
+            PlayerPrefs.SetString("CurrentSaveId", currentData.saveId);
+            SceneManager.LoadScene(currentData.lastScene);
+        }*/
+
+        if (isNewSlot)
+        {
+            // 弹出改名面板，而不是立刻跳转
+            RenamePanelController.instance.ShowPanel();
         }
         else
         {
