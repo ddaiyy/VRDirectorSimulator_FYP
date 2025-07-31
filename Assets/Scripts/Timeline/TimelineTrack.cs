@@ -603,8 +603,7 @@ public class TimelineTrack : MonoBehaviour
         currentTime = time;
         ApplyClipAtTime(time);
     }
-
-    [ContextMenu("show UI")]
+    
     public void showUI()
     {
         Debug.Log("显示UI预制体");
