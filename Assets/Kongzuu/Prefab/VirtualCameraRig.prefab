@@ -254,6 +254,20 @@ MonoBehaviour:
   duration: 5
   isControlledByMaster: 0
   volume: {fileID: 6256381692250732556}
+  objectTimelineUI: {fileID: 0}
+  objectTimelineUIPrefab: {fileID: 0}
+  cameraTimelineUIPrefab: {fileID: 7402487073939681752, guid: 29468b9e82445a64bb491dc37b645c0f, type: 3}
+  startPosition: {x: 0, y: 0, z: 0}
+  startRotation: {x: 0, y: 0, z: 0, w: 0}
+  fov: 60
+  startScale: {x: 0, y: 0, z: 0}
+  startIsActive: 1
+  startFocusDistance: 5
+  startActiveCameraID: 0
+  isCamera: 0
+  animName: Test Animation Name
+  animDuration: 5
+  isAnimPlaying: 0
 --- !u!1 &594180995413794149
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,13 +6,13 @@ public class DepthOfFieldFocusDistanceController : MonoBehaviour
     public Slider focusDistanceSlider;
     public Text focusDistanceValueText;
 
-    private bool isUpdatingSlider = false; // ·ÀÖ¹Slider.value¸³ÖµÊ±´¥·¢OnValueChangedµ¼ÖÂÑ­»·
+    private bool isUpdatingSlider = false; // ï¿½ï¿½Ö¹Slider.valueï¿½ï¿½ÖµÊ±ï¿½ï¿½ï¿½ï¿½OnValueChangedï¿½ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½
 
     private void Start()
     {
         if (focusDistanceSlider == null)
         {
-            Debug.LogError("Çë°ó¶¨½¹¾àSlider£¡");
+            Debug.LogError("ï¿½ï¿½ó¶¨½ï¿½ï¿½ï¿½Sliderï¿½ï¿½");
             return;
         }
 
@@ -50,13 +50,14 @@ public class DepthOfFieldFocusDistanceController : MonoBehaviour
 
     private void OnFocusDistanceChanged(float value)
     {
-        if (isUpdatingSlider) return; // ·ÀÖ¹µÝ¹éµ÷ÓÃ
+        if (isUpdatingSlider) return; // ï¿½ï¿½Ö¹ï¿½Ý¹ï¿½ï¿½ï¿½ï¿½
 
         var selectedCamera = CameraManager.Instance?.GetCurrentSelectedCamera();
         if (selectedCamera != null)
         {
             selectedCamera.SetFocusDistance(value);
         }
+
         UpdateValueText(value);
     }
 

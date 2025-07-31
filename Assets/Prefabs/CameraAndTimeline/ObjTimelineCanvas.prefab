@@ -147,6 +147,7 @@ MonoBehaviour:
   timelineContent: {fileID: 6379546188523929289}
   timelineWidth: 600
   maxTime: 20
+  currentTrack: {fileID: 0}
 --- !u!1001 &170518066821983852
 PrefabInstance:
   m_ObjectHideFlags: 0

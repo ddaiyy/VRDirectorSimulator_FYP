@@ -26,11 +26,21 @@ public class ObjectTimelineUI : MonoBehaviour
 
     public GameObject keyframeItemPrefab;
     public Button addKeyframeButton;
-    private TimelineTrack currentTrack;
 
     public RectTransform timelineContent; // 拖到Inspector
     public float timelineWidth = 600f; // 你的时间轴UI宽度
     public float maxTime = 20f; // 时间轴最大时间
+    
+    [Header("Camera相关")]
+    public Toggle camActiveToggle;
+    public Slider fovSlider;
+    public Text fovText;
+    public Slider dofSlider;
+    public Text dofText;
+    
+    
+    [Header("对应TimelineObject")]
+    [SerializeField] private TimelineTrack currentTrack;
 
     void Start()
     {
@@ -39,10 +49,50 @@ public class ObjectTimelineUI : MonoBehaviour
         stopButton.onClick.AddListener(OnStopClicked);
         timeSlider.onValueChanged.AddListener(OnSliderChanged);
         addKeyframeButton.onClick.AddListener(OnAddKeyframeClicked);
-
+        
+        //fov and dof
+        /*fovSlider.onValueChanged.AddListener(OnFOVChanged);
+        dofSlider.minValue = 0.1f;
+        dofSlider.maxValue = 10f;
+        dofSlider.onValueChanged.AddListener(OnDofChanged);*/
+        
+        //SelectCamera
+        //camActiveToggle.onValueChanged.AddListener(OnCamActiveChanged);
         //HidePanel();
     }
 
+    // private void OnDofChanged(float arg0)
+    // {
+    //     
+    // }
+    //
+    // private void OnFOVChanged(float value)
+    // {
+    //     if (CameraManager.Instance != null)
+    //     {
+    //         CameraController selected = CameraManager.Instance.GetCurrentSelectedCamera();
+    //         if (selected != null)
+    //         {
+    //             selected.SetFOV(value);
+    //         }
+    //     }
+    //
+    //     if (fovText != null)
+    //     {
+    //         fovText.text = value.ToString("F0");
+    //     }
+    // }
+    // public void SyncSlider(CameraController controller)
+    // {
+    //     if (controller != null && fovSlider != null)
+    //     {
+    //         fovSlider.value = controller.GetFOV();
+    //         if (fovText != null)
+    //         {
+    //             fovText.text = controller.GetFOV().ToString("F0");
+    //         }
+    //     }
+    // }
     public void ShowPanel(TimelineTrack track)
     {
         currentTrack = track;

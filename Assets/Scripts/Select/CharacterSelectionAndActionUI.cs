@@ -17,7 +17,7 @@ public class CharacterSelectionAndActionUI : MonoBehaviour, ICustomSelectable
     private GameObject currentCanvasInstance;
     private bool isCanvasVisible = false;
 
-    // 👉 UI按钮调用此方法：选中角色并显示/隐藏动作Canvas
+    // UI按钮调用此方法：选中角色并显示/隐藏动作Canvas
     public void OnCharacterButtonClicked()
     {
         SelectCharacter();

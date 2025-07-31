@@ -20,6 +20,7 @@ public class TimelineTrack : MonoBehaviour
 
     [Header("UI相关配置")] public ObjectTimelineUI objectTimelineUI;
     public GameObject objectTimelineUIPrefab;
+    public GameObject cameraTimelineUIPrefab;
 
     [Header("default 开始配置")] public Vector3 startPosition;
     public Quaternion startRotation;
@@ -153,7 +154,53 @@ public class TimelineTrack : MonoBehaviour
     //一般关键帧的添加
     public void AddClip(float time)
     {
-        
+        TimelineClip clip = new TimelineClip();
+        clip.time = currentTime; //TODO：暂时需自定义
+        clip.position = transform.position;
+        clip.rotation = transform.rotation;
+        clip.scale = transform.localScale;
+        clip.clipType = TimelineClip.ClipType.ObjectClip;
+
+        if (isCamera)
+        {
+            clip.fov = cam.fieldOfView;
+            if (dof != null)
+            {
+                clip.focusDistance = dof.focusDistance.value;
+            }
+            else
+            {
+                clip.focusDistance = 5f;
+            }
+        }
+        else
+        {
+            clip.fov = 0f;
+            clip.focusDistance = 0f;
+        }
+
+        //TODO：能否用这里来确认不管怎么样开一个相机？或者有CameraManager
+        // 记录当前激活的摄像机ID（假设用 InstanceID）
+        if (CameraManager.Instance != null && CameraManager.Instance.GetCurrentSelectedCamera() != null)
+        {
+            clip.activeCameraID = CameraManager.Instance.GetCurrentSelectedCamera().GetInstanceID();
+        }
+        else
+        {
+            clip.activeCameraID = -1; // 没有选中摄像机
+        }
+
+        clips.Add(clip);
+        clips = clips.OrderBy(c => c.time).ToList();
+
+        if (clips.Count > 1)
+        {
+            Debug.Log("计算duration");
+            duration = GetDuration();
+        }
+
+        MasterTimelineUI.Instance?.RefreshTimelineUI();
+        objectTimelineUI.RefreshAll();
     }
 
 
@@ -320,11 +367,22 @@ public class TimelineTrack : MonoBehaviour
         Debug.Log($"[{gameObject.name}] 开始初始化UI");
 
         // 如果没有设置UI，尝试自动创建
-        if (objectTimelineUI == null && objectTimelineUIPrefab != null)
+        if (objectTimelineUI == null && (objectTimelineUIPrefab != null || cameraTimelineUIPrefab != null ))
         {
             Debug.Log($"[{gameObject.name}] 创建新的UI实例");
-            // 直接实例化prefab并挂载到当前物体下
-            GameObject uiInstance = Instantiate(objectTimelineUIPrefab, transform);
+            // 实例化prefab
+            GameObject uiInstance=null;
+            if (this.gameObject.GetComponentInChildren<Camera>() != null && cameraTimelineUIPrefab != null)
+            {
+                //这是摄像机
+                Debug.Log("实例化相机的操作Canvas");
+                uiInstance = Instantiate(cameraTimelineUIPrefab);
+            }
+            else
+            {
+                uiInstance = Instantiate(objectTimelineUIPrefab);
+            }
+            uiInstance.name = $"{gameObject.name} Canvas";
             objectTimelineUI = uiInstance.GetComponent<ObjectTimelineUI>();
             // 初始化UI并绑定到当前轨道
             objectTimelineUI.Initialize(this);
@@ -546,6 +604,7 @@ public class TimelineTrack : MonoBehaviour
         ApplyClipAtTime(time);
     }
 
+    [ContextMenu("show UI")]
     public void showUI()
     {
         Debug.Log("显示UI预制体");
