@@ -144,16 +144,21 @@ public class CameraController : MonoBehaviour, ICustomSelectable
 
     public void OnSelect()
     {
-        Debug.Log($"{gameObject.name} 被选中：OnSelect 被调用");
+        Debug.Log($"{gameObject.name} 被选中：OnSelect 被调用，当前FOV为 {GetFOV()}");
 
         worldCanvas?.SetActive(true);
         CameraManager.Instance.SelectCamera(this);
+
+        //
+        CameraFOVSlider.Instance?.SyncSlider(this);
+
         TimelineTrack track = this.gameObject.GetComponentInParent<TimelineTrack>();
         if (track != null)
         {
             track.showUI();
         }
     }
+
 
 
     public void OnDeselect()

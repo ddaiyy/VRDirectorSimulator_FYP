@@ -3,8 +3,15 @@ using UnityEngine.UI;
 
 public class CameraFOVSlider : MonoBehaviour
 {
+    public static CameraFOVSlider Instance;
     public Slider fovSlider;
-    public Text fovValueText; // 可选，用于显示当前值
+    public Text fovValueText;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
 
     private void Start()
     {
