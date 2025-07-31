@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using System.Collections;
+using MyGame.Selection;
 
 public class VRModelLoader : MonoBehaviour
 {
@@ -176,6 +177,9 @@ public class VRModelLoader : MonoBehaviour
         ForceAssignWhiteTexture(parent);
         // 在模型正面中部添加抓取锚点
         AddFrontCenterGrabAnchor(parent);
+        // 加载模型完成后，添加旋转控制脚本model.AddComponent<ModelJoystickRotator>();
+        parent.AddComponent<ModelRotatorWithJoystick>();
+        parent.AddComponent<ModelManipulator>();
 
 
         // ✅ 设置位置
@@ -204,7 +208,7 @@ public class VRModelLoader : MonoBehaviour
 
 
     }
-
+    
 
     public async Task LoadZipModel(string zipPath)
     {
