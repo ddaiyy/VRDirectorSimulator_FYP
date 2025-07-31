@@ -64,7 +64,8 @@ public class TimelineTrack : MonoBehaviour
 
     void CheckCameraExists()
     {
-        cam = gameObject.GetComponent<Camera>();
+        //cam = gameObject.GetComponent<Camera>();
+        cam = gameObject.GetComponentInChildren<Camera>();
         if (cam == null)
         {
             isCamera = false;
@@ -123,6 +124,7 @@ public class TimelineTrack : MonoBehaviour
         }
         else
         {
+            Debug.Log($"是不是相机{isCamera}");
             clip.fov = 0f;
             clip.focusDistance = 0f;
         }
