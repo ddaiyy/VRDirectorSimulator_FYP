@@ -485,26 +485,6 @@ public class TimelineTrack : MonoBehaviour
                     dof.focusDistance.value = last.focusDistance;
             }
 
-            // 摄像机激活逻辑
-            int activeID = last.activeCameraID;
-            CameraController toActivate = null;
-            if (CameraManager.Instance != null)
-            {
-                foreach (var camCtrl in CameraManager.Instance.GetAllCameras())
-                {
-                    if (camCtrl.GetInstanceID() == activeID)
-                    {
-                        toActivate = camCtrl;
-                        break;
-                    }
-                }
-
-                if (toActivate != null)
-                {
-                    CameraManager.Instance.SelectCamera(toActivate);
-                }
-            }
-
             // 检查并触发动画关键帧
             CheckAndTriggerAnimationClip(time);
             return;
@@ -521,6 +501,40 @@ public class TimelineTrack : MonoBehaviour
                 break;
             }
         }
+        // 找到当前时间点之前最近且激活摄像机的关键帧
+        TimelineClip activeCamClip = null;
+        for (int i = nonAutoAnimationClips.Count - 1; i >= 0; i--)
+        {
+            if (nonAutoAnimationClips[i].time <= time && nonAutoAnimationClips[i].isActive)
+            {
+                activeCamClip = nonAutoAnimationClips[i];
+                break;
+            }
+        }
+
+        if (activeCamClip != null)
+        {
+            int activeID = activeCamClip.activeCameraID;
+            CameraController toActivate = null;
+
+            if (CameraManager.Instance != null)
+            {
+                foreach (var camCtrl in CameraManager.Instance.GetAllCameras())
+                {
+                    if (camCtrl.GetInstanceID() == activeID)
+                    {
+                        toActivate = camCtrl;
+                        break;
+                    }
+                }
+
+                if (toActivate != null)
+                {
+                    CameraManager.Instance.SelectCamera(toActivate);
+                }
+            }
+        }
+
         // 检查并触发动画关键帧
         CheckAndTriggerAnimationClip(time);
         if (prev == null || next == null) return; // 理论上不会发生
@@ -543,25 +557,6 @@ public class TimelineTrack : MonoBehaviour
             if (dof != null)
                 dof.focusDistance.value = Mathf.Lerp(prev.focusDistance, next.focusDistance, t);
 
-            // 摄像机激活状态
-            int activeID = prev.activeCameraID;
-            CameraController toActivate = null;
-            if (CameraManager.Instance != null)
-            {
-                foreach (var camCtrl in CameraManager.Instance.GetAllCameras())
-                {
-                    if (camCtrl.GetInstanceID() == activeID)
-                    {
-                        toActivate = camCtrl;
-                        break;
-                    }
-                }
-
-                if (toActivate != null)
-                {
-                    CameraManager.Instance.SelectCamera(toActivate);
-                }
-            }
         }
         
     }
