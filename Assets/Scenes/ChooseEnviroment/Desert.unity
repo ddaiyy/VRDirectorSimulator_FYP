@@ -2786,6 +2786,58 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2297097188129316030, guid: 8a08e661034047d4188437f2a37f694d, type: 3}
   m_PrefabInstance: {fileID: 423969635}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &436898694
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 436898696}
+  - component: {fileID: 436898695}
+  m_Layer: 0
+  m_Name: DayNightManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &436898695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 436898694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb183210fbce664ca88c503ec800bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dayAmbientColor: {r: 1, g: 1, b: 1, a: 1}
+  duskAmbientColor: {r: 1, g: 0.6, b: 0.3, a: 1}
+  nightAmbientColor: {r: 0.05, g: 0.05, b: 0.2, a: 1}
+  fantasyAmbientColor: {r: 0.6, g: 0.3, b: 1, a: 1}
+  daySkybox: {fileID: 2100000, guid: 7416536dbe0334cfd888dd1beb75a9fb, type: 2}
+  duskSkybox: {fileID: 2100000, guid: 356decb03293f22498cb5565d128c9da, type: 2}
+  nightSkybox: {fileID: 2100000, guid: b4f152e0498484391a9f0d5a1facf03b, type: 2}
+  fantasySkybox: {fileID: 2100000, guid: 8b7dd0809c7c6498789fa32a61eaa6cb, type: 2}
+--- !u!4 &436898696
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 436898694}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.7681863, y: 2.4347355, z: 3.4667668}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &442095682
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3130,6 +3182,52 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7254947168175677216, guid: c2912483673b536409f902c8239af1d2, type: 3}
   m_PrefabInstance: {fileID: 449420817}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &471267017
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 471267019}
+  - component: {fileID: 471267018}
+  m_Layer: 0
+  m_Name: BrightnessController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &471267018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 471267017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1449d1adfd2bf248aedb97f5f5b73ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxIntensity: 1.5
+  transitionDuration: 1
+--- !u!4 &471267019
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 471267017}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.51272, y: 2.0978966, z: 3.5025427}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &510767895
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13730,3 +13828,5 @@ SceneRoots:
   - {fileID: 1597292404}
   - {fileID: 1213482852}
   - {fileID: 122527255}
+  - {fileID: 471267019}
+  - {fileID: 436898696}
