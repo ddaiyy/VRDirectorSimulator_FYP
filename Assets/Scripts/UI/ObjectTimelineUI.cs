@@ -57,10 +57,51 @@ public class ObjectTimelineUI : MonoBehaviour
         dofSlider.onValueChanged.AddListener(OnDofChanged);*/
         
         //SelectCamera
-        //camActiveToggle.onValueChanged.AddListener(OnCamActiveChanged);
+        if (camActiveToggle != null)
+        {
+            camActiveToggle.onValueChanged.AddListener(OnCamActiveChanged);
+        }
         //HidePanel();
     }
 
+    // 处理相机激活状态变化
+    private void OnCamActiveChanged(bool isActive)
+    {
+        if (currentTrack != null && currentTrack.isCamera)
+        {
+            // 更新当前关键帧的激活状态
+            var currentClip = currentTrack.GetClipAtTime(currentTrack.currentTime);
+            if (currentClip != null)
+            {
+                currentClip.isCameraActiveAtTime= isActive;
+                Debug.Log($"[{currentTrack.gameObject.name}] 相机激活状态设置为: {isActive}");
+            }
+            
+            // 如果当前轨道对应的相机是当前选中的相机，更新CameraManager
+            if (CameraManager.Instance != null)
+            {
+                var currentSelectedCamera = CameraManager.Instance.GetCurrentSelectedCamera();
+                if (currentSelectedCamera != null && currentSelectedCamera.gameObject == currentTrack.gameObject)
+                {
+                    if (isActive)
+                    {
+                        CameraManager.Instance.SelectCamera(currentSelectedCamera);
+                    }
+                    else
+                    {
+                        // 如果当前相机被禁用，可以选择其他相机或清空选择
+                        var allCameras = CameraManager.Instance.GetAllCameras();
+                        var otherCamera = allCameras.FirstOrDefault(c => c != currentSelectedCamera);
+                        if (otherCamera != null)
+                        {
+                            CameraManager.Instance.SelectCamera(otherCamera);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    //
     // private void OnDofChanged(float arg0)
     // {
     //     
@@ -103,6 +144,21 @@ public class ObjectTimelineUI : MonoBehaviour
         timeSlider.maxValue = 20f;
         timeSlider.value = track.currentTime;
 
+        // 如果是相机轨道，同步激活状态
+        if (track.isCamera && camActiveToggle != null)
+        {
+            var currentClip = track.GetClipAtTime(track.currentTime);
+            if (currentClip != null)
+            {
+                camActiveToggle.isOn = currentClip.isCameraActiveAtTime;
+            }
+            else
+            {
+                // 如果没有关键帧，默认激活
+                camActiveToggle.isOn = false;
+            }
+        }
+
         RefreshKeyframeList();
         RefreshTime();
     }
@@ -117,6 +173,16 @@ public class ObjectTimelineUI : MonoBehaviour
         if (currentTrack != null && gameObject.activeSelf)
         {
             RefreshTime();
+            
+            // 如果是相机轨道，实时同步激活状态
+            if (currentTrack.isCamera && camActiveToggle != null)
+            {
+                var currentClip = currentTrack.GetClipAtTime(currentTrack.currentTime);
+                if (currentClip != null && camActiveToggle.isOn != currentClip.isCameraActiveAtTime)
+                {
+                    camActiveToggle.isOn = currentClip.isCameraActiveAtTime;
+                }
+            }
         }
     }
 
@@ -239,5 +305,56 @@ public class ObjectTimelineUI : MonoBehaviour
 
         // 刷新时间显示
         RefreshTime();
+
+        // 如果是相机轨道，同步激活状态
+        if (currentTrack.isCamera && camActiveToggle != null)
+        {
+            var currentClip = currentTrack.GetClipAtTime(currentTrack.currentTime);
+            if (currentClip != null)
+            {
+                camActiveToggle.isOn = currentClip.isCameraActiveAtTime;
+            }
+            else
+            {
+                // 如果没有关键帧，默认激活
+                camActiveToggle.isOn = true;
+            }
+        }
+    }
+
+    // 同步相机激活状态
+    public void SyncCameraActiveState()
+    {
+        if (currentTrack != null && currentTrack.isCamera && camActiveToggle != null)
+        {
+            var currentClip = currentTrack.GetClipAtTime(currentTrack.currentTime);
+            if (currentClip != null)
+            {
+                camActiveToggle.isOn = currentClip.isCameraActiveAtTime;
+            }
+            else
+            {
+                camActiveToggle.isOn = true;
+            }
+        }
+    }
+
+    // 获取当前相机激活状态
+    public bool GetCameraActiveState()
+    {
+        if (currentTrack != null && currentTrack.isCamera && camActiveToggle != null)
+        {
+            return camActiveToggle.isOn;
+        }
+        return true; // 默认激活
+    }
+
+    // 设置相机激活状态
+    public void SetCameraActiveState(bool isActive)
+    {
+        if (currentTrack != null && currentTrack.isCamera && camActiveToggle != null)
+        {
+            camActiveToggle.isOn = isActive;
+        }
     }
 }

@@ -48,13 +48,9 @@ public class CameraController : MonoBehaviour, ICustomSelectable
         mainPlayerCamera.enabled = true;
         mainPlayerCamera.targetTexture = null;
 
-        if (CameraManager.Instance != null)
+        if (CameraManager.Instance != null && !CameraManager.Instance.cameraList.Contains(this))
         {
             CameraManager.Instance.RegisterCamera(this);
-        }
-        else
-        {
-            Debug.LogError("CameraManager.Instance is null in Start!");
         }
     }
 

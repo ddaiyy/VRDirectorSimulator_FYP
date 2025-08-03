@@ -10,17 +10,20 @@ public class CameraManager : MonoBehaviour
     public RenderTexture previewTexture; // Ԥ����RT
     public GameObject cameraPrefab; // �����Ԥ����
     public Transform cameraSpawnPoint; // ����λ��
+
     public delegate void SelectedCameraChangedHandler(CameraController selectedCamera);
+
     public event SelectedCameraChangedHandler OnSelectedCameraChanged;
 
-    private List<CameraController> cameraList = new List<CameraController>();
-    private CameraController currentSelected;
+    [SerializeField] public List<CameraController> cameraList = new List<CameraController>();
+    [SerializeField] private CameraController currentSelected;
     public Renderer previewPlaneRenderer;
-    
+
     private void Awake()
     {
         Instance = this;
     }
+
     // ��CameraManager�У���ӡpreviewTexture��Ϣȷ��
     private void Start()
     {
@@ -30,6 +33,7 @@ public class CameraManager : MonoBehaviour
             GL.Clear(true, true, Color.clear);
             RenderTexture.active = null;
         }
+
         if (previewTexture == null)
         {
             Debug.LogError("previewTexture is not assigned!");
@@ -58,7 +62,7 @@ public class CameraManager : MonoBehaviour
                 currentSelected.DisablePreview();
                 currentSelected = null;
             }
-            
+
             cameraList.Remove(controller);
 
             //  ɾ������
@@ -86,10 +90,28 @@ public class CameraManager : MonoBehaviour
     }
 
 
-
-
     public void SelectCamera(CameraController controller)
     {
+        // 检查是否有Master控制
+        if (TimelineManager.Instance.masterTrack != null && TimelineManager.Instance.masterTrack.isPlaying)
+        {
+            // 检查当前所有受控轨道，是否允许切换
+            foreach (var track in TimelineManager.Instance.GetAllTracks())
+            {
+                if (track.isControlledByMaster && track.isCamera)
+                {
+                    var expectedController =
+                        track.GetExpectedActiveCameraControllerAtTime(TimelineManager.Instance.masterTrack.currentTime);
+                    if (expectedController != null && controller != expectedController)
+                    {
+                        Debug.LogError(
+                            $"[CameraManager] Master播放期间禁止手动切换相机！当前应激活：{expectedController.gameObject.name}");
+                        return; // 阻止切换
+                    }
+                }
+            }
+        }
+
         if (currentSelected != null)
         {
             currentSelected.DisablePreview();
@@ -106,12 +128,11 @@ public class CameraManager : MonoBehaviour
     }
 
 
-
     public void AddNewCamera()
     {
         GameObject camObj = Instantiate(cameraPrefab, cameraSpawnPoint.position, cameraSpawnPoint.rotation);
         CameraController controller = camObj.GetComponentInChildren<CameraController>();
-        
+
         TimelineManager.Instance.RegisterTrack(camObj.GetComponentInChildren<TimelineTrack>());
 
         if (controller == null)
@@ -136,5 +157,4 @@ public class CameraManager : MonoBehaviour
     {
         return cameraList;
     }
-
 }

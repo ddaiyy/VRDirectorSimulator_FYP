@@ -1211,7 +1211,7 @@ MonoBehaviour:
   timelineContent: {fileID: 2280410146879999530}
   timelineWidth: 600
   maxTime: 20
-  camActiveToggle: {fileID: 0}
+  camActiveToggle: {fileID: 5561199128848362094}
   fovSlider: {fileID: 0}
   fovText: {fileID: 0}
   dofSlider: {fileID: 0}
