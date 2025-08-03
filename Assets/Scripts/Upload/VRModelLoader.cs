@@ -8,11 +8,15 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using System.Collections;
+using MyGame.Selection;
 
 public class VRModelLoader : MonoBehaviour
 {
     [Header("UI References")]
     public TMP_Text vrMessageText;
+
+    [Header("Material Options")]
+    public bool keepOriginalMaterial = true; // 控制是否保留 glTF 原材质
 
     void Start()
     {// 一开始隐藏
@@ -62,11 +66,6 @@ public class VRModelLoader : MonoBehaviour
         vrMessageText.gameObject.SetActive(true);
         vrMessageText.text = message;
 
-        // 如果你有一个 Panel，先激活
-        // if (vrMessagePanel != null)
-        //    vrMessagePanel.SetActive(true);
-
-        // 可选：几秒后自动隐藏
         StopAllCoroutines();
         StartCoroutine(HideAfterDelay(duration));
     }
@@ -131,7 +130,6 @@ public class VRModelLoader : MonoBehaviour
             }
             else
             {
-                Debug.LogError("❌ 只支持 .glb 文件格式");
                 Destroy(parent);
                 return;
             }
@@ -139,7 +137,6 @@ public class VRModelLoader : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"❌ [异常] GLTF 加载失败: {ex.Message}\n{ex.StackTrace}");
             Destroy(parent);
             return;
         }
@@ -175,10 +172,15 @@ public class VRModelLoader : MonoBehaviour
             SetupRigidbodyAndGrab(parent);
         }
 
-        ReplaceShadersToStandard(parent);
+        //ReplaceShadersToStandard(parent);
         PrintLoadedMaterialsAndTextures(parent);
         ForceAssignWhiteTexture(parent);
-        
+        // 在模型正面中部添加抓取锚点
+        AddFrontCenterGrabAnchor(parent);
+        // 加载模型完成后，添加旋转控制脚本model.AddComponent<ModelJoystickRotator>();
+        parent.AddComponent<ModelRotatorWithJoystick>();
+        parent.AddComponent<ModelManipulator>();
+
 
         // ✅ 设置位置
         if (Camera.main != null)
@@ -199,13 +201,19 @@ public class VRModelLoader : MonoBehaviour
         Debug.Log("✅ 模型加载完成");
         ShowVRMessage("Model loaded successfully.", 5f);
 
+        // ✅ 添加 Canvas 触发组件
+        var trigger = parent.AddComponent<VRModelCanvasTrigger>();
+        trigger.canvasPrefab = Resources.Load<GameObject>("TriggerCanvas"); // 你的 Canvas 预制体放到 Resources 文件夹
+
+
+
     }
+    
 
-
-    // LoadZipModel 改成：
     public async Task LoadZipModel(string zipPath)
     {
         string extractPath = Path.Combine(Application.temporaryCachePath, "unzipped_model");
+
         if (Directory.Exists(extractPath))
             Directory.Delete(extractPath, true);
 
@@ -213,22 +221,32 @@ public class VRModelLoader : MonoBehaviour
 
         System.IO.Compression.ZipFile.ExtractToDirectory(zipPath, extractPath);
 
-        // 查找 gltf 或 glb 文件
+        // 查找 glb 或 gltf 文件，优先选择 .glb
         string[] glbFiles = Directory.GetFiles(extractPath, "*.glb", SearchOption.AllDirectories);
-        string modelPath = (glbFiles.Length > 0) ? glbFiles[0] : null;
+        string[] gltfFiles = Directory.GetFiles(extractPath, "*.gltf", SearchOption.AllDirectories);
+
+        string modelPath = null;
+
+        if (glbFiles.Length > 0)
+        {
+            modelPath = glbFiles[0]; // 优先使用 .glb 文件
+        }
+        else if (gltfFiles.Length > 0)
+        {
+            modelPath = gltfFiles[0];
+        }
 
         if (modelPath == null)
         {
-            string errorMsg = " No .glb file found in the Zip archive.";
+            string errorMsg = "❌ No .glb or .gltf file found in the Zip archive.";
             Debug.LogError(errorMsg);
             ShowVRMessage(errorMsg, 5f); // ✅ 在 VR 头显中显示错误提示
             return;
         }
 
-
         await LoadModel(modelPath);
-
     }
+
 
     void NormalizeModelScale(GameObject model, float maxSize = 1f)
     {
@@ -295,12 +313,12 @@ public class VRModelLoader : MonoBehaviour
         grab.enabled = true;
     }
 
-    void ReplaceShadersToStandard(GameObject go)
+    /*void ReplaceShadersToStandard(GameObject go)
     {
         Shader standardShader = Shader.Find("Standard");
         if (standardShader == null)
         {
-            Debug.LogError("找不到 Standard Shader");
+            Debug.LogError("❌ 找不到 Standard Shader");
             return;
         }
 
@@ -312,18 +330,39 @@ public class VRModelLoader : MonoBehaviour
                 var mat = materials[i];
                 if (mat == null) continue;
 
-                var newMat = new Material(standardShader);
-                if (mat.mainTexture != null)
-                {
-                    newMat.mainTexture = mat.mainTexture;
-                }
-                materials[i] = newMat;
+                string shaderName = mat.shader.name.ToLower();
 
-                Debug.Log($"材质 '{mat.name}' 替换为 Standard Shader");
+                // 判断是否是 glTF 材质（保留），否则替换
+                if (shaderName.Contains("gltf") || shaderName.Contains("pbrmetallicroughness"))
+                {
+                    Debug.Log($"✅ 保留 glTF 材质: {mat.name} ({mat.shader.name})");
+                }
+                else
+                {
+                    Debug.Log($"🔄 替换非 glTF 材质: {mat.name} ({mat.shader.name}) → Standard");
+
+                    var newMat = new Material(standardShader);
+
+                    // 尝试复制常见贴图属性
+                    if (mat.HasProperty("_MainTex"))
+                        newMat.SetTexture("_MainTex", mat.GetTexture("_MainTex"));
+
+                    if (mat.HasProperty("_BaseMap")) // 一些非标准材质使用 _BaseMap
+                        newMat.SetTexture("_MainTex", mat.GetTexture("_BaseMap")); // 转到 Standard 的 _MainTex
+
+                    if (mat.HasProperty("_Color"))
+                        newMat.SetColor("_Color", mat.GetColor("_Color"));
+
+                    // 可选：复制法线贴图
+                    if (mat.HasProperty("_BumpMap"))
+                        newMat.SetTexture("_BumpMap", mat.GetTexture("_BumpMap"));
+
+                    materials[i] = newMat;
+                }
             }
             renderer.sharedMaterials = materials;
         }
-    }
+    }*/
 
 
     void ForceAssignWhiteTexture(GameObject go)
@@ -392,6 +431,42 @@ public class VRModelLoader : MonoBehaviour
         Debug.LogWarning("CopyFileToPersistentPath 在非Android平台未实现");
         return null;
 #endif
+    }
+
+    void AddFrontCenterGrabAnchor(GameObject model)
+    {
+        var grab = model.GetComponent<XRGrabInteractable>();
+        if (grab == null) return;
+
+        var renderers = model.GetComponentsInChildren<Renderer>();
+        if (renderers.Length == 0) return;
+
+        // 计算整体包围盒
+        Bounds bounds = renderers[0].bounds;
+        foreach (var r in renderers)
+            bounds.Encapsulate(r.bounds);
+
+        Vector3 center = bounds.center;
+        Vector3 size = bounds.size;
+
+        // 模型正面是 forward 方向，取包围盒中心 + forward * 半深度
+        Vector3 frontCenterWorld = center + model.transform.forward * (size.z / 2f);
+        frontCenterWorld.y = center.y; // 保持中间高度
+
+        // 转换为本地坐标
+        Vector3 localFrontCenter = model.transform.InverseTransformPoint(frontCenterWorld);
+
+        // 创建锚点空物体
+        GameObject grabAnchor = new GameObject("GrabAnchor");
+        grabAnchor.transform.SetParent(model.transform, false);
+        grabAnchor.transform.localPosition = localFrontCenter;
+
+        // ✅ 设置锚点旋转，使 forward 一致
+        grabAnchor.transform.rotation = Quaternion.LookRotation(model.transform.forward, model.transform.up);
+        grabAnchor.transform.localRotation = Quaternion.Inverse(model.transform.rotation) * grabAnchor.transform.rotation;
+
+
+        grab.attachTransform = grabAnchor.transform;
     }
 
 

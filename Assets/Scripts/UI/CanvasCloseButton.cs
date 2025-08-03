@@ -27,6 +27,16 @@ public class CanvasCloseButton : MonoBehaviour
         }
     }
 
+    public class ModelCloseButton : MonoBehaviour
+    {
+        public GameObject target;
+
+        public void CloseSelf()
+        {
+            if (target != null)
+                Destroy(target);
+        }
+    }
     // 在无头显环境下测试用
     [ContextMenu("测试关闭 Canvas")]
     public void TestCloseCanvas()
