@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -17,6 +18,7 @@ public class CameraManager : MonoBehaviour
 
     [SerializeField] public List<CameraController> cameraList = new List<CameraController>();
     [SerializeField] private CameraController currentSelected;
+    public GameObject currentCamera; 
     public Renderer previewPlaneRenderer;
 
     private void Awake()
@@ -88,7 +90,111 @@ public class CameraManager : MonoBehaviour
             }
         }
     }
+    
 
+    /// <summary>
+    /// 根据时间点获取应该激活的相机
+    /// </summary>
+    /// <param name="currentTime">当前时间点</param>
+    /// <returns>应该激活的相机，如果没有则返回null</returns>
+    public CameraController GetExpectedActiveCameraAtTime(float currentTime)
+    {
+        foreach (var track in TimelineManager.Instance.GetAllTracks())
+        {
+            if (track.isControlledByMaster && track.isCamera)
+            {
+                var expectedController = track.GetExpectedActiveCameraControllerAtTime(currentTime);
+                if (expectedController != null)
+                {
+                    return expectedController;
+                }
+            }
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// 主线控制下更新相机状态 - 如果已经有相机激活，返回false
+    /// </summary>
+    /// <param name="cameraController">要更新的相机</param>
+    /// <param name="shouldBeActive">是否应该激活</param>
+    /// <param name="time">当前时间</param>
+    /// <returns>是否成功更新状态</returns>
+    public bool UpdateCameraStateForMasterControl(CameraController cameraController, bool shouldBeActive, float time)
+    {
+        if (shouldBeActive)
+        {
+            // 如果要激活相机，检查是否已经有其他相机激活
+            if (currentSelected != null && currentSelected != cameraController)
+            {
+                Debug.LogError($"[CameraManager] 主线控制：{cameraController.gameObject.name} 试图激活，但 {currentSelected.gameObject.name} 已经激活 (时间: {time:F2}s)");
+                return false; // 冲突，返回false
+            }
+            
+            // 如果是同一个相机重复激活，直接返回成功
+            if (currentSelected == cameraController)
+            {
+                Debug.Log($"[CameraManager] 主线控制：{cameraController.gameObject.name} 已经是激活状态 (时间: {time:F2}s)");
+                return true;
+            }
+            
+            // 激活相机
+            SelectCamera(cameraController);
+            Debug.Log($"[CameraManager] 主线控制：{cameraController.gameObject.name} 激活 (时间: {time:F2}s)");
+            return true;
+        }
+        else
+        {
+            // 如果要禁用相机，检查是否是当前激活的相机
+            if (currentSelected == cameraController)
+            {
+                // 禁用当前相机
+                currentSelected.DisablePreview();
+                currentSelected = null;
+                currentCamera = null;
+                Debug.Log($"[CameraManager] 主线控制：{cameraController.gameObject.name} 禁用 (时间: {time:F2}s)");
+                
+                // 尝试切换到其他应该激活的相机
+                var nextCamera = GetExpectedActiveCameraAtTime(time);
+                if (nextCamera != null)
+                {
+                    SelectCamera(nextCamera);
+                    Debug.Log($"[CameraManager] 主线控制：自动切换到 {nextCamera.gameObject.name} (时间: {time:F2}s)");
+                }
+            }
+            return true; // 禁用总是成功的
+        }
+    }
+
+    /// <summary>
+    /// 检测当前时间点是否有多个相机试图同时激活
+    /// </summary>
+    /// <param name="currentTime">当前时间点</param>
+    /// <returns>冲突的相机列表，如果没有冲突返回空列表</returns>
+    public List<CameraController> CheckCameraConflictAtTime(float currentTime)
+    {
+        List<CameraController> conflictingCameras = new List<CameraController>();
+        
+        foreach (var track in TimelineManager.Instance.GetAllTracks())
+        {
+            if (track.isControlledByMaster && track.isCamera)
+            {
+                var expectedController = track.GetExpectedActiveCameraControllerAtTime(currentTime);
+                if (expectedController != null)
+                {
+                    conflictingCameras.Add(expectedController);
+                }
+            }
+        }
+        
+        // 如果只有一个或没有相机应该激活，则没有冲突
+        if (conflictingCameras.Count <= 1)
+        {
+            return new List<CameraController>();
+        }
+        
+        return conflictingCameras;
+    }
 
     public void SelectCamera(CameraController controller)
     {
@@ -102,12 +208,12 @@ public class CameraManager : MonoBehaviour
                 {
                     var expectedController =
                         track.GetExpectedActiveCameraControllerAtTime(TimelineManager.Instance.masterTrack.currentTime);
-                    if (expectedController != null && controller != expectedController)
+                    /*if (expectedController != null && controller != expectedController)
                     {
                         Debug.LogError(
                             $"[CameraManager] Master播放期间禁止手动切换相机！当前应激活：{expectedController.gameObject.name}");
                         return; // 阻止切换
-                    }
+                    }*/
                 }
             }
         }
@@ -118,7 +224,7 @@ public class CameraManager : MonoBehaviour
         }
 
         currentSelected = controller;
-
+        currentCamera = controller.transform.parent.gameObject;
         currentSelected.EnablePreview(previewTexture);
 
         Debug.Log($"Selected camera: {controller.gameObject.name}");
@@ -131,6 +237,7 @@ public class CameraManager : MonoBehaviour
     public void AddNewCamera()
     {
         GameObject camObj = Instantiate(cameraPrefab, cameraSpawnPoint.position, cameraSpawnPoint.rotation);
+        camObj.name=GetCameraNameWithIndex(cameraPrefab.name);
         CameraController controller = camObj.GetComponentInChildren<CameraController>();
 
         TimelineManager.Instance.RegisterTrack(camObj.GetComponentInChildren<TimelineTrack>());
@@ -146,6 +253,28 @@ public class CameraManager : MonoBehaviour
 
         RegisterCamera(controller);
         SelectCamera(controller); // ������Զ�ѡ�У�Ԥ���������
+    }
+
+    private string GetCameraNameWithIndex(string cameraPrefabName)
+    {
+       var allObjects = GameObject.FindObjectsOfType<Transform>(true)
+                   .Select(t => t.gameObject)
+                   .Where(go => go.name.StartsWith(cameraPrefabName))
+                   .ToList();
+               int maxIndex = 0;
+       
+               foreach (var obj in allObjects)
+               {
+                   string suffix = obj.name.Substring(cameraPrefabName.Length); // 去掉前缀
+                   if (int.TryParse(suffix, out int index))
+                   {
+                       if (index > maxIndex)
+                           maxIndex = index;
+                   }
+               }
+       
+               int nextIndex = maxIndex + 1;
+               return cameraPrefabName + nextIndex;
     }
 
     public CameraController GetCurrentSelectedCamera()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq; // Added for .Select()
 
 public class MasterTimelineTrack : MonoBehaviour
 {
@@ -18,28 +19,62 @@ public class MasterTimelineTrack : MonoBehaviour
                 currentTime = duration;
                 foreach (var track in TimelineManager.Instance.GetAllTracks())
                 {
-                    if (track.isControlledByMaster){
-                        track.SetTime(track.clips[0].time);
+                    if (track.isControlledByMaster)
+                    {
+                        // 检查clips是否为空，避免IndexOutOfRangeException
+                        if (track.clips != null && track.clips.Count > 0)
+                        {
+                            track.SetTime(track.clips[0].time);
+                        }
+                        else
+                        {
+                            // 如果轨道没有关键帧，设置为0秒
+                            track.SetTime(0f);
+                        }
                     }
                 }
+
                 foreach (var track in TimelineManager.Instance.GetAllTracks())
                 {
-                    if (track.isControlledByMaster){
+                    if (track.isControlledByMaster)
+                    {
                         track.isControlledByMaster = false;
                     }
                 }
+
                 isPlaying = false;
+            }
+            else
+            {
+                // 检测相机冲突
+                var conflictingCameras = CameraManager.Instance.CheckCameraConflictAtTime(currentTime);
+                if (conflictingCameras.Count > 1)
+                {
+                    // 有冲突，停止播放并报错
+                    string cameraNames = string.Join(", ", conflictingCameras.Select(c => c.gameObject.name));
+                    Debug.LogError($"[MasterTimelineTrack] 检测到相机冲突！时间: {currentTime:F2}s，冲突相机: {cameraNames}");
+                    
+                    // 停止播放
+                    isPlaying = false;
+                    foreach (var track in TimelineManager.Instance.GetAllTracks())
+                    {
+                        if (track.isControlledByMaster)
+                        {
+                            track.isControlledByMaster = false;
+                        }
+                    }
+                    return; // 不执行后续的轨道更新
+                }
                 
-            }else{
                 // 推进所有轨道
                 foreach (var track in TimelineManager.Instance.GetAllTracks())
                 {
-                    if (track.isControlledByMaster){
+                    if (track.isControlledByMaster)
+                    {
                         track.SetTime(currentTime);
                     }
                 }
             }
-            
         }
     }
 
@@ -49,7 +84,7 @@ public class MasterTimelineTrack : MonoBehaviour
         isPlaying = true;
         currentTime = 0f;
         duration = GetDuration();
-        
+
         foreach (var track in TimelineManager.Instance.GetAllTracks())
         {
             track.isControlledByMaster = true;
@@ -69,7 +104,16 @@ public class MasterTimelineTrack : MonoBehaviour
         currentTime = 0f;
         foreach (var track in TimelineManager.Instance.GetAllTracks())
         {
-            track.SetTime(track.clips[0].time);
+            // 检查clips是否为空，避免IndexOutOfRangeException
+            if (track.clips != null && track.clips.Count > 0)
+            {
+                track.SetTime(track.clips[0].time);
+            }
+            else
+            {
+                // 如果轨道没有关键帧，设置为0秒
+                track.SetTime(0f);
+            }
             track.isControlledByMaster = false;
         }
     }
@@ -83,6 +127,7 @@ public class MasterTimelineTrack : MonoBehaviour
             float d = track.GetDuration();
             if (d > max) max = d;
         }
+
         return max;
     }
 }

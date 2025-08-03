@@ -110,72 +110,89 @@ public class TimelineTrack : MonoBehaviour
                     bool isCurrentlyActive = (currentSelectedCamera != null &&
                                               currentSelectedCamera.gameObject == this.gameObject);
 
-                    // 激活逻辑
-                    if (shouldBeActive)
-                    {
-                        if (!isCurrentlyActive)
-                        {
-                            // 激活当前相机
-                            var cameraController = GetComponentInChildren<CameraController>();
-                            if (cameraController != null)
-                            {
-                                // 确保相机组件是激活的
-                                if (cam != null)
-                                {
-                                    cam.gameObject.SetActive(true);
-                                }
+                                         // 激活逻辑
+                     if (shouldBeActive)
+                     {
+                         if (isControlledByMaster)
+                         {
+                             // 主线控制模式：通过CameraManager更新状态
+                             var cameraController = GetComponentInChildren<CameraController>();
+                             if (cameraController != null)
+                             {
+                                 bool success = CameraManager.Instance.UpdateCameraStateForMasterControl(cameraController, shouldBeActive, time);
+                                 if (!success)
+                                 {
+                                     // 如果更新失败，记录错误但不中断执行
+                                     Debug.LogWarning($"[{gameObject.name}] 相机激活失败，可能存在冲突");
+                                 }
+                             }
+                         }
+                         else
+                         {
+                             // 独立模式：直接激活
+                             if (!isCurrentlyActive)
+                             {
+                                 // 激活当前相机
+                                 var cameraController = GetComponentInChildren<CameraController>();
+                                 if (cameraController != null)
+                                 {
+                                     // 确保相机组件是激活的
+                                     if (cam != null)
+                                     {
+                                         cam.gameObject.SetActive(true);
+                                     }
 
-                                CameraManager.Instance.SelectCamera(cameraController);
-                                Debug.Log($"[{gameObject.name}] 激活相机 (时间: {time:F2}s)");
-                            }
-                        }
-                        else if (!isControlledByMaster)
-                        {
-                            // 独立模式：如果当前已激活但需要重新激活预览
-                            var cameraController = GetComponentInChildren<CameraController>();
-                            if (cameraController != null && CameraManager.Instance.previewTexture != null)
-                            {
-                                cameraController.EnablePreview(CameraManager.Instance.previewTexture);
-                                Debug.Log($"[{gameObject.name}] 独立模式重新激活相机预览 (时间: {time:F2}s)");
-                            }
-                        }
-                    }
-                    // 禁用逻辑
-                    else
-                    {
-                        if (isControlledByMaster)
-                        {
-                            if (isCurrentlyActive)
-                            {
-                                // Master控制模式：切换到其他相机
-                                var allCameras = CameraManager.Instance.GetAllCameras();
-                                var otherCamera = allCameras.FirstOrDefault(c => c.gameObject != this.gameObject);
-                                if (otherCamera != null)
-                                {
-                                    CameraManager.Instance.SelectCamera(otherCamera);
-                                    Debug.Log(
-                                        $"[{gameObject.name}] 禁用相机，切换到 {otherCamera.gameObject.name} (时间: {time:F2}s)");
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // 独立模式：无论当前状态如何，都执行禁用
-                            var cameraController = GetComponentInChildren<CameraController>();
-                            if (cameraController != null)
-                            {
-                                cameraController.DisablePreview();
-                                ClearPreviewTexture(); // 清空预览纹理
-                                Debug.Log($"[{gameObject.name}] 独立模式禁用相机预览 (时间: {time:F2}s)");
-                            }
-                            else if (cam != null)
-                            {
-                                cam.gameObject.SetActive(false);
-                                ClearPreviewTexture(); // 清空预览纹理
-                                Debug.Log($"[{gameObject.name}] 独立模式禁用相机组件 (时间: {time:F2}s)");
-                            }
-                        }
-                    }
+                                     CameraManager.Instance.SelectCamera(cameraController);
+                                     Debug.Log($"[{gameObject.name}] 独立模式激活相机 (时间: {time:F2}s)");
+                                 }
+                             }
+                             else
+                             {
+                                 // 独立模式：如果当前已激活但需要重新激活预览
+                                 var cameraController = GetComponentInChildren<CameraController>();
+                                 if (cameraController != null && CameraManager.Instance.previewTexture != null)
+                                 {
+                                     cameraController.EnablePreview(CameraManager.Instance.previewTexture);
+                                     Debug.Log($"[{gameObject.name}] 独立模式重新激活相机预览 (时间: {time:F2}s)");
+                                 }
+                             }
+                         }
+                     }
+                     // 禁用逻辑
+                     else
+                     {
+                         if (isControlledByMaster)
+                         {
+                             // 主线控制模式：通过CameraManager更新状态
+                             var cameraController = GetComponentInChildren<CameraController>();
+                             if (cameraController != null)
+                             {
+                                 bool success = CameraManager.Instance.UpdateCameraStateForMasterControl(cameraController, shouldBeActive, time);
+                                 if (!success)
+                                 {
+                                     // 如果更新失败，记录错误但不中断执行
+                                     Debug.LogWarning($"[{gameObject.name}] 相机状态更新失败，可能存在冲突");
+                                 }
+                             }
+                         }
+                         else
+                         {
+                             // 独立模式：无论当前状态如何，都执行禁用
+                             var cameraController = GetComponentInChildren<CameraController>();
+                             if (cameraController != null)
+                             {
+                                 cameraController.DisablePreview();
+                                 ClearPreviewTexture(); // 清空预览纹理
+                                 Debug.Log($"[{gameObject.name}] 独立模式禁用相机预览 (时间: {time:F2}s)");
+                             }
+                             else if (cam != null)
+                             {
+                                 cam.gameObject.SetActive(false);
+                                 ClearPreviewTexture(); // 清空预览纹理
+                                 Debug.Log($"[{gameObject.name}] 独立模式禁用相机组件 (时间: {time:F2}s)");
+                             }
+                         }
+                     }
                 }
                 else
                 {
@@ -1121,66 +1138,5 @@ public class TimelineTrack : MonoBehaviour
 
         return null;
     }
-
-    [ContextMenu("测试用例: 播放结束后回到第一帧")]
-    public void TestPlaybackEndReturnToFirstFrame()
-    {
-        Debug.Log("=== 测试用例: 播放结束后回到第一帧 ===");
-        
-        // 清空现有关键帧
-        DeleteAllClips();
-        
-        // 添加多个关键帧
-        currentTime = 0f;
-        AddClip();
-        currentTime = 2f;
-        AddClip();
-        currentTime = 4f;
-        AddClip();
-        
-        Debug.Log($"创建测试关键帧: 0s -> 2s -> 4s (总时长: {duration}s)");
-        Debug.Log($"初始位置: {transform.position}");
-        
-        // 记录第一个关键帧的位置
-        var firstClip = clips[0];
-        Vector3 firstPosition = firstClip.position;
-        
-        // 移动到中间位置
-        SetTime(2f);
-        Debug.Log($"移动到2s位置: {transform.position}");
-        
-        // 开始播放
-        Play();
-        Debug.Log($"开始播放: isPlaying={isPlaying}, currentTime={currentTime}");
-        
-        // 模拟播放结束（手动设置时间到结束）
-        currentTime = duration;
-        isPlaying = false;
-        
-        // 删除自动添加的0秒关键帧
-        DeleteClipsByType(TimelineClip.ClipType.Null);
-        
-        // 回到第一个关键帧
-        if (clips.Count > 0)
-        {
-            SetTime(clips[0].time);
-            Debug.Log($"播放结束后回到第一帧: {transform.position}");
-            Debug.Log($"第一帧原始位置: {firstPosition}");
-            
-            // 检查是否回到了正确位置
-            if (Vector3.Distance(transform.position, firstPosition) < 0.1f)
-            {
-                Debug.Log("✓ 成功回到第一帧位置");
-            }
-            else
-            {
-                Debug.LogError("✗ 没有回到第一帧位置");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("没有关键帧，回到0秒");
-            SetTime(0f);
-        }
-    }
+    
 }
