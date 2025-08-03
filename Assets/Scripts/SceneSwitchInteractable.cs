@@ -9,18 +9,33 @@ public class SceneSwitchInteractable : MonoBehaviour
     private void OnEnable()
     {
         var interactable = GetComponent<XRBaseInteractable>();
-        interactable.selectEntered.AddListener(OnSelectEntered);
+        if (interactable != null)
+            interactable.selectEntered.AddListener(OnSelectEntered);
     }
 
     private void OnDisable()
     {
         var interactable = GetComponent<XRBaseInteractable>();
-        interactable.selectEntered.RemoveListener(OnSelectEntered);
+        if (interactable != null)
+            interactable.selectEntered.RemoveListener(OnSelectEntered);
     }
 
     private void OnSelectEntered(SelectEnterEventArgs args)
     {
-        Debug.Log("Clicked! Loading scene: " + targetSceneName);
+        Debug.Log("XR 交互触发场景切换: " + targetSceneName);
+        LoadTargetScene();
+    }
+
+    // 新增：用于 UI Button 点击
+    public void LoadTargetScene()
+    {
+        if (string.IsNullOrEmpty(targetSceneName))
+        {
+            Debug.LogWarning("目标场景名为空，无法加载！");
+            return;
+        }
+
+        Debug.Log("加载场景: " + targetSceneName);
         SceneManager.LoadScene(targetSceneName);
     }
 

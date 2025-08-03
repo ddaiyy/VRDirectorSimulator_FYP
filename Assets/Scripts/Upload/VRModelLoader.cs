@@ -17,6 +17,11 @@ public class VRModelLoader : MonoBehaviour
 
     [Header("Material Options")]
     public bool keepOriginalMaterial = true; // 控制是否保留 glTF 原材质
+    [Header("右手控制器物体名（场景中必须存在）")]
+    public string rightHandObjectName = "RightHand Controller";
+
+    private XRBaseInteractor rightHandInteractor;
+
 
     void Start()
     {// 一开始隐藏
@@ -25,6 +30,8 @@ public class VRModelLoader : MonoBehaviour
 
         // if (vrMessagePanel != null)
         //    vrMessagePanel.SetActive(false);
+
+        TryFindRightHandInteractor();
     }
 
     public async void OpenModelPicker()
@@ -179,8 +186,8 @@ public class VRModelLoader : MonoBehaviour
         AddFrontCenterGrabAnchor(parent);
         // 加载模型完成后，添加旋转控制脚本model.AddComponent<ModelJoystickRotator>();
         parent.AddComponent<ModelRotatorWithJoystick>();
-        parent.AddComponent<ModelManipulator>();
-
+        parent.AddComponent<GrabScaleController_XRInput>();
+        
 
         // ✅ 设置位置
         if (Camera.main != null)
@@ -468,6 +475,25 @@ public class VRModelLoader : MonoBehaviour
 
         grab.attachTransform = grabAnchor.transform;
     }
-
+    private void TryFindRightHandInteractor()
+    {
+        GameObject rightHand = GameObject.Find("RightHand Controller"); // 注意名字要对
+        if (rightHand != null)
+        {
+            rightHandInteractor = rightHand.GetComponent<XRBaseInteractor>();
+            if (rightHandInteractor == null)
+            {
+                Debug.LogWarning("⚠️ 找到右手物体但没有 XRBaseInteractor 组件");
+            }
+            else
+            {
+                Debug.Log("✅ 右手控制器 XRBaseInteractor 获取成功");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ 无法找到右手控制器对象，请检查名称");
+        }
+    }
 
 }
