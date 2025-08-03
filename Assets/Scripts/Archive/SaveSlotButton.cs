@@ -44,38 +44,7 @@ public class SaveSlotButton : MonoBehaviour
 
 
     public void OnClick()
-    {
-        /*Debug.Log($"按钮被点击，isNewSlot: {isNewSlot}, saveId: {saveId}");
-
-        if (isNewSlot)
-        {
-            string newSaveName = "P " + (SaveSystem.LoadAll().Count + 1);
-            // 创建新存档并跳转
-            SaveData newData = new SaveData
-            {
-                saveId = System.Guid.NewGuid().ToString(),
-                *//*saveName = "New Save " + System.DateTime.Now.ToString("HH:mm"),*//*
-                saveName = newSaveName,
-                lastScene = "EnvironmentSelect",
-                saveTime = System.DateTime.Now
-            };
-
-            SaveSystem.Save(newData);
-            PlayerPrefs.SetString("CurrentSaveId", newData.saveId);
-            SceneManager.LoadScene("EnvironmentSelect");
-        }
-        else
-        {
-            if (currentData == null)
-            {
-                Debug.LogError("当前存档数据为空（currentData is null），请检查是否调用了 SetupExistingSlot。");
-                return;
-            }
-
-            PlayerPrefs.SetString("CurrentSaveId", currentData.saveId);
-            SceneManager.LoadScene(currentData.lastScene);
-        }*/
-
+    {      
         if (isNewSlot)
         {
             // 弹出改名面板，而不是立刻跳转

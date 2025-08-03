@@ -1,4 +1,6 @@
-using System;
+using System.Collections.Generic;
+using UnityEngine;
+
 [System.Serializable]
 public class SaveData
 {
@@ -14,6 +16,7 @@ public class SaveData
     public float playerZ;
 
     public int timeOfDayIndex = 0;
+    public List<SceneObjectData> placedObjects = new List<SceneObjectData>();
 
     // 非序列化字段，仅用于运行时访问
     [System.NonSerialized]

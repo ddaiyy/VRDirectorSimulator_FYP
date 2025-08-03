@@ -1,9 +1,10 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ExitAndSave : MonoBehaviour
 {
     public Transform playerTransform;
+    public SceneObjectManager sceneObjectManager;
 
     public void SaveAndExit()
     {
@@ -19,8 +20,9 @@ public class ExitAndSave : MonoBehaviour
         data.playerY = playerTransform.position.y;
         data.playerZ = playerTransform.position.z;
 
-        data.timeOfDayIndex = PlayerPrefs.GetInt("UserTimeOfDay", 0); // ±£´æÓÃ»§µ±Ç°Ñ¡ÔñµÄÌì¿ÕºĞ
+        data.timeOfDayIndex = PlayerPrefs.GetInt("UserTimeOfDay", 0); // ä¿å­˜ç”¨æˆ·å½“å‰é€‰æ‹©çš„å¤©ç©ºç›’
 
+        SceneObjectManager.Instance?.SaveObjects(data); // ğŸ‘ˆ ä¿å­˜åŠ¨æ€ç‰©ä½“
 
         SaveSystem.Save(data);
 

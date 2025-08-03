@@ -3,6 +3,7 @@
 public class LoadPlayerPosition : MonoBehaviour
 {
     public Transform playerTransform;
+    public SceneObjectManager sceneObjectManager;
 
     void Start()
     {
@@ -19,5 +20,7 @@ public class LoadPlayerPosition : MonoBehaviour
         // ⚠️ 把存档里的值写回 PlayerPrefs，防止被 Setting 页面覆盖
         PlayerPrefs.SetInt("UserTimeOfDay", data.timeOfDayIndex);
         PlayerPrefs.Save();
+
+        SceneObjectManager.Instance?.LoadObjects(data); // 👈 加载动态物体
     }
 }
