@@ -53,7 +53,10 @@ public class RenamePanelController : MonoBehaviour
             saveId = newSaveId,
             saveName = inputName,
             lastScene = "Environment",
-            saveTime = System.DateTime.Now
+            saveTime = System.DateTime.Now,
+
+            //保存当前用户在 Setting 里选的天空盒
+            timeOfDayIndex = PlayerPrefs.GetInt("UserTimeOfDay", 0),
         };
 
         SaveSystem.Save(newData);

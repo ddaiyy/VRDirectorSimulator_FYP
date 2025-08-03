@@ -19,6 +19,9 @@ public class ExitAndSave : MonoBehaviour
         data.playerY = playerTransform.position.y;
         data.playerZ = playerTransform.position.z;
 
+        data.timeOfDayIndex = PlayerPrefs.GetInt("UserTimeOfDay", 0); // 保存用户当前选择的天空盒
+
+
         SaveSystem.Save(data);
 
         SceneManager.LoadScene("Start");

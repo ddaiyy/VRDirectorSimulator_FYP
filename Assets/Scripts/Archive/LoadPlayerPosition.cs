@@ -13,5 +13,11 @@ public class LoadPlayerPosition : MonoBehaviour
         if (data == null) return;
 
         playerTransform.position = new Vector3(data.playerX, data.playerY, data.playerZ);
+
+        DayNightManager.TimeOfDay time = (DayNightManager.TimeOfDay)data.timeOfDayIndex;
+        FindObjectOfType<DayNightManager>()?.ApplyTimeOfDay(time);
+        // ⚠️ 把存档里的值写回 PlayerPrefs，防止被 Setting 页面覆盖
+        PlayerPrefs.SetInt("UserTimeOfDay", data.timeOfDayIndex);
+        PlayerPrefs.Save();
     }
 }

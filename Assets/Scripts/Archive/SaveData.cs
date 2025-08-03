@@ -13,6 +13,8 @@ public class SaveData
     public float playerY;
     public float playerZ;
 
+    public int timeOfDayIndex = 0;
+
     // 非序列化字段，仅用于运行时访问
     [System.NonSerialized]
     public System.DateTime saveTime;
