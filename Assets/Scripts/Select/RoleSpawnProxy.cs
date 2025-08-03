@@ -25,7 +25,7 @@ public class RoleSpawnProxy : MonoBehaviour
         GameObject newCharacter = Instantiate(originalPrefab, position, rotation);
 
         // 注册到场景对象管理器用于保存
-        SceneObjectManager.Instance?.RegisterObject(obj);
+        SceneObjectManager.Instance?.RegisterObject(newCharacter);
 
 
         Debug.Log("✅ 在 " + position + " 生成角色: " + newCharacter.name);
