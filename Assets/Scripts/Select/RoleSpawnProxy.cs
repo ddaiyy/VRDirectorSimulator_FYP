@@ -24,6 +24,10 @@ public class RoleSpawnProxy : MonoBehaviour
         Quaternion rotation = Quaternion.Euler(0, 180f, 0);  // Y轴旋转180度
         GameObject newCharacter = Instantiate(originalPrefab, position, rotation);
 
+        // 注册到场景对象管理器用于保存
+        SceneObjectManager.Instance?.RegisterObject(newCharacter);
+
+
         Debug.Log("✅ 在 " + position + " 生成角色: " + newCharacter.name);
         //注册Timeline
         TimelineManager.Instance.RegisterTrack(newCharacter.GetComponent<TimelineTrack>());

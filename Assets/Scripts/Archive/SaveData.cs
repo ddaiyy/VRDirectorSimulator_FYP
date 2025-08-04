@@ -1,21 +1,6 @@
-/*using System;
+using System.Collections.Generic;
+using UnityEngine;
 
-[System.Serializable]
-public class SaveData
-{
-    public string saveId;
-    public string saveName;
-    public string lastScene;
-    public DateTime saveTime;
-
-    // 可以扩展：比如位置、进度等
-    public float playerX;
-    public float playerY;
-    public float playerZ;
-}
-*/
-
-using System;
 [System.Serializable]
 public class SaveData
 {
@@ -29,6 +14,9 @@ public class SaveData
     public float playerX;
     public float playerY;
     public float playerZ;
+
+    public int timeOfDayIndex = 0;
+    public List<SceneObjectData> placedObjects = new List<SceneObjectData>();
 
     // 非序列化字段，仅用于运行时访问
     [System.NonSerialized]
