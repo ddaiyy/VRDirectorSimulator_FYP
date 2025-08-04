@@ -14661,19 +14661,7 @@ MonoBehaviour:
       m_Calls: []
   m_Activated:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5405835155138598069}
-        m_TargetAssemblyTypeName: CharacterSelectionAndActionUI, Assembly-CSharp
-        m_MethodName: OnCharacterButtonClicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_Deactivated:
     m_PersistentCalls:
       m_Calls: []
@@ -14765,7 +14753,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e06540ae13bd01489db6cda9b295434, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalPrefab: {fileID: 4199056328295280206, guid: 237b2944dda42064f9a54ea773e91ca3, type: 3}
+  originalPrefab: {fileID: 4199056328295280206, guid: 4d49a9ae2f75f49468a964ec77c8e8c8, type: 3}
 --- !u!114 &3131227996932405456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18698,19 +18686,7 @@ MonoBehaviour:
       m_Calls: []
   m_Activated:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1702740615502179368}
-        m_TargetAssemblyTypeName: CharacterSelectionAndActionUI, Assembly-CSharp
-        m_MethodName: OnCharacterButtonClicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_Deactivated:
     m_PersistentCalls:
       m_Calls: []
@@ -18802,7 +18778,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e06540ae13bd01489db6cda9b295434, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalPrefab: {fileID: 1836936020492445810, guid: 1461206b4f829a041949de1a27d48316, type: 3}
+  originalPrefab: {fileID: 1836936020492445810, guid: 4a9a06dbb86f37e468e28e6f26c3120d, type: 3}
 --- !u!114 &5274062974041904030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21032,19 +21008,7 @@ MonoBehaviour:
       m_Calls: []
   m_Activated:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5329779196102008872}
-        m_TargetAssemblyTypeName: CharacterSelectionAndActionUI, Assembly-CSharp
-        m_MethodName: OnCharacterButtonClicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_Deactivated:
     m_PersistentCalls:
       m_Calls: []
@@ -21136,7 +21100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e06540ae13bd01489db6cda9b295434, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalPrefab: {fileID: 4051780915273838970, guid: e9aa73231e8a9e043b15bce322874d62, type: 3}
+  originalPrefab: {fileID: 4051780915273838970, guid: 0e887467d6235694a82887eed4daa528, type: 3}
 --- !u!114 &337723825306941750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30173,7 +30137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e06540ae13bd01489db6cda9b295434, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalPrefab: {fileID: 8025752508931190599, guid: 7fb0e02154d669d44b0e17e3205bd411, type: 3}
+  originalPrefab: {fileID: 8025752508931190599, guid: 432da28024f8b064a834462551da8eb5, type: 3}
 --- !u!114 &4433001819264539225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31155,19 +31119,7 @@ MonoBehaviour:
       m_Calls: []
   m_Activated:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3506061557649481942}
-        m_TargetAssemblyTypeName: CharacterSelectionAndActionUI, Assembly-CSharp
-        m_MethodName: OnCharacterButtonClicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_Deactivated:
     m_PersistentCalls:
       m_Calls: []
@@ -31259,7 +31211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e06540ae13bd01489db6cda9b295434, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalPrefab: {fileID: 1384412809518333611, guid: 185ae2877c49ccf4aaa8c8d9168ddae3, type: 3}
+  originalPrefab: {fileID: 1384412809518333611, guid: 2e5483c0dbaa10644b4f3d3733ffbb0c, type: 3}
 --- !u!114 &7174569213926764506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38772,19 +38724,7 @@ MonoBehaviour:
       m_Calls: []
   m_Activated:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1704074931600777278}
-        m_TargetAssemblyTypeName: CharacterSelectionAndActionUI, Assembly-CSharp
-        m_MethodName: OnCharacterButtonClicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_Deactivated:
     m_PersistentCalls:
       m_Calls: []
@@ -38876,7 +38816,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e06540ae13bd01489db6cda9b295434, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalPrefab: {fileID: 5372288485508970322, guid: b58ec4425dd60be489b89fd156fe6b48, type: 3}
+  originalPrefab: {fileID: 5372288485508970322, guid: a4f81703f03feca42acced496f9986be, type: 3}
 --- !u!114 &7790252096496337549
 MonoBehaviour:
   m_ObjectHideFlags: 0

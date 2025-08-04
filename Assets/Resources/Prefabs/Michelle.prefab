@@ -175,7 +175,6 @@ GameObject:
   - component: {fileID: 3440744345700622126}
   - component: {fileID: 8616481323134706416}
   - component: {fileID: 2144556219631297523}
-  - component: {fileID: -6615329373481954665}
   - component: {fileID: 3510062528658913061}
   m_Layer: 0
   m_Name: Michelle
@@ -323,19 +322,7 @@ MonoBehaviour:
       m_Calls: []
   m_SelectEntered:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2144556219631297523}
-        m_TargetAssemblyTypeName: CharacterSelectionAndActionUI, Assembly-CSharp
-        m_MethodName: OnCharacterButtonClicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_SelectExited:
     m_PersistentCalls:
       m_Calls: []
@@ -463,18 +450,6 @@ MonoBehaviour:
   controllerForThisCharacter: {fileID: 8616481323134706416}
   propUI: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
   characterTransform: {fileID: 7302554327282129156}
---- !u!114 &-6615329373481954665
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1384412809518333611}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4746b596b1674d419c8c06b7a33c83b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3510062528658913061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -493,6 +468,18 @@ MonoBehaviour:
   duration: 0
   isControlledByMaster: 0
   volume: {fileID: 0}
+  isCameraActive: 0
+  objectTimelineUI: {fileID: 0}
+  objectTimelineUIPrefab: {fileID: 0}
+  cameraTimelineUIPrefab: {fileID: 0}
+  startPosition: {x: 0, y: 0, z: 0}
+  startRotation: {x: 0, y: 0, z: 0, w: 0}
+  fov: 60
+  startScale: {x: 0, y: 0, z: 0}
+  isCamera: 0
+  animName: Test Animation Name
+  animDuration: 5
+  isAnimPlaying: 0
 --- !u!1 &1386002455302445983
 GameObject:
   m_ObjectHideFlags: 0

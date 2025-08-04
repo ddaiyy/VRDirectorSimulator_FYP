@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 635832357895011088}
   - component: {fileID: 3017787452769391226}
   - component: {fileID: -7215478762868472916}
+  - component: {fileID: 6889411444961679519}
   m_Layer: 0
   m_Name: Prop_TeddyBear_01
   m_TagString: Untagged
@@ -242,6 +243,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputSource: 4
   rotationSpeed: 60
+--- !u!114 &6889411444961679519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383764733723319192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e06540ae13bd01489db6cda9b295434, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  originalPrefab: {fileID: 0}
 --- !u!1 &1643627821241393273
 GameObject:
   m_ObjectHideFlags: 0
