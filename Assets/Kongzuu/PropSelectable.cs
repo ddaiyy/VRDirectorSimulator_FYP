@@ -8,25 +8,31 @@ public class PropSelectable : MonoBehaviour, ICustomSelectable
 
     private GameObject spawnedUI;
 
+
     public void OnSelect()
     {
+        Debug.Log("OnSelect() 被调用啦！");
+
         if (propUIPrefab != null && spawnedUI == null)
         {
-            // 实例化Canvas，不设置父物体
             spawnedUI = Instantiate(propUIPrefab);
 
-            // 设置位置，和物体位置匹配，带偏移
             spawnedUI.transform.position = transform.position + new Vector3(0, 1f, 0);
-
-            // 设置旋转，如果你想让UI不旋转，可以用Quaternion.identity
             spawnedUI.transform.rotation = Quaternion.identity;
 
             spawnedUI.SetActive(true);
 
-            Debug.Log("道具被选中，UI已实例化，且不作为子物体");
+            Debug.Log("UI 已实例化");
+        }
+        else if (spawnedUI != null)
+        {
+            Debug.Log("UI 已存在，重复点击不会重新生成");
+        }
+        else
+        {
+            Debug.LogWarning("propUIPrefab 没有绑定，无法实例化 UI");
         }
     }
-
 
 
     public void OnDeselect()
