@@ -66,12 +66,23 @@ public class MasterTimelineTrack : MonoBehaviour
                     return; // 不执行后续的轨道更新
                 }
                 
-                // 推进所有轨道
+                // 分两步处理：先处理所有相机的关闭，再处理激活
+                var cameraTracks = TimelineManager.Instance.GetAllTracks()
+                    .Where(track => track.isControlledByMaster && track.isCamera)
+                    .ToList();
+                
+                // 第一步：处理所有相机的关闭
+                foreach (var track in cameraTracks)
+                {
+                    track.HandleCameraDeactivationOnly(currentTime);
+                }
+                
+                // 第二步：处理所有相机的激活和其他属性
                 foreach (var track in TimelineManager.Instance.GetAllTracks())
                 {
                     if (track.isControlledByMaster)
                     {
-                        track.SetTime(currentTime);
+                        track.SetTimeWithoutCameraActivation(currentTime);
                     }
                 }
             }
@@ -84,10 +95,23 @@ public class MasterTimelineTrack : MonoBehaviour
         isPlaying = true;
         currentTime = 0f;
         duration = GetDuration();
-
+        ClearPreviewTexture();
+        
         foreach (var track in TimelineManager.Instance.GetAllTracks())
         {
             track.isControlledByMaster = true;
+        }
+    }
+    private void ClearPreviewTexture()
+    {
+        if (CameraManager.Instance != null && CameraManager.Instance.previewTexture != null)
+        {
+            RenderTexture.active = CameraManager.Instance.previewTexture;
+            CameraManager.Instance.currentSelected = null;
+            CameraManager.Instance.currentCamera = null;
+            GL.Clear(true, true, Color.clear);
+            RenderTexture.active = null;
+            Debug.Log($"[{gameObject.name}] 清空预览纹理");
         }
     }
 
