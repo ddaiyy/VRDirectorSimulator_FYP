@@ -238,7 +238,7 @@ GameObject:
   - component: {fileID: 3451288413432878978}
   - component: {fileID: 5801753172801346692}
   - component: {fileID: 1095760268175528139}
-  - component: {fileID: 5252360602584904263}
+  - component: {fileID: 1813286843873206268}
   m_Layer: 0
   m_Name: Prop_TeddyBear_01
   m_TagString: Untagged
@@ -311,8 +311,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5252360602584904263
-MeshCollider:
+--- !u!65 &1813286843873206268
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -329,7 +329,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 2665983840855125152, guid: e8a634e3add66fa4299d4ff6504347f9, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.30471072, y: 0.52523273, z: 0.27313086}
+  m_Center: {x: 0.000000014901161, y: 0.25824627, z: 0.012245972}

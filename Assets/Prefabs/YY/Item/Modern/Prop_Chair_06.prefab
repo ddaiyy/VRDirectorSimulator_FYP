@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5483225572079539383}
   - component: {fileID: 3596217206502079878}
   - component: {fileID: 7351581617051379420}
-  - component: {fileID: 3934828528671527658}
+  - component: {fileID: 3499884243344722341}
   m_Layer: 0
   m_Name: Prop_Chair_06
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &3934828528671527658
-MeshCollider:
+--- !u!65 &3499884243344722341
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,10 +102,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 6570609276756788739, guid: ff544276d5a8cf344ae572d636cd28fd, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.5127405, y: 0.84971994, z: 0.54876757}
+  m_Center: {x: 0.00000062584877, y: 0.4316394, z: -0.0038059205}
 --- !u!1 &7565367646243623342
 GameObject:
   m_ObjectHideFlags: 0

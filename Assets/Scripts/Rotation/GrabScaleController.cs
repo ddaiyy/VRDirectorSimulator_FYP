@@ -2,6 +2,7 @@
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 using System.Collections.Generic;
+using static ModelUtils;
 
 public class GrabScaleController_XRInput : MonoBehaviour
 {
@@ -96,6 +97,7 @@ public class GrabScaleController_XRInput : MonoBehaviour
             return;
         }
 
+        // 1. 缩放 Visual（模型显示）
         Vector3 oldScale = visualTarget.localScale;
         Vector3 newScale = oldScale + Vector3.one * delta;
 
@@ -107,10 +109,26 @@ public class GrabScaleController_XRInput : MonoBehaviour
 
         Debug.Log($"✅ 缩放对象: {visualTarget.name}, 原始缩放: {oldScale}, 当前缩放: {visualTarget.localScale}");
 
-        // 确保显示状态
-        visualTarget.gameObject.SetActive(true);
-        if (visualTarget.parent != null)
-            visualTarget.parent.gameObject.SetActive(true);
+        // 2. 更新父物体（grabbedObject）的碰撞器和 XR 组件
+        
+        if (grabbedObject != null)
+        {
+            AddAccurateBoxCollider(grabbedObject.gameObject);
+
+            // 自动注册 Collider 到 XRGrabInteractable
+            var grab = grabbedObject.GetComponent<XRGrabInteractable>();
+            var col = grabbedObject.GetComponent<BoxCollider>();
+            if (grab != null && col != null)
+            {
+                if (!grab.colliders.Contains(col))
+                {
+                    grab.colliders.Clear();
+                    grab.colliders.Add(col);
+                    Debug.Log("✅ Collider 自动添加到 grab 列表中");
+                }
+            }
+        }
+
     }
 
 

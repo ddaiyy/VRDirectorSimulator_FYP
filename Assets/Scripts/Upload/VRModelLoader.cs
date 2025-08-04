@@ -9,6 +9,8 @@ using System.Linq;
 using TMPro;
 using System.Collections;
 using MyGame.Selection;
+using static ModelUtils;
+
 
 public class VRModelLoader : MonoBehaviour
 {
@@ -18,7 +20,7 @@ public class VRModelLoader : MonoBehaviour
     [Header("Material Options")]
     public bool keepOriginalMaterial = true; // 控制是否保留 glTF 原材质
     [Header("右手控制器物体名（场景中必须存在）")]
-    public string rightHandObjectName = "RightHand Controller";
+    public string rightHandObjectName = "Right Controller";
 
     private XRBaseInteractor rightHandInteractor;
 
@@ -175,7 +177,7 @@ public class VRModelLoader : MonoBehaviour
         if (instantiated)
         {
             AddAccurateBoxCollider(parent);
-            
+
             SetupRigidbodyAndGrab(parent);
         }
 
@@ -207,6 +209,7 @@ public class VRModelLoader : MonoBehaviour
 
         Debug.Log("✅ 模型加载完成");
         ShowVRMessage("Model loaded successfully.", 5f);
+
 
         // ✅ 添加 Canvas 触发组件
         var trigger = parent.AddComponent<VRModelCanvasTrigger>();
@@ -271,30 +274,30 @@ public class VRModelLoader : MonoBehaviour
         model.transform.localScale *= scaleFactor;
     }
 
-    void AddAccurateBoxCollider(GameObject go)
-    {
-        var renderers = go.GetComponentsInChildren<Renderer>();
-        if (renderers.Length == 0)
-        {
-            Debug.LogWarning("No renderer found, skipping collider.");
-            return;
-        }
+    /* void AddAccurateBoxCollider(GameObject go)
+     {
+         var renderers = go.GetComponentsInChildren<Renderer>();
+         if (renderers.Length == 0)
+         {
+             Debug.LogWarning("No renderer found, skipping collider.");
+             return;
+         }
 
-        Bounds worldBounds = renderers[0].bounds;
-        for (int i = 1; i < renderers.Length; i++)
-            worldBounds.Encapsulate(renderers[i].bounds);
+         Bounds worldBounds = renderers[0].bounds;
+         for (int i = 1; i < renderers.Length; i++)
+             worldBounds.Encapsulate(renderers[i].bounds);
 
-        BoxCollider boxCollider = go.GetComponent<BoxCollider>();
-        if (boxCollider == null)
-            boxCollider = go.AddComponent<BoxCollider>();
+         BoxCollider boxCollider = go.GetComponent<BoxCollider>();
+         if (boxCollider == null)
+             boxCollider = go.AddComponent<BoxCollider>();
 
-        Vector3 localCenter = go.transform.InverseTransformPoint(worldBounds.center);
-        boxCollider.center = localCenter;
+         Vector3 localCenter = go.transform.InverseTransformPoint(worldBounds.center);
+         boxCollider.center = localCenter;
 
-        Vector3 worldSize = worldBounds.size;
-        Vector3 localSize = go.transform.InverseTransformVector(worldSize);
-        boxCollider.size = new Vector3(Mathf.Abs(localSize.x), Mathf.Abs(localSize.y), Mathf.Abs(localSize.z));
-    }
+         Vector3 worldSize = worldBounds.size;
+         Vector3 localSize = go.transform.InverseTransformVector(worldSize);
+         boxCollider.size = new Vector3(Mathf.Abs(localSize.x), Mathf.Abs(localSize.y), Mathf.Abs(localSize.z));
+     }*/
 
     void SetupRigidbodyAndGrab(GameObject go)
     {
