@@ -98,7 +98,7 @@ public class TimelineTrack : MonoBehaviour
             bool shouldBeActive = currentActiveClip.isCameraActiveAtTime;
 
             
-            Debug.Log($"[{gameObject.name}] ：shouldBeActive: {shouldBeActive}");
+            //Debug.Log($"[{gameObject.name}] ：shouldBeActive: {shouldBeActive}");
             //lastCameraActiveState = shouldBeActive;
 
             // 检查当前相机的激活状态
@@ -141,7 +141,7 @@ public class TimelineTrack : MonoBehaviour
                                 }
 
                                 CameraManager.Instance.SelectCamera(cameraController);
-                                Debug.Log($"[{gameObject.name}] 独立模式激活相机 (时间: {time:F2}s)");
+                                //Debug.Log($"[{gameObject.name}] 独立模式激活相机 (时间: {time:F2}s)");
                             }
                         }
                         else
@@ -151,7 +151,7 @@ public class TimelineTrack : MonoBehaviour
                             if (cameraController != null && CameraManager.Instance.previewTexture != null)
                             {
                                 cameraController.EnablePreview(CameraManager.Instance.previewTexture);
-                                Debug.Log($"[{gameObject.name}] 独立模式重新激活相机预览 (时间: {time:F2}s)");
+                                //Debug.Log($"[{gameObject.name}] 独立模式重新激活相机预览 (时间: {time:F2}s)");
                             }
                         }
                     }
@@ -183,13 +183,13 @@ public class TimelineTrack : MonoBehaviour
                         {
                             cameraController.DisablePreview();
                             ClearPreviewTexture(); // 清空预览纹理
-                            Debug.Log($"[{gameObject.name}] 独立模式禁用相机预览 (时间: {time:F2}s)");
+                            //Debug.Log($"[{gameObject.name}] 独立模式禁用相机预览 (时间: {time:F2}s)");
                         }
                         else if (cam != null)
                         {
                             cam.gameObject.SetActive(false);
                             ClearPreviewTexture(); // 清空预览纹理
-                            Debug.Log($"[{gameObject.name}] 独立模式禁用相机组件 (时间: {time:F2}s)");
+                            //Debug.Log($"[{gameObject.name}] 独立模式禁用相机组件 (时间: {time:F2}s)");
                         }
                     }
                 }
@@ -1432,7 +1432,7 @@ public class TimelineTrack : MonoBehaviour
             RenderTexture.active = CameraManager.Instance.previewTexture;
             GL.Clear(true, true, Color.clear);
             RenderTexture.active = null;
-            Debug.Log($"[{gameObject.name}] 清空预览纹理");
+            //Debug.Log($"[{gameObject.name}] 清空预览纹理");
         }
     }
 

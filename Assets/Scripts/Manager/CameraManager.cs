@@ -172,7 +172,7 @@ public class CameraManager : MonoBehaviour
     {
         List<CameraController> conflictingCameras = new List<CameraController>();
         
-        Debug.Log($"[CameraManager] 开始检测时间 {currentTime:F2}s 的相机冲突...");
+        //Debug.Log($"[CameraManager] 开始检测时间 {currentTime:F2}s 的相机冲突...");
         
         foreach (var track in TimelineManager.Instance.GetAllTracks())
         {
@@ -182,11 +182,11 @@ public class CameraManager : MonoBehaviour
                 if (expectedController != null)
                 {
                     conflictingCameras.Add(expectedController);
-                    Debug.Log($"[CameraManager] 时间 {currentTime:F2}s: {track.gameObject.name} 应该激活");
+                    //Debug.Log($"[CameraManager] 时间 {currentTime:F2}s: {track.gameObject.name} 应该激活");
                 }
                 else
                 {
-                    Debug.Log($"[CameraManager] 时间 {currentTime:F2}s: {track.gameObject.name} 不应该激活");
+                    //Debug.Log($"[CameraManager] 时间 {currentTime:F2}s: {track.gameObject.name} 不应该激活");
                 }
             }
         }
@@ -194,7 +194,7 @@ public class CameraManager : MonoBehaviour
         // 如果只有一个或没有相机应该激活，则没有冲突
         if (conflictingCameras.Count <= 1)
         {
-            Debug.Log($"[CameraManager] 时间 {currentTime:F2}s: 没有冲突，激活相机数量: {conflictingCameras.Count}");
+            //Debug.Log($"[CameraManager] 时间 {currentTime:F2}s: 没有冲突，激活相机数量: {conflictingCameras.Count}");
             return new List<CameraController>();
         }
         
@@ -238,7 +238,7 @@ public class CameraManager : MonoBehaviour
         currentCamera = controller.transform.parent.gameObject;
         currentSelected.EnablePreview(previewTexture);
 
-        Debug.Log($"Selected camera: {controller.gameObject.name}");
+        //Debug.Log($"Selected camera: {controller.gameObject.name}");
 
         FindObjectOfType<CameraFOVSlider>()?.SyncSlider(controller);
         OnSelectedCameraChanged?.Invoke(currentSelected);

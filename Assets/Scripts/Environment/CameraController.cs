@@ -57,7 +57,7 @@ public class CameraController : MonoBehaviour, ICustomSelectable
    
     public void EnablePreview(RenderTexture rt)
     {
-        Debug.Log($"启用预览 {gameObject.name}");
+        //Debug.Log($"启用预览 {gameObject.name}");
         cam.enabled = false;
         cam.targetTexture = null;  // 先清空一下，确保刷新
         cam.targetTexture = rt;
@@ -77,7 +77,7 @@ public class CameraController : MonoBehaviour, ICustomSelectable
     {
         cam.enabled = false;
         cam.targetTexture = null;
-        Debug.Log($"DisablePreview called on {gameObject.name}");
+        //Debug.Log($"DisablePreview called on {gameObject.name}");
     }
 
 

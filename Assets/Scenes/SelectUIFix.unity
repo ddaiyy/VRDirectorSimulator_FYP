@@ -918,6 +918,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1860600491009939831, guid: 66852dee0cce46c4bb2f6b4a54df93fa, type: 3}
   m_PrefabInstance: {fileID: 189114127}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &189114129 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7303636412609505542, guid: 66852dee0cce46c4bb2f6b4a54df93fa, type: 3}
+  m_PrefabInstance: {fileID: 189114127}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &196855572
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6077,6 +6088,8 @@ GameObject:
   - component: {fileID: 1804851388}
   - component: {fileID: 1804851387}
   - component: {fileID: 1804851386}
+  - component: {fileID: 1804851391}
+  - component: {fileID: 1804851390}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -6101,6 +6114,8 @@ MonoBehaviour:
   cameraSpawnPoint: {fileID: 343348646}
   cameraList: []
   currentSelected: {fileID: 0}
+  currentCamera: {fileID: 0}
+  startCamera: {fileID: 0}
   previewPlaneRenderer: {fileID: 2030494349}
 --- !u!114 &1804851387
 MonoBehaviour:
@@ -6147,6 +6162,57 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1804851390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804851385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2035a5518ff4f41b15857f0f3dfba1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  captureCommand: {fileID: 1804851391}
+  startButton: {fileID: 189114129}
+  recordDuration: 10
+  outputFileName: output.mp4
+--- !u!114 &1804851391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804851385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9db58d109d8091a4eb00999b3de4e9e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ExecuteOnStart: 1
+  Options: 
+  PrintStdErr: 0
+  CaptureSources:
+  - Type: 2
+    Width: -1
+    Height: 480
+    FrameRate: 30
+    SourceCamera: {fileID: 0}
+    SourceRenderTexture: {fileID: 8400000, guid: d7391bef485e8b4489934be694d51de6, type: 2}
+    SourceAudio: {fileID: 0}
+    Mute: 0
+  - Type: 3
+    Width: -1
+    Height: 480
+    FrameRate: 30
+    SourceCamera: {fileID: 0}
+    SourceRenderTexture: {fileID: 0}
+    SourceAudio: {fileID: 0}
+    Mute: 0
+  CaptureOptions: 
+  OutputOptions:
+  - 
 --- !u!1 &1818777550
 GameObject:
   m_ObjectHideFlags: 0
