@@ -184,8 +184,9 @@ public class VRModelLoader : MonoBehaviour
         //ReplaceShadersToStandard(parent);
         PrintLoadedMaterialsAndTextures(parent);
         ForceAssignWhiteTexture(parent);
-        // 在模型正面中部添加抓取锚点
-        AddFrontCenterGrabAnchor(parent);
+
+        parent.AddComponent<DynamicGrabAnchorSetter>();
+
         // 加载模型完成后，添加旋转控制脚本model.AddComponent<ModelJoystickRotator>();
         parent.AddComponent<ModelRotatorWithJoystick>();
         parent.AddComponent<GrabScaleController_XRInput>();
@@ -274,31 +275,6 @@ public class VRModelLoader : MonoBehaviour
         model.transform.localScale *= scaleFactor;
     }
 
-    /* void AddAccurateBoxCollider(GameObject go)
-     {
-         var renderers = go.GetComponentsInChildren<Renderer>();
-         if (renderers.Length == 0)
-         {
-             Debug.LogWarning("No renderer found, skipping collider.");
-             return;
-         }
-
-         Bounds worldBounds = renderers[0].bounds;
-         for (int i = 1; i < renderers.Length; i++)
-             worldBounds.Encapsulate(renderers[i].bounds);
-
-         BoxCollider boxCollider = go.GetComponent<BoxCollider>();
-         if (boxCollider == null)
-             boxCollider = go.AddComponent<BoxCollider>();
-
-         Vector3 localCenter = go.transform.InverseTransformPoint(worldBounds.center);
-         boxCollider.center = localCenter;
-
-         Vector3 worldSize = worldBounds.size;
-         Vector3 localSize = go.transform.InverseTransformVector(worldSize);
-         boxCollider.size = new Vector3(Mathf.Abs(localSize.x), Mathf.Abs(localSize.y), Mathf.Abs(localSize.z));
-     }*/
-
     void SetupRigidbodyAndGrab(GameObject go)
     {
         var rb = go.GetComponent<Rigidbody>();
@@ -322,59 +298,6 @@ public class VRModelLoader : MonoBehaviour
         grab.enabled = false;
         grab.enabled = true;
     }
-
-    /*void ReplaceShadersToStandard(GameObject go)
-    {
-        Shader standardShader = Shader.Find("Standard");
-        if (standardShader == null)
-        {
-            Debug.LogError("❌ 找不到 Standard Shader");
-            return;
-        }
-
-        foreach (var renderer in go.GetComponentsInChildren<Renderer>())
-        {
-            var materials = renderer.sharedMaterials;
-            for (int i = 0; i < materials.Length; i++)
-            {
-                var mat = materials[i];
-                if (mat == null) continue;
-
-                string shaderName = mat.shader.name.ToLower();
-
-                // 判断是否是 glTF 材质（保留），否则替换
-                if (shaderName.Contains("gltf") || shaderName.Contains("pbrmetallicroughness"))
-                {
-                    Debug.Log($"✅ 保留 glTF 材质: {mat.name} ({mat.shader.name})");
-                }
-                else
-                {
-                    Debug.Log($"🔄 替换非 glTF 材质: {mat.name} ({mat.shader.name}) → Standard");
-
-                    var newMat = new Material(standardShader);
-
-                    // 尝试复制常见贴图属性
-                    if (mat.HasProperty("_MainTex"))
-                        newMat.SetTexture("_MainTex", mat.GetTexture("_MainTex"));
-
-                    if (mat.HasProperty("_BaseMap")) // 一些非标准材质使用 _BaseMap
-                        newMat.SetTexture("_MainTex", mat.GetTexture("_BaseMap")); // 转到 Standard 的 _MainTex
-
-                    if (mat.HasProperty("_Color"))
-                        newMat.SetColor("_Color", mat.GetColor("_Color"));
-
-                    // 可选：复制法线贴图
-                    if (mat.HasProperty("_BumpMap"))
-                        newMat.SetTexture("_BumpMap", mat.GetTexture("_BumpMap"));
-
-                    materials[i] = newMat;
-                }
-            }
-            renderer.sharedMaterials = materials;
-        }
-    }*/
-
-
     void ForceAssignWhiteTexture(GameObject go)
     {
         var whiteTex = Texture2D.whiteTexture;
@@ -443,41 +366,6 @@ public class VRModelLoader : MonoBehaviour
 #endif
     }
 
-    void AddFrontCenterGrabAnchor(GameObject model)
-    {
-        var grab = model.GetComponent<XRGrabInteractable>();
-        if (grab == null) return;
-
-        var renderers = model.GetComponentsInChildren<Renderer>();
-        if (renderers.Length == 0) return;
-
-        // 计算整体包围盒
-        Bounds bounds = renderers[0].bounds;
-        foreach (var r in renderers)
-            bounds.Encapsulate(r.bounds);
-
-        Vector3 center = bounds.center;
-        Vector3 size = bounds.size;
-
-        // 模型正面是 forward 方向，取包围盒中心 + forward * 半深度
-        Vector3 frontCenterWorld = center + model.transform.forward * (size.z / 2f);
-        frontCenterWorld.y = center.y; // 保持中间高度
-
-        // 转换为本地坐标
-        Vector3 localFrontCenter = model.transform.InverseTransformPoint(frontCenterWorld);
-
-        // 创建锚点空物体
-        GameObject grabAnchor = new GameObject("GrabAnchor");
-        grabAnchor.transform.SetParent(model.transform, false);
-        grabAnchor.transform.localPosition = localFrontCenter;
-
-        // ✅ 设置锚点旋转，使 forward 一致
-        grabAnchor.transform.rotation = Quaternion.LookRotation(model.transform.forward, model.transform.up);
-        grabAnchor.transform.localRotation = Quaternion.Inverse(model.transform.rotation) * grabAnchor.transform.rotation;
-
-
-        grab.attachTransform = grabAnchor.transform;
-    }
     private void TryFindRightHandInteractor()
     {
         GameObject rightHand = GameObject.Find("RightHand Controller"); // 注意名字要对

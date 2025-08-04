@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7832521063317974801}
   - component: {fileID: 6022956599115143538}
   - component: {fileID: 5959011718157613429}
+  - component: {fileID: 6525647905982103691}
   m_Layer: 0
   m_Name: IceCream
   m_TagString: Untagged
@@ -228,6 +229,20 @@ MonoBehaviour:
   minScale: 0.5
   maxScale: 8
   debounceTime: 0.3
+--- !u!114 &6525647905982103691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1800248801297586040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa3ee69b0c2171d4ab56295bcfeb93ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputSource: 4
+  rotationSpeed: 60
 --- !u!1 &2052717234271583302
 GameObject:
   m_ObjectHideFlags: 0

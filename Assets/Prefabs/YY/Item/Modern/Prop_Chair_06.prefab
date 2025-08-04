@@ -117,6 +117,7 @@ GameObject:
   - component: {fileID: 2628585988150227143}
   - component: {fileID: 8854472868537062799}
   - component: {fileID: 4800384628597055934}
+  - component: {fileID: -7570247849819768941}
   m_Layer: 0
   m_Name: Prop_Chair_06
   m_TagString: Untagged
@@ -332,3 +333,17 @@ MonoBehaviour:
   minScale: 0.5
   maxScale: 8
   debounceTime: 0.3
+--- !u!114 &-7570247849819768941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7565367646243623342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa3ee69b0c2171d4ab56295bcfeb93ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputSource: 4
+  rotationSpeed: 60

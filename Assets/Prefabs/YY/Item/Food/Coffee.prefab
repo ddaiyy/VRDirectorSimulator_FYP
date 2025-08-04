@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6024138725991945655}
   - component: {fileID: 3070825861426744191}
   - component: {fileID: 6784490943321652687}
+  - component: {fileID: 338062194682545971}
   m_Layer: 0
   m_Name: Coffee
   m_TagString: Untagged
@@ -228,6 +229,20 @@ MonoBehaviour:
   minScale: 0.5
   maxScale: 8
   debounceTime: 0.3
+--- !u!114 &338062194682545971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3988443417673257149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa3ee69b0c2171d4ab56295bcfeb93ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputSource: 4
+  rotationSpeed: 60
 --- !u!1 &6012572863599514599
 GameObject:
   m_ObjectHideFlags: 0

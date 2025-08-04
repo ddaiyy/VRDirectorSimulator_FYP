@@ -117,6 +117,7 @@ GameObject:
   - component: {fileID: 7921996902638642577}
   - component: {fileID: 6056448462631111922}
   - component: {fileID: 2791926153338796704}
+  - component: {fileID: -6185951853352178440}
   m_Layer: 0
   m_Name: LacqueredBox_2
   m_TagString: Untagged
@@ -332,3 +333,17 @@ MonoBehaviour:
   minScale: 0.5
   maxScale: 8
   debounceTime: 0.3
+--- !u!114 &-6185951853352178440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7908706435911394225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa3ee69b0c2171d4ab56295bcfeb93ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputSource: 4
+  rotationSpeed: 60
