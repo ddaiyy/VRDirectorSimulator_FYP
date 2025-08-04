@@ -4648,50 +4648,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1139464608}
   m_CullTransparentMesh: 1
---- !u!1 &1152985881
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1152985883}
-  - component: {fileID: 1152985882}
-  m_Layer: 0
-  m_Name: AddCam
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1152985882
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1152985881}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4573ba294bc41c5479c10eb2c4ad7c01, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1152985883
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1152985881}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.7, y: 0, z: 2.75}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1166767923
 GameObject:
   m_ObjectHideFlags: 0
@@ -9197,9 +9153,9 @@ RectTransform:
   m_Father: {fileID: 3358223108695212505}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 0}
+  m_SizeDelta: {x: 20, y: -17}
   m_Pivot: {x: 1, y: 1}
 --- !u!1001 &1461484475546607788
 PrefabInstance:
@@ -9767,8 +9723,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7122577220660025890}
   m_HandleRect: {fileID: 5332097764125725809}
   m_Direction: 2
-  m_Value: 0.48713592
-  m_Size: 0.60999995
+  m_Value: -0.00000026083393
+  m_Size: 0.6099945
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -9789,9 +9745,9 @@ RectTransform:
   m_Father: {fileID: 3358223108695212505}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -17, y: -17}
   m_Pivot: {x: 0, y: 1}
 --- !u!223 &3675177025793243916
 Canvas:
@@ -10203,7 +10159,7 @@ RectTransform:
   m_Father: {fileID: 4258536147906037633}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0.6099945}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -10377,7 +10333,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6196709326705957808
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10500,7 +10456,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0007854029, y: 60.005096}
+  m_AnchoredPosition: {x: 0.0007854029, y: 117.000046}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &6827489436665260076
@@ -10917,7 +10873,7 @@ RectTransform:
   m_Father: {fileID: 3357826109599287497}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -11272,9 +11228,9 @@ RectTransform:
   m_Father: {fileID: 3358223108695212505}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 20}
+  m_SizeDelta: {x: -17, y: 20}
   m_Pivot: {x: 0, y: 0}
 --- !u!1 &8885487158451893103
 GameObject:
@@ -11350,12 +11306,11 @@ SceneRoots:
   - {fileID: 4035815537953618227}
   - {fileID: 3000854890982572191}
   - {fileID: 1562068415}
-  - {fileID: 1804851389}
   - {fileID: 196855572}
   - {fileID: 343348646}
-  - {fileID: 1152985883}
   - {fileID: 6196709326705957808}
   - {fileID: 530924382}
   - {fileID: 1618168153}
   - {fileID: 250932549}
   - {fileID: 2057103288348787878}
+  - {fileID: 1804851389}
