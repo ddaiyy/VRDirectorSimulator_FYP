@@ -21,6 +21,8 @@ public class VRModelLoader : MonoBehaviour
     public bool keepOriginalMaterial = true; // 控制是否保留 glTF 原材质
     [Header("右手控制器物体名（场景中必须存在）")]
     public string rightHandObjectName = "Right Controller";
+    [Header("UI Canvas 预制体")]
+    public GameObject propUIPrefab;
 
     private XRBaseInteractor rightHandInteractor;
 
@@ -190,7 +192,11 @@ public class VRModelLoader : MonoBehaviour
         // 加载模型完成后，添加旋转控制脚本model.AddComponent<ModelJoystickRotator>();
         parent.AddComponent<ModelRotatorWithJoystick>();
         parent.AddComponent<GrabScaleController_XRInput>();
-        
+
+
+        // 给上传模型添加 PropSelectable 脚本
+        var selectable = parent.AddComponent<PropSelectable>();
+        selectable.propUIPrefab = propUIPrefab;
 
         // ✅ 设置位置
         if (Camera.main != null)
@@ -211,15 +217,8 @@ public class VRModelLoader : MonoBehaviour
         Debug.Log("✅ 模型加载完成");
         ShowVRMessage("Model loaded successfully.", 5f);
 
-
-        // ✅ 添加 Canvas 触发组件
-        var trigger = parent.AddComponent<VRModelCanvasTrigger>();
-        trigger.canvasPrefab = Resources.Load<GameObject>("TriggerCanvas"); // 你的 Canvas 预制体放到 Resources 文件夹
-
-
-
     }
-    
+
 
     public async Task LoadZipModel(string zipPath)
     {
