@@ -128,20 +128,20 @@ public class CameraManager : MonoBehaviour
             // 如果要激活相机，检查是否已经有其他相机激活
             if (currentSelected != null && currentSelected != cameraController)
             {
-                Debug.LogError($"[CameraManager] 主线控制：{cameraController.transform.parent.gameObject.name} 试图激活，但 {currentSelected.transform.parent.gameObject.name} 已经激活 (时间: {time:F2}s)");
+                //Debug.LogError($"[CameraManager] 主线控制：{cameraController.transform.parent.gameObject.name} 试图激活，但 {currentSelected.transform.parent.gameObject.name} 已经激活 (时间: {time:F2}s)");
                 return false; // 冲突，返回false
             }
             
             // 如果是同一个相机重复激活，直接返回成功
             if (currentSelected == cameraController)
             {
-                Debug.Log($"[CameraManager] 主线控制：{cameraController.transform.parent.gameObject.name} 已经是激活状态 (时间: {time:F2}s)");
+                //Debug.Log($"[CameraManager] 主线控制：{cameraController.transform.parent.gameObject.name} 已经是激活状态 (时间: {time:F2}s)");
                 return true;
             }
             
             // 激活相机
             SelectCamera(cameraController);
-            Debug.Log($"[CameraManager] 主线控制：{cameraController.transform.parent.gameObject.name} 激活 (时间: {time:F2}s)");
+            //Debug.Log($"[CameraManager] 主线控制：{cameraController.transform.parent.gameObject.name} 激活 (时间: {time:F2}s)");
             return true;
         }
         else
