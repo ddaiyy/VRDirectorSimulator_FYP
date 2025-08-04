@@ -81,7 +81,7 @@ public class ObjectTimelineUI : MonoBehaviour
             if (CameraManager.Instance != null)
             {
                 var currentSelectedCamera = CameraManager.Instance.GetCurrentSelectedCamera();
-                if (currentSelectedCamera != null && currentSelectedCamera.gameObject == currentTrack.gameObject)
+                if (currentSelectedCamera != null && currentSelectedCamera.transform.parent.gameObject == currentTrack.gameObject)
                 {
                     if (isActive)
                     {
