@@ -20,13 +20,13 @@ public class TimelineClip
     public Vector3 scale;
     
     //是否激活
-    public bool isActive = true;
-
+    //public bool isActive = true;
+    public bool isCameraActiveAtTime = false;
     // 记录景深焦距
     public float focusDistance = 5f;
 
     //记录摄像机的ID
-    public int activeCameraID;
+    //public int activeCameraID;
     
     //
     public enum ClipType
