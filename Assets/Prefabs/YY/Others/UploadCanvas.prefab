@@ -344,7 +344,7 @@ GameObject:
   - component: {fileID: 9196304978594400584}
   - component: {fileID: 4482233291100137337}
   - component: {fileID: 3305614359501223556}
-  - component: {fileID: 5207308287392423784}
+  - component: {fileID: 7995999037070579348}
   m_Layer: 5
   m_Name: UploadButton
   m_TagString: Untagged
@@ -454,7 +454,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5207308287392423784}
+      - m_Target: {fileID: 7995999037070579348}
         m_TargetAssemblyTypeName: VRModelLoader, Assembly-CSharp
         m_MethodName: OpenModelPicker
         m_Mode: 1
@@ -466,7 +466,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &5207308287392423784
+--- !u!114 &7995999037070579348
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -475,6 +475,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8753121708905200013}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7026a09bf033b7488c97b7243412754, type: 3}
+  m_Script: {fileID: 11500000, guid: 50c19a796d3e8d441aca23d1e43b154d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vrMessageText: {fileID: 0}
+  keepOriginalMaterial: 1
+  rightHandObjectName: Right Controller

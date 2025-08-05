@@ -1,9 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ExitAndSave : MonoBehaviour
 {
     public Transform playerTransform;
+    public SceneObjectManager sceneObjectManager;
 
     public void SaveAndExit()
     {
@@ -18,6 +19,10 @@ public class ExitAndSave : MonoBehaviour
         data.playerX = playerTransform.position.x;
         data.playerY = playerTransform.position.y;
         data.playerZ = playerTransform.position.z;
+
+        data.timeOfDayIndex = PlayerPrefs.GetInt("UserTimeOfDay", 0); // 保存用户当前选择的天空盒
+
+        SceneObjectManager.Instance?.SaveObjects(data); // 👈 保存动态物体
 
         SaveSystem.Save(data);
 

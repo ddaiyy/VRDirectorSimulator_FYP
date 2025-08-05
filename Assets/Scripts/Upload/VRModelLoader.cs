@@ -8,11 +8,24 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using System.Collections;
+using MyGame.Selection;
+using static ModelUtils;
+
 
 public class VRModelLoader : MonoBehaviour
 {
     [Header("UI References")]
     public TMP_Text vrMessageText;
+
+    [Header("Material Options")]
+    public bool keepOriginalMaterial = true; // 控制是否保留 glTF 原材质
+    [Header("右手控制器物体名（场景中必须存在）")]
+    public string rightHandObjectName = "Right Controller";
+    [Header("UI Canvas 预制体")]
+    public GameObject propUIPrefab;
+
+    private XRBaseInteractor rightHandInteractor;
+
 
     void Start()
     {// 一开始隐藏
@@ -21,6 +34,8 @@ public class VRModelLoader : MonoBehaviour
 
         // if (vrMessagePanel != null)
         //    vrMessagePanel.SetActive(false);
+
+        TryFindRightHandInteractor();
     }
 
     public async void OpenModelPicker()
@@ -62,11 +77,6 @@ public class VRModelLoader : MonoBehaviour
         vrMessageText.gameObject.SetActive(true);
         vrMessageText.text = message;
 
-        // 如果你有一个 Panel，先激活
-        // if (vrMessagePanel != null)
-        //    vrMessagePanel.SetActive(true);
-
-        // 可选：几秒后自动隐藏
         StopAllCoroutines();
         StartCoroutine(HideAfterDelay(duration));
     }
@@ -131,7 +141,6 @@ public class VRModelLoader : MonoBehaviour
             }
             else
             {
-                Debug.LogError("❌ 只支持 .glb 文件格式");
                 Destroy(parent);
                 return;
             }
@@ -139,7 +148,6 @@ public class VRModelLoader : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"❌ [异常] GLTF 加载失败: {ex.Message}\n{ex.StackTrace}");
             Destroy(parent);
             return;
         }
@@ -171,14 +179,24 @@ public class VRModelLoader : MonoBehaviour
         if (instantiated)
         {
             AddAccurateBoxCollider(parent);
-            
+
             SetupRigidbodyAndGrab(parent);
         }
 
-        ReplaceShadersToStandard(parent);
+        //ReplaceShadersToStandard(parent);
         PrintLoadedMaterialsAndTextures(parent);
         ForceAssignWhiteTexture(parent);
-        
+
+        parent.AddComponent<DynamicGrabAnchorSetter>();
+
+        // 加载模型完成后，添加旋转控制脚本model.AddComponent<ModelJoystickRotator>();
+        parent.AddComponent<ModelRotatorWithJoystick>();
+        parent.AddComponent<GrabScaleController_XRInput>();
+
+
+        // 给上传模型添加 PropSelectable 脚本
+        var selectable = parent.AddComponent<PropSelectable>();
+        selectable.propUIPrefab = propUIPrefab;
 
         // ✅ 设置位置
         if (Camera.main != null)
@@ -202,10 +220,10 @@ public class VRModelLoader : MonoBehaviour
     }
 
 
-    // LoadZipModel 改成：
     public async Task LoadZipModel(string zipPath)
     {
         string extractPath = Path.Combine(Application.temporaryCachePath, "unzipped_model");
+
         if (Directory.Exists(extractPath))
             Directory.Delete(extractPath, true);
 
@@ -213,22 +231,32 @@ public class VRModelLoader : MonoBehaviour
 
         System.IO.Compression.ZipFile.ExtractToDirectory(zipPath, extractPath);
 
-        // 查找 gltf 或 glb 文件
+        // 查找 glb 或 gltf 文件，优先选择 .glb
         string[] glbFiles = Directory.GetFiles(extractPath, "*.glb", SearchOption.AllDirectories);
-        string modelPath = (glbFiles.Length > 0) ? glbFiles[0] : null;
+        string[] gltfFiles = Directory.GetFiles(extractPath, "*.gltf", SearchOption.AllDirectories);
+
+        string modelPath = null;
+
+        if (glbFiles.Length > 0)
+        {
+            modelPath = glbFiles[0]; // 优先使用 .glb 文件
+        }
+        else if (gltfFiles.Length > 0)
+        {
+            modelPath = gltfFiles[0];
+        }
 
         if (modelPath == null)
         {
-            string errorMsg = " No .glb file found in the Zip archive.";
+            string errorMsg = "❌ No .glb or .gltf file found in the Zip archive.";
             Debug.LogError(errorMsg);
             ShowVRMessage(errorMsg, 5f); // ✅ 在 VR 头显中显示错误提示
             return;
         }
 
-
         await LoadModel(modelPath);
-
     }
+
 
     void NormalizeModelScale(GameObject model, float maxSize = 1f)
     {
@@ -244,31 +272,6 @@ public class VRModelLoader : MonoBehaviour
 
         float scaleFactor = maxSize / maxDimension;
         model.transform.localScale *= scaleFactor;
-    }
-
-    void AddAccurateBoxCollider(GameObject go)
-    {
-        var renderers = go.GetComponentsInChildren<Renderer>();
-        if (renderers.Length == 0)
-        {
-            Debug.LogWarning("No renderer found, skipping collider.");
-            return;
-        }
-
-        Bounds worldBounds = renderers[0].bounds;
-        for (int i = 1; i < renderers.Length; i++)
-            worldBounds.Encapsulate(renderers[i].bounds);
-
-        BoxCollider boxCollider = go.GetComponent<BoxCollider>();
-        if (boxCollider == null)
-            boxCollider = go.AddComponent<BoxCollider>();
-
-        Vector3 localCenter = go.transform.InverseTransformPoint(worldBounds.center);
-        boxCollider.center = localCenter;
-
-        Vector3 worldSize = worldBounds.size;
-        Vector3 localSize = go.transform.InverseTransformVector(worldSize);
-        boxCollider.size = new Vector3(Mathf.Abs(localSize.x), Mathf.Abs(localSize.y), Mathf.Abs(localSize.z));
     }
 
     void SetupRigidbodyAndGrab(GameObject go)
@@ -294,38 +297,6 @@ public class VRModelLoader : MonoBehaviour
         grab.enabled = false;
         grab.enabled = true;
     }
-
-    void ReplaceShadersToStandard(GameObject go)
-    {
-        Shader standardShader = Shader.Find("Standard");
-        if (standardShader == null)
-        {
-            Debug.LogError("找不到 Standard Shader");
-            return;
-        }
-
-        foreach (var renderer in go.GetComponentsInChildren<Renderer>())
-        {
-            var materials = renderer.sharedMaterials;
-            for (int i = 0; i < materials.Length; i++)
-            {
-                var mat = materials[i];
-                if (mat == null) continue;
-
-                var newMat = new Material(standardShader);
-                if (mat.mainTexture != null)
-                {
-                    newMat.mainTexture = mat.mainTexture;
-                }
-                materials[i] = newMat;
-
-                Debug.Log($"材质 '{mat.name}' 替换为 Standard Shader");
-            }
-            renderer.sharedMaterials = materials;
-        }
-    }
-
-
     void ForceAssignWhiteTexture(GameObject go)
     {
         var whiteTex = Texture2D.whiteTexture;
@@ -394,5 +365,25 @@ public class VRModelLoader : MonoBehaviour
 #endif
     }
 
+    private void TryFindRightHandInteractor()
+    {
+        GameObject rightHand = GameObject.Find("RightHand Controller"); // 注意名字要对
+        if (rightHand != null)
+        {
+            rightHandInteractor = rightHand.GetComponent<XRBaseInteractor>();
+            if (rightHandInteractor == null)
+            {
+                Debug.LogWarning("⚠️ 找到右手物体但没有 XRBaseInteractor 组件");
+            }
+            else
+            {
+                Debug.Log("✅ 右手控制器 XRBaseInteractor 获取成功");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ 无法找到右手控制器对象，请检查名称");
+        }
+    }
 
 }

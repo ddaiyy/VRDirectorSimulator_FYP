@@ -16,12 +16,12 @@ public class MasterTimelineUI : MonoBehaviour
     public Button playButton;
     public Button stopButton;
     
-    
     [Header("Timeline Settings")]
     public float timelineWidth = 40f;   // 时间轴总宽度
     public float timelineHeight = 40f;    // 条带高度
     public float barSpacing = 10f;        // 条带间距
 
+    
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -37,6 +37,7 @@ public class MasterTimelineUI : MonoBehaviour
         RefreshTimelineUI();
         playButton.onClick.AddListener(OnPlayClicked);
         stopButton.onClick.AddListener(OnStopClicked);
+        
     }
 
     private void OnStopClicked()

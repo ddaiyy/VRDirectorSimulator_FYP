@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class RoleSpawnProxy : MonoBehaviour
@@ -18,12 +19,22 @@ public class RoleSpawnProxy : MonoBehaviour
     {
         if (originalPrefab == null)
         {
-            Debug.LogWarning("❌ originalPrefab 未设置！");
+            Debug.LogWarning("originalPrefab 未设置！");
             return;
         }
         Quaternion rotation = Quaternion.Euler(0, 180f, 0);  // Y轴旋转180度
         GameObject newCharacter = Instantiate(originalPrefab, position, rotation);
+        TimelineTrack tempTimelineTrack = newCharacter.GetComponent<TimelineTrack>();
+        // 注册到场景对象管理器用于保存
+        if (tempTimelineTrack)
+        {
+            newCharacter.name = GetCharacterNameWithIndex(originalPrefab.name);
+        }
+        SceneObjectManager.Instance?.RegisterObject(newCharacter);
 
+
+        
+        
         Debug.Log("✅ 在 " + position + " 生成角色: " + newCharacter.name);
         //注册Timeline
         TimelineManager.Instance.RegisterTrack(newCharacter.GetComponent<TimelineTrack>());
@@ -50,6 +61,28 @@ public class RoleSpawnProxy : MonoBehaviour
         {
             interactor.interactionManager.SelectEnter(interactor, newCharacter.GetComponent<IXRSelectInteractable>());
         }
+    }
+
+    private string GetCharacterNameWithIndex(string originalPrefabName)
+    {
+        var allObjects = GameObject.FindObjectsOfType<Transform>(true)
+            .Select(t => t.gameObject)
+            .Where(go => go.name.StartsWith(originalPrefabName))
+            .ToList();
+        int maxIndex = 0;
+
+        foreach (var obj in allObjects)
+        {
+            string suffix = obj.name.Substring(originalPrefabName.Length); // 去掉前缀
+            if (int.TryParse(suffix, out int index))
+            {
+                if (index > maxIndex)
+                    maxIndex = index;
+            }
+        }
+
+        int nextIndex = maxIndex + 1;
+        return originalPrefabName + nextIndex;
     }
 
     void OnEnable()

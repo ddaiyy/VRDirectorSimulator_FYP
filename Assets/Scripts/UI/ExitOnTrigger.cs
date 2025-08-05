@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ExitOnTrigger : MonoBehaviour
 {
@@ -6,20 +6,15 @@ public class ExitOnTrigger : MonoBehaviour
     {
         Debug.Log("Something entered the exit trigger: " + other.name);
 
-        // ����Ƿ�Ϊ��ң�Tag = Player��
-        if (other.CompareTag("Player"))
+        // 检查玩家是否进入触发区域
+        if (other.CompareTag("Player")) // 你的摄像机/角色需要设置为"Player"标签
         {
-            Debug.Log("Player has entered the exit zone. Quitting application...");
-
-            Application.Quit();
-
+            // 退出程序
 #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
+            UnityEditor.EditorApplication.isPlaying = false; // 如果在编辑器中，停止播放
+#else
+            Application.Quit(); // 如果是打包后运行，退出程序
 #endif
-        }
-        else
-        {
-            Debug.Log("Entered object is not tagged as Player.");
         }
     }
 }

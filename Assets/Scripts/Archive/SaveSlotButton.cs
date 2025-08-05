@@ -20,7 +20,8 @@ public class SaveSlotButton : MonoBehaviour
         isNewSlot = false;
 
         if (label != null)
-            label.text = $"{data.saveName}: {data.lastScene}\n{data.saveTime:MM/dd HH:mm}";
+            label.text = $"{data.saveName}\n{data.saveTime:MM/dd HH:mm}";
+
 
         if (deleteButtonGO != null)
             deleteButtonGO.SetActive(true);
@@ -43,25 +44,11 @@ public class SaveSlotButton : MonoBehaviour
 
 
     public void OnClick()
-    {
-        Debug.Log($"按钮被点击，isNewSlot: {isNewSlot}, saveId: {saveId}");
-
+    {      
         if (isNewSlot)
         {
-            string newSaveName = "P " + (SaveSystem.LoadAll().Count + 1);
-            // 创建新存档并跳转
-            SaveData newData = new SaveData
-            {
-                saveId = System.Guid.NewGuid().ToString(),
-                /*saveName = "New Save " + System.DateTime.Now.ToString("HH:mm"),*/
-                saveName = newSaveName,
-                lastScene = "Environment",
-                saveTime = System.DateTime.Now
-            };
-
-            SaveSystem.Save(newData);
-            PlayerPrefs.SetString("CurrentSaveId", newData.saveId);
-            SceneManager.LoadScene("Environment");
+            // 弹出改名面板，而不是立刻跳转
+            RenamePanelController.instance.ShowPanel();
         }
         else
         {

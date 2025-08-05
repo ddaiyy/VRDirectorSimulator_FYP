@@ -48,20 +48,16 @@ public class CameraController : MonoBehaviour, ICustomSelectable
         mainPlayerCamera.enabled = true;
         mainPlayerCamera.targetTexture = null;
 
-        if (CameraManager.Instance != null)
+        if (CameraManager.Instance != null && !CameraManager.Instance.cameraList.Contains(this))
         {
             CameraManager.Instance.RegisterCamera(this);
-        }
-        else
-        {
-            Debug.LogError("CameraManager.Instance is null in Start!");
         }
     }
 
    
     public void EnablePreview(RenderTexture rt)
     {
-        Debug.Log($"启用预览 {gameObject.name}");
+        //Debug.Log($"启用预览 {gameObject.name}");
         cam.enabled = false;
         cam.targetTexture = null;  // 先清空一下，确保刷新
         cam.targetTexture = rt;
@@ -81,7 +77,7 @@ public class CameraController : MonoBehaviour, ICustomSelectable
     {
         cam.enabled = false;
         cam.targetTexture = null;
-        Debug.Log($"DisablePreview called on {gameObject.name}");
+        //Debug.Log($"DisablePreview called on {gameObject.name}");
     }
 
 
@@ -144,16 +140,21 @@ public class CameraController : MonoBehaviour, ICustomSelectable
 
     public void OnSelect()
     {
-        Debug.Log($"{gameObject.name} 被选中：OnSelect 被调用");
+        Debug.Log($"{gameObject.name} 被选中：OnSelect 被调用，当前FOV为 {GetFOV()}");
 
         worldCanvas?.SetActive(true);
         CameraManager.Instance.SelectCamera(this);
+
+        //
+        CameraFOVSlider.Instance?.SyncSlider(this);
+
         TimelineTrack track = this.gameObject.GetComponentInParent<TimelineTrack>();
         if (track != null)
         {
             track.showUI();
         }
     }
+
 
 
     public void OnDeselect()

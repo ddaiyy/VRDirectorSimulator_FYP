@@ -9,8 +9,11 @@ EditorBuildSettings:
     path: Assets/Scenes/Select.unity
     guid: 21dc81671b1f6874791dc29ba559f982
   - enabled: 1
-    path: Assets/Scenes/Enviroment.unity
-    guid: ce80d618b23e81547a8da475776a46e6
+    path: Assets/Scenes/Start.unity
+    guid: b42ca4c5c936383429d2318c931f7ad2
+  - enabled: 1
+    path: Assets/Scenes/Environment.unity
+    guid: 8f1a01e4b1a374aa6bfe472517a8a56e
   - enabled: 1
     path: Assets/Scenes/ChooseEnviroment/_PrototypeStarter.unity
     guid: a37f1dd48a6dba446b40a0462e15a5a0
@@ -21,11 +24,11 @@ EditorBuildSettings:
     path: Assets/Scenes/ChooseEnviroment/house.unity
     guid: 06db8b40c9740a44ea32f0266002716d
   - enabled: 1
-    path: Assets/Scenes/ChooseEnviroment/Space_Forest.unity
-    guid: 925ac71831835c94c9bc00ab547d076d
-  - enabled: 1
     path: Assets/Scenes/ChooseEnviroment/Winter.unity
     guid: 276d82ce49db94f5bbb80eb03ad778c1
+  - enabled: 1
+    path: Assets/Scenes/ChooseEnviroment/All scenes.unity
+    guid: e3dbe02ef66af8845b912b5f03ec0aa0
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 082c130a2fb56c54fab73d25b862722b, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 9fcc4f282678c1848863f06a04ede893, type: 2}

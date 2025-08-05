@@ -3,23 +3,45 @@ using MyGame.Selection;
 
 public class PropSelectable : MonoBehaviour, ICustomSelectable
 {
-    public GameObject propUI;
+    [Header("UI Canvas 预制体（需放入 Resources 或 Inspector 引用）")]
+    public GameObject propUIPrefab;
+
+    private GameObject spawnedUI;
+
 
     public void OnSelect()
     {
-        if (propUI != null)
+        Debug.Log("OnSelect() 被调用啦！");
+
+        if (propUIPrefab != null && spawnedUI == null)
         {
-            propUI.SetActive(true);
-            Debug.Log("道具被选中，显示 UI");
+            spawnedUI = Instantiate(propUIPrefab);
+
+            spawnedUI.transform.position = transform.position + new Vector3(0, 1f, 0);
+            spawnedUI.transform.rotation = Quaternion.identity;
+
+            spawnedUI.SetActive(true);
+
+            Debug.Log("UI 已实例化");
+        }
+        else if (spawnedUI != null)
+        {
+            Debug.Log("UI 已存在，重复点击不会重新生成");
+        }
+        else
+        {
+            Debug.LogWarning("propUIPrefab 没有绑定，无法实例化 UI");
         }
     }
 
+
     public void OnDeselect()
     {
-        if (propUI != null)
+        if (spawnedUI != null)
         {
-            propUI.SetActive(false);
-            Debug.Log("取消选中，隐藏 UI");
+            Destroy(spawnedUI);
+            spawnedUI = null;
+            Debug.Log("取消选中，UI 已销毁");
         }
     }
 
@@ -34,5 +56,4 @@ public class PropSelectable : MonoBehaviour, ICustomSelectable
     {
         OnDeselect();
     }
-
 }
