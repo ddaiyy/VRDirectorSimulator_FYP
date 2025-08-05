@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17950873, g: 0.22476804, b: 0.30638257, a: 1}
+  m_IndirectSpecularColor: {r: 0.17950909, g: 0.22476873, b: 0.30638367, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1265,6 +1265,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -14.39
       objectReference: {fileID: 0}
+    - target: {fileID: 82000011781386908, guid: f28287b1c722ebd4aa4f4d8547ed7fa8, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: -1075903200597958885, guid: fbab01d15bc2a3b4b9abf81910d36df2, type: 2}
+    - target: {fileID: 82000011813157576, guid: f28287b1c722ebd4aa4f4d8547ed7fa8, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: -1075903200597958885, guid: fbab01d15bc2a3b4b9abf81910d36df2, type: 2}
     - target: {fileID: 114000010912951870, guid: f28287b1c722ebd4aa4f4d8547ed7fa8, type: 3}
       propertyPath: inKeyboard
       value: 0
@@ -30788,6 +30796,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -14.39
       objectReference: {fileID: 0}
+    - target: {fileID: 82000011781386908, guid: f28287b1c722ebd4aa4f4d8547ed7fa8, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: -1075903200597958885, guid: fbab01d15bc2a3b4b9abf81910d36df2, type: 2}
+    - target: {fileID: 82000011813157576, guid: f28287b1c722ebd4aa4f4d8547ed7fa8, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: -1075903200597958885, guid: fbab01d15bc2a3b4b9abf81910d36df2, type: 2}
     - target: {fileID: 114000010912951870, guid: f28287b1c722ebd4aa4f4d8547ed7fa8, type: 3}
       propertyPath: inKeyboard
       value: 0

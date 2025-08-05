@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1615790826688818019}
   - component: {fileID: 7806229572785854892}
   - component: {fileID: 332355282305918109}
-  - component: {fileID: 820129453810636317}
+  - component: {fileID: 4258085891962364123}
   m_Layer: 5
   m_Name: ModernButton
   m_TagString: Untagged
@@ -122,9 +122,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 820129453810636317}
-        m_TargetAssemblyTypeName: CanvasToggle, Assembly-CSharp
-        m_MethodName: OnButtonClick
+      - m_Target: {fileID: 4258085891962364123}
+        m_TargetAssemblyTypeName: CursorClickTogglePlane, Assembly-CSharp
+        m_MethodName: TogglePlaneByButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -134,7 +134,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &820129453810636317
+--- !u!114 &4258085891962364123
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,10 +143,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1437772454100043153}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 248de5c7b185add4fa0b36bc67200a2d, type: 3}
+  m_Script: {fileID: 11500000, guid: cdca874f9caabf547be975370dfa6aec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvasPrefab: {fileID: 3956693168880783406, guid: ca3f88412dc6ff74ebedf401dc3780bc, type: 3}
+  selectionPlanePrefab: {fileID: 3956693168880783406, guid: ca3f88412dc6ff74ebedf401dc3780bc, type: 3}
+  spawnPointName: SelectionPlaneSpawnPoint
 --- !u!1 &3680587062168858065
 GameObject:
   m_ObjectHideFlags: 0
@@ -385,7 +386,7 @@ RectTransform:
   m_GameObject: {fileID: 5527670945670673281}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -1.7794473}
-  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_LocalScale: {x: 0.049999997, y: 0.049999997, z: 0.049999997}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3943070044624677346}
@@ -445,7 +446,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &3644397631867431439
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -628,7 +629,7 @@ GameObject:
   - component: {fileID: 5189053722007230998}
   - component: {fileID: 732231185703292835}
   - component: {fileID: 1502735648881695483}
-  - component: {fileID: 2252858903970919584}
+  - component: {fileID: 8770622097860686512}
   m_Layer: 5
   m_Name: FoodButton
   m_TagString: Untagged
@@ -738,9 +739,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2252858903970919584}
-        m_TargetAssemblyTypeName: CanvasToggle, Assembly-CSharp
-        m_MethodName: OnButtonClick
+      - m_Target: {fileID: 8770622097860686512}
+        m_TargetAssemblyTypeName: CursorClickTogglePlane, Assembly-CSharp
+        m_MethodName: TogglePlaneByButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -750,7 +751,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2252858903970919584
+--- !u!114 &8770622097860686512
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -759,10 +760,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6870202963659941068}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 248de5c7b185add4fa0b36bc67200a2d, type: 3}
+  m_Script: {fileID: 11500000, guid: cdca874f9caabf547be975370dfa6aec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvasPrefab: {fileID: 3435013403042788624, guid: 165f888ec6fb0ea43b406cf5a71761c9, type: 3}
+  selectionPlanePrefab: {fileID: 3435013403042788624, guid: 165f888ec6fb0ea43b406cf5a71761c9, type: 3}
+  spawnPointName: SelectionPlaneSpawnPoint
 --- !u!1 &7929573536747532582
 GameObject:
   m_ObjectHideFlags: 0
@@ -909,7 +911,7 @@ GameObject:
   - component: {fileID: 6147292690647131413}
   - component: {fileID: 3880323171033238089}
   - component: {fileID: 6255501079496707796}
-  - component: {fileID: 5742843942521716894}
+  - component: {fileID: 2722219792947393488}
   m_Layer: 5
   m_Name: AncientButton
   m_TagString: Untagged
@@ -1019,9 +1021,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5742843942521716894}
-        m_TargetAssemblyTypeName: CanvasToggle, Assembly-CSharp
-        m_MethodName: OnButtonClick
+      - m_Target: {fileID: 2722219792947393488}
+        m_TargetAssemblyTypeName: CursorClickTogglePlane, Assembly-CSharp
+        m_MethodName: TogglePlaneByButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1031,7 +1033,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &5742843942521716894
+--- !u!114 &2722219792947393488
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1040,10 +1042,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8404528526975783742}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 248de5c7b185add4fa0b36bc67200a2d, type: 3}
+  m_Script: {fileID: 11500000, guid: cdca874f9caabf547be975370dfa6aec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvasPrefab: {fileID: 8865934013414703447, guid: 252721b52cceb5841a98eb6bc989982c, type: 3}
+  selectionPlanePrefab: {fileID: 8865934013414703447, guid: 252721b52cceb5841a98eb6bc989982c, type: 3}
+  spawnPointName: SelectionPlaneSpawnPoint
 --- !u!1 &9138772271771817725
 GameObject:
   m_ObjectHideFlags: 0

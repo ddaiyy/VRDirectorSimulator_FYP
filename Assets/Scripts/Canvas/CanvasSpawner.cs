@@ -1,24 +1,24 @@
-using UnityEngine;
+锘縰sing UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class CanvasSpawner : MonoBehaviour
 {
-    [Header("Canvas 预制体")]
+    [Header("Canvas 脭陇脰脝脤氓")]
     public GameObject canvasPrefab;
 
     private GameObject currentCanvasInstance;
 
     void Start()
     {
-        // 确保摄像机存在
+        // 脠路卤拢脡茫脧帽禄煤麓忙脭脷
         if (Camera.main == null)
         {
-            Debug.LogError("没有找到主摄像机！");
+            Debug.LogError("脙禄脫脨脮脪碌陆脰梅脡茫脧帽禄煤拢隆");
         }
     }
 
-    // 这个函数在按钮点击时被调用
+    // 脮芒赂枚潞炉脢媒脭脷掳麓脜楼碌茫禄梅脢卤卤禄碌梅脫脙
     public void ToggleCanvas()
     {
         if (currentCanvasInstance == null)
@@ -36,21 +36,21 @@ public class CanvasSpawner : MonoBehaviour
     {
         if (canvasPrefab == null || Camera.main == null) return;
 
-        // 获取摄像机位置和方向
+        // 禄帽脠隆脡茫脧帽禄煤脦禄脰脙潞脥路陆脧貌
         Transform cam = Camera.main.transform;
 
-        Vector3 spawnPosition = cam.position + cam.forward * 10f + Vector3.up * -0.2f; // 稍微下移一点
+        Vector3 spawnPosition = cam.position + cam.forward * 5f + Vector3.up * -2f; // 脡脭脦垄脧脗脪脝脪禄碌茫
         Quaternion rotation = Quaternion.LookRotation(cam.forward);
 
         currentCanvasInstance = Instantiate(canvasPrefab, spawnPosition, rotation);
         currentCanvasInstance.SetActive(true);
 
-        // 可选：让 Canvas 始终正对玩家（只绕 Y）
+        // 驴脡脩隆拢潞脠脙 Canvas 脢录脰脮脮媒露脭脥忙录脪拢篓脰禄脠脝 Y拢漏
         Vector3 lookPos = new Vector3(cam.position.x, currentCanvasInstance.transform.position.y, cam.position.z);
         currentCanvasInstance.transform.LookAt(lookPos);
-        currentCanvasInstance.transform.Rotate(0, 180, 0); // 反向使 UI 正对
+        currentCanvasInstance.transform.Rotate(0, 180, 0); // 路麓脧貌脢鹿 UI 脮媒露脭
 
-        // 自动绑定 Close 按钮
+        // 脳脭露炉掳贸露篓 Close 掳麓脜楼
         Button closeBtn = currentCanvasInstance.GetComponentInChildren<Button>();
         if (closeBtn != null)
         {
@@ -67,21 +67,21 @@ public class CanvasSpawner : MonoBehaviour
         }
     }
 
-    [ContextMenu("测试/创建 Canvas")]
+    [ContextMenu("虏芒脢脭/麓麓陆篓 Canvas")]
     void Debug_SpawnCanvas()
     {
         if (currentCanvasInstance == null)
             SpawnCanvasInFrontOfUser();
         else
-            Debug.LogWarning("Canvas 已存在，跳过创建");
+            Debug.LogWarning("Canvas 脪脩麓忙脭脷拢卢脤酶鹿媒麓麓陆篓");
     }
 
-    [ContextMenu("测试/销毁 Canvas")]
+    [ContextMenu("虏芒脢脭/脧煤禄脵 Canvas")]
     void Debug_DestroyCanvas()
     {
         if (currentCanvasInstance != null)
             CloseCanvas();
         else
-            Debug.LogWarning("没有 Canvas 可销毁");
+            Debug.LogWarning("脙禄脫脨 Canvas 驴脡脧煤禄脵");
     }
 }
