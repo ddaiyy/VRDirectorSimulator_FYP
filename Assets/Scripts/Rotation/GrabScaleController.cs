@@ -54,7 +54,11 @@ public class GrabScaleController_XRInput : MonoBehaviour
     {
         if (rightHandGrab.hasSelection)
         {
-            grabbedObject = rightHandGrab.firstInteractableSelected.transform;
+            if (rightHandGrab != null && rightHandGrab.hasSelection && rightHandGrab.firstInteractableSelected != null)
+            {
+                grabbedObject = rightHandGrab.firstInteractableSelected.transform;
+            }
+
 
             // 缓存 Visual 子物体，避免每帧查找
             if (visualTarget == null || visualTarget.parent != grabbedObject)

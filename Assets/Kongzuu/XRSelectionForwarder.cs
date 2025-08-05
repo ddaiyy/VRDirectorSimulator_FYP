@@ -38,10 +38,10 @@ public class XRSelectionForwarder : MonoBehaviour
                     if (currentHoverSelectable is MonoBehaviour mb)
                     {
                         var cameraController = mb.GetComponent<CameraController>();
-                        var propSelectable = mb.GetComponent<PropSelectable>();
+                       
 
                         bool isCamera = (cameraController != null);
-                        bool isProp = (propSelectable != null);
+                        
 
                         if (currentSelectedSelectable != currentHoverSelectable)
                         {
@@ -94,6 +94,7 @@ public class XRSelectionForwarder : MonoBehaviour
             Debug.Log($"Hover进入了 {selectable}");
         }
     }
+
 
 
     private void OnHoverExited(HoverExitEventArgs args)

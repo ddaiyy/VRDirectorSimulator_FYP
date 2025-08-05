@@ -193,11 +193,6 @@ public class VRModelLoader : MonoBehaviour
         parent.AddComponent<ModelRotatorWithJoystick>();
         parent.AddComponent<GrabScaleController_XRInput>();
 
-
-        // 给上传模型添加 PropSelectable 脚本
-        var selectable = parent.AddComponent<PropSelectable>();
-        selectable.propUIPrefab = propUIPrefab;
-
         // ✅ 设置位置
         if (Camera.main != null)
         {
