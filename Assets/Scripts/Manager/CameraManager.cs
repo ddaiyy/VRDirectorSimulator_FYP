@@ -8,7 +8,7 @@ public class CameraManager : MonoBehaviour
 {
     public static CameraManager Instance;
 
-    public RenderTexture previewTexture; // Ԥ����RT
+    
     public GameObject cameraPrefab; // �����Ԥ����
     public Transform cameraSpawnPoint; // ����λ��
 
@@ -18,10 +18,13 @@ public class CameraManager : MonoBehaviour
 
     [SerializeField] public List<CameraController> cameraList = new List<CameraController>();
     [SerializeField] public CameraController currentSelected;
+    
     public GameObject currentCamera;
     public GameObject startCamera;
+    
     public Renderer previewPlaneRenderer;
-
+    public RenderTexture previewTexture;
+    
     private void Awake()
     {
         Instance = this;
@@ -229,7 +232,7 @@ public class CameraManager : MonoBehaviour
             }
         }
 
-        if (currentSelected != null)
+        if (currentSelected!=null && currentSelected !=controller)
         {
             currentSelected.DisablePreview();
         }
@@ -240,11 +243,36 @@ public class CameraManager : MonoBehaviour
 
         //Debug.Log($"Selected camera: {controller.gameObject.name}");
 
-        FindObjectOfType<CameraFOVSlider>()?.SyncSlider(controller);
-        OnSelectedCameraChanged?.Invoke(currentSelected);
+        //FindObjectOfType<CameraFOVSlider>()?.SyncSlider(controller);
+        //OnSelectedCameraChanged?.Invoke(currentSelected);
     }
 
+    public void ClearSelectedCamera(CameraController cameraController)
+    {
+        if(currentSelected!=cameraController) return;
+        
+        // 禁用相机输出
+        if (currentSelected != null)
+        {
+            currentSelected.DisablePreview();
+        }
 
+        currentSelected = null;
+        currentCamera = null;
+        
+        //TODO:如果画面卡住前一个加强制
+        if (previewTexture != null)
+        {
+            RenderTexture activeRT = RenderTexture.active;
+            RenderTexture.active = previewTexture;
+            GL.Clear(true, true, Color.clear);
+            RenderTexture.active = activeRT;
+
+            previewPlaneRenderer.material.mainTexture = previewTexture;
+        }
+        
+    } 
+    
     public void AddNewCamera()
     {
         GameObject camObj = Instantiate(cameraPrefab, cameraSpawnPoint.position, cameraSpawnPoint.rotation);
@@ -288,7 +316,7 @@ public class CameraManager : MonoBehaviour
                return cameraPrefabName + nextIndex;
     }
 
-    public CameraController GetCurrentSelectedCamera()
+    public CameraController GetCurrentSelectedCameraController()
     {
         return currentSelected;
     }

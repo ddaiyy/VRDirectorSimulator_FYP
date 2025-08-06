@@ -52,7 +52,7 @@ public class DepthOfFieldFocusDistanceController : MonoBehaviour
     {
         if (isUpdatingSlider) return; // ��ֹ�ݹ����
 
-        var selectedCamera = CameraManager.Instance?.GetCurrentSelectedCamera();
+        var selectedCamera = CameraManager.Instance?.GetCurrentSelectedCameraController();
         if (selectedCamera != null)
         {
             selectedCamera.SetFocusDistance(value);
@@ -63,7 +63,7 @@ public class DepthOfFieldFocusDistanceController : MonoBehaviour
 
     public void SyncSliderWithSelectedCamera()
     {
-        var selectedCamera = CameraManager.Instance?.GetCurrentSelectedCamera();
+        var selectedCamera = CameraManager.Instance?.GetCurrentSelectedCameraController();
         if (selectedCamera != null && focusDistanceSlider != null)
         {
             UpdateSliderAndText(selectedCamera.GetFocusDistance());

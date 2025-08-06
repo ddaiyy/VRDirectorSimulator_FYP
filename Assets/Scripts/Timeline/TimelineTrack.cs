@@ -14,9 +14,9 @@ public class TimelineTrack : MonoBehaviour
     public bool isPlaying = false;
     public float duration = 0f; // 轨道总时长，可根据clips自动计算
     public bool isControlledByMaster = false;
-    public PostProcessVolume volume; // Inspector 里拖入
-    private DepthOfField dof;
-    public bool isCameraActive = false;
+    //public PostProcessVolume volume; // Inspector 里拖入
+    //private DepthOfField dof;
+    //public bool isCameraActive = false;
 
     [Header("UI相关配置")] public ObjectTimelineUI objectTimelineUI;
     public GameObject objectTimelineUIPrefab;
@@ -24,12 +24,14 @@ public class TimelineTrack : MonoBehaviour
 
     [Header("default 开始配置")] public Vector3 startPosition;
     public Quaternion startRotation;
-    public float fov = 60f;
+    public float startFov = 27f;
+    public float startFocusDistance = 10f;
     public Vector3 startScale;
 
 
     private Camera cam;
     public bool isCamera = false;
+    public CameraController cameraController;
 
     [Header("测试用参数")] public string animName = "Test Animation Name";
     public float animDuration = 5f;
@@ -38,19 +40,6 @@ public class TimelineTrack : MonoBehaviour
 
     void Start()
     {
-        //TODO:可以换到检查相机那里面去
-        if (volume != null)
-        {
-            if (!volume.profile.TryGetSettings(out dof))
-            {
-                Debug.LogWarning("PostProcessVolume中没有DepthOfField");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("未设置PostProcessVolume引用！");
-        }
-
         //初始化UI
         CheckCameraExists();
         InitializeData();
@@ -61,17 +50,27 @@ public class TimelineTrack : MonoBehaviour
     {
         //TODO:把生成时候的位置数据变成默认数据
     }
+    
 
-    // 获取当前相机激活状态
-    private bool GetCurrentCameraActiveState()
+    public bool GetPreCameraClipActive(float currentTime)
     {
-        if (objectTimelineUI != null)
-        {
-            return objectTimelineUI.GetCameraActiveState();
-        }
+        var Clips = clips.OrderBy(c => c.time).ToList();
+        if (Clips.Count == 0) return false;
 
-        return false; // 默认不激活，确保安全
+        // 找到当前时间点之前最近的关键帧
+        TimelineClip preCameraClip = null;
+        for (int i = Clips.Count - 1; i >= 0; i--)
+        {
+            if (Clips[i].time <= currentTime)
+            {
+                preCameraClip = Clips[i];
+                break;
+            }
+        }
+        if(preCameraClip == null) return false;
+        return preCameraClip.isCameraActiveAtTime;
     }
+    
 
     // 处理相机激活状态切换
     private void HandleCameraActivation(float time)
@@ -91,6 +90,7 @@ public class TimelineTrack : MonoBehaviour
                 break;
             }
         }
+        
 
         // 如果找到了关键帧，检查其激活状态
         if (currentActiveClip != null)
@@ -104,9 +104,9 @@ public class TimelineTrack : MonoBehaviour
             // 检查当前相机的激活状态
             if (CameraManager.Instance != null)
             {
-                var currentSelectedCamera = CameraManager.Instance.GetCurrentSelectedCamera();
+                var currentSelectedCamera = CameraManager.Instance.GetCurrentSelectedCameraController();
                 bool isCurrentlyActive = (currentSelectedCamera != null &&
-                                          currentSelectedCamera.transform.parent.gameObject == this.gameObject);
+                                          currentSelectedCamera == cameraController);//t-当前相机激活
 
                 if (shouldBeActive)//相机应该被激活
                 {
@@ -131,14 +131,13 @@ public class TimelineTrack : MonoBehaviour
                         if (!isCurrentlyActive)
                         {
                             // 激活当前相机
-                            var cameraController = GetComponentInChildren<CameraController>();
                             if (cameraController != null)
                             {
                                 // 确保相机组件是激活的
-                                if (cam != null)
+                                /*if (cam != null)
                                 {
                                     cam.gameObject.SetActive(true);
-                                }
+                                }*/
 
                                 CameraManager.Instance.SelectCamera(cameraController);
                                 //Debug.Log($"[{gameObject.name}] 独立模式激活相机 (时间: {time:F2}s)");
@@ -147,12 +146,7 @@ public class TimelineTrack : MonoBehaviour
                         else
                         {
                             // 独立模式：如果当前已激活但需要重新激活预览
-                            var cameraController = GetComponentInChildren<CameraController>();
-                            if (cameraController != null && CameraManager.Instance.previewTexture != null)
-                            {
-                                cameraController.EnablePreview(CameraManager.Instance.previewTexture);
-                                //Debug.Log($"[{gameObject.name}] 独立模式重新激活相机预览 (时间: {time:F2}s)");
-                            }
+                            //不做处理，goon
                         }
                     }
                 }
@@ -177,18 +171,17 @@ public class TimelineTrack : MonoBehaviour
                     }
                     else
                     {
-                        // 独立模式：无论当前状态如何，都执行禁用
-                        var cameraController = GetComponentInChildren<CameraController>();
-                        if (cameraController != null)
+                        // 独立模式：应该禁用，但现在激活
+                        if (isCurrentlyActive)
                         {
-                            cameraController.DisablePreview();
-                            ClearPreviewTexture(); // 清空预览纹理
+                            //cameraController.DisablePreview();
+                            //ClearPreviewTexture(); // 清空预览纹理
                             //Debug.Log($"[{gameObject.name}] 独立模式禁用相机预览 (时间: {time:F2}s)");
+                            CameraManager.Instance.ClearSelectedCamera(cameraController);
                         }
-                        else if (cam != null)
+                        else
                         {
-                            cam.gameObject.SetActive(false);
-                            ClearPreviewTexture(); // 清空预览纹理
+                            //应该禁用，本来也禁用
                             //Debug.Log($"[{gameObject.name}] 独立模式禁用相机组件 (时间: {time:F2}s)");
                         }
                     }
@@ -196,48 +189,7 @@ public class TimelineTrack : MonoBehaviour
             }
             else
             {
-                // 没有CameraManager时的处理（独立模式）
-                if (shouldBeActive)
-                {
-                    // 激活相机
-                    var cameraController = GetComponentInChildren<CameraController>();
-                    if (cameraController != null)
-                    {
-                        // 如果有预览纹理，重新启用预览
-                        if (CameraManager.Instance != null && CameraManager.Instance.previewTexture != null)
-                        {
-                            cameraController.EnablePreview(CameraManager.Instance.previewTexture);
-                        }
-                        else if (cam != null)
-                        {
-                            cam.gameObject.SetActive(true);
-                        }
-
-                        Debug.Log($"[{gameObject.name}] 独立模式激活相机 (时间: {time:F2}s)");
-                    }
-                    else if (cam != null)
-                    {
-                        cam.gameObject.SetActive(true);
-                        Debug.Log($"[{gameObject.name}] 独立模式激活相机组件 (时间: {time:F2}s)");
-                    }
-                }
-                else
-                {
-                    // 禁用相机
-                    var cameraController = GetComponentInChildren<CameraController>();
-                    if (cameraController != null)
-                    {
-                        cameraController.DisablePreview();
-                        Debug.Log($"[{gameObject.name}] 独立模式禁用相机预览 (时间: {time:F2}s)");
-                    }
-                    else if (cam != null)
-                    {
-                        cam.gameObject.SetActive(false);
-                        ClearPreviewTexture(); // 清空预览纹理
-                        Debug.Log($"[{gameObject.name}] 独立模式禁用相机组件 (时间: {time:F2}s)");
-                    }
-                }
-                //}
+                Debug.LogError("CameraManager不存在");
             }
         }
     }
@@ -282,284 +234,7 @@ public class TimelineTrack : MonoBehaviour
             }
         }
     }
-
-    /// <summary>
-    /// 只处理相机激活，不处理其他属性
-    /// </summary>
-    public void HandleCameraActivationOnly(float time)
-    {
-        if (!isCamera) return; // 只有相机轨道才需要处理激活状态
-
-        var Clips = clips.OrderBy(c => c.time).ToList();
-        if (Clips.Count == 0) return;
-
-        // 找到当前时间点之前最近的关键帧
-        TimelineClip currentActiveClip = null;
-        for (int i = Clips.Count - 1; i >= 0; i--)
-        {
-            if (Clips[i].time <= time)
-            {
-                currentActiveClip = Clips[i];
-                break;
-            }
-        }
-
-        // 如果找到了关键帧，检查其激活状态
-        if (currentActiveClip != null)
-        {
-            bool shouldBeActive = currentActiveClip.isCameraActiveAtTime;
-
-            // 检查当前相机的激活状态
-            if (CameraManager.Instance != null)
-            {
-                var currentSelectedCamera = CameraManager.Instance.GetCurrentSelectedCamera();
-                bool isCurrentlyActive = (currentSelectedCamera != null &&
-                                          currentSelectedCamera.transform.parent.gameObject == this.gameObject);
-
-                if (shouldBeActive)//相机应该被激活
-                {
-                    if (isControlledByMaster)// 主线控制模式：通过CameraManager更新状态
-                    {
-                        var cameraController = GetComponentInChildren<CameraController>();
-                        if (cameraController != null)
-                        {
-                            bool success =
-                                CameraManager.Instance.UpdateCameraStateForMasterControl(cameraController,
-                                    shouldBeActive, time);
-                            if (!success)
-                            {
-                                // 如果更新失败，记录错误但不中断执行
-                                Debug.LogWarning($"[{gameObject.name}] 相机激活失败，可能存在冲突");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // 独立模式：直接激活
-                        if (!isCurrentlyActive)
-                        {
-                            // 激活当前相机
-                            var cameraController = GetComponentInChildren<CameraController>();
-                            if (cameraController != null)
-                            {
-                                // 确保相机组件是激活的
-                                if (cam != null)
-                                {
-                                    cam.gameObject.SetActive(true);
-                                }
-
-                                CameraManager.Instance.SelectCamera(cameraController);
-                                Debug.Log($"[{gameObject.name}] 独立模式激活相机 (时间: {time:F2}s)");
-                            }
-                        }
-                        else
-                        {
-                            // 独立模式：如果当前已激活但需要重新激活预览
-                            var cameraController = GetComponentInChildren<CameraController>();
-                            if (cameraController != null && CameraManager.Instance.previewTexture != null)
-                            {
-                                cameraController.EnablePreview(CameraManager.Instance.previewTexture);
-                                Debug.Log($"[{gameObject.name}] 独立模式重新激活相机预览 (时间: {time:F2}s)");
-                            }
-                        }
-                    }
-                }
-                // 禁用逻辑
-                else
-                {
-                    if (isControlledByMaster)
-                    {
-                        // 主线控制模式：通过CameraManager更新状态
-                        var cameraController = GetComponentInChildren<CameraController>();
-                        if (cameraController != null)
-                        {
-                            bool success =
-                                CameraManager.Instance.UpdateCameraStateForMasterControl(cameraController,
-                                    shouldBeActive, time);
-                            if (!success)
-                            {
-                                // 如果更新失败，记录错误但不中断执行
-                                Debug.LogWarning($"[{gameObject.name}] 相机状态更新失败，可能存在冲突");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // 独立模式：无论当前状态如何，都执行禁用
-                        var cameraController = GetComponentInChildren<CameraController>();
-                        if (cameraController != null)
-                        {
-                            cameraController.DisablePreview();
-                            ClearPreviewTexture(); // 清空预览纹理
-                            Debug.Log($"[{gameObject.name}] 独立模式禁用相机预览 (时间: {time:F2}s)");
-                        }
-                        else if (cam != null)
-                        {
-                            cam.gameObject.SetActive(false);
-                            ClearPreviewTexture(); // 清空预览纹理
-                            Debug.Log($"[{gameObject.name}] 独立模式禁用相机组件 (时间: {time:F2}s)");
-                        }
-                    }
-                }
-            }
-            else
-            {
-                // 没有CameraManager时的处理（独立模式）
-                if (shouldBeActive)
-                {
-                    // 激活相机
-                    var cameraController = GetComponentInChildren<CameraController>();
-                    if (cameraController != null)
-                    {
-                        // 如果有预览纹理，重新启用预览
-                        if (CameraManager.Instance != null && CameraManager.Instance.previewTexture != null)
-                        {
-                            cameraController.EnablePreview(CameraManager.Instance.previewTexture);
-                        }
-                        else if (cam != null)
-                        {
-                            cam.gameObject.SetActive(true);
-                        }
-
-                        Debug.Log($"[{gameObject.name}] 独立模式激活相机 (时间: {time:F2}s)");
-                    }
-                    else if (cam != null)
-                    {
-                        cam.gameObject.SetActive(true);
-                        Debug.Log($"[{gameObject.name}] 独立模式激活相机组件 (时间: {time:F2}s)");
-                    }
-                }
-                else
-                {
-                    // 禁用相机
-                    var cameraController = GetComponentInChildren<CameraController>();
-                    if (cameraController != null)
-                    {
-                        cameraController.DisablePreview();
-                        Debug.Log($"[{gameObject.name}] 独立模式禁用相机预览 (时间: {time:F2}s)");
-                    }
-                    else if (cam != null)
-                    {
-                        cam.gameObject.SetActive(false);
-                        ClearPreviewTexture(); // 清空预览纹理
-                        Debug.Log($"[{gameObject.name}] 独立模式禁用相机组件 (时间: {time:F2}s)");
-                    }
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// 处理位置、旋转、缩放等属性，包括相机激活状态
-    /// </summary>
-    public void SetTimeWithoutCameraActivation(float time)
-    {
-        currentTime = time;
-        ApplyClipAtTimeWithoutCameraActivation(time);
-    }
-
-    // 平滑插值（不包括相机激活）
-    void ApplyClipAtTimeWithoutCameraActivation(float time)
-    {
-        var nonAutoAnimationClips = clips.Where(c => c.clipType != TimelineClip.ClipType.AutoAnimationClip)
-            .OrderBy(c => c.time).ToList();
-        if (nonAutoAnimationClips.Count() == 0) return;
-
-        // 注意：这里不处理相机激活状态切换，只处理位置、旋转、缩放等属性
-
-        // 如果只有一个0秒关键帧且不是动画，只处理位置等属性，不处理相机激活
-        if (nonAutoAnimationClips.Count() == 1 &&
-            nonAutoAnimationClips.First().clipType != TimelineClip.ClipType.AnimationClip &&
-            nonAutoAnimationClips.First().time == 0f)
-        {
-            var first = nonAutoAnimationClips.First();
-            transform.position = first.position;
-            transform.rotation = first.rotation;
-            transform.localScale = first.scale;
-            if (cam != null)
-            {
-                cam.fieldOfView = first.fov;
-                if (dof != null)
-                    dof.focusDistance.value = first.focusDistance;
-            }
-            return;
-        }
-
-        // 检查并触发动画关键帧
-        if (time < nonAutoAnimationClips.First().time && (isPlaying || isControlledByMaster))
-        {
-            transform.position = new Vector3(99999, 99999, 99999);
-            CheckAndTriggerAnimationClip(time);
-            return;
-        }
-        else if (time < nonAutoAnimationClips.First().time && !isPlaying)
-        {
-            var first = nonAutoAnimationClips.First();
-            transform.position = first.position;
-            transform.rotation = first.rotation;
-            transform.localScale = first.scale;
-            if (cam != null)
-            {
-                cam.fieldOfView = first.fov;
-                if (dof != null)
-                    dof.focusDistance.value = first.focusDistance;
-            }
-
-            return;
-        }
-
-        // 处理超出范围的情况
-        if (time >= nonAutoAnimationClips.Last().time ||
-            (isControlledByMaster && time >= nonAutoAnimationClips.Last().time))
-        {
-            var last = nonAutoAnimationClips.Last();
-            transform.position = last.position;
-            transform.rotation = last.rotation;
-            transform.localScale = last.scale;
-            if (cam != null)
-            {
-                cam.fieldOfView = last.fov;
-                if (dof != null)
-                    dof.focusDistance.value = last.focusDistance;
-            }
-
-            CheckAndTriggerAnimationClip(time);
-            return;
-        }
-
-        // 在关键帧区间内插值
-        TimelineClip prev = null, next = null;
-        for (int i = 0; i < nonAutoAnimationClips.Count() - 1; i++)
-        {
-            if (nonAutoAnimationClips[i].time <= time && nonAutoAnimationClips[i + 1].time >= time)
-            {
-                prev = nonAutoAnimationClips[i];
-                next = nonAutoAnimationClips[i + 1];
-                break;
-            }
-        }
-
-        CheckAndTriggerAnimationClip(time);
-        if (prev == null || next == null) return;
-
-        float delta = next.time - prev.time;
-        float t = 0f;
-        if (Mathf.Approximately(delta, 0f))
-            t = 0f;
-        else
-            t = (time - prev.time) / delta;
-
-        transform.position = Vector3.Lerp(prev.position, next.position, t);
-        transform.rotation = Quaternion.Slerp(prev.rotation, next.rotation, t);
-        transform.localScale = Vector3.Lerp(prev.scale, next.scale, t);
-
-        if (cam != null)
-        {
-            cam.fieldOfView = Mathf.Lerp(prev.fov, next.fov, t);
-            if (dof != null)
-                dof.focusDistance.value = Mathf.Lerp(prev.focusDistance, next.focusDistance, t);
-        }
-    }
+    
 
     void CheckCameraExists()
     {
@@ -572,6 +247,7 @@ public class TimelineTrack : MonoBehaviour
         else
         {
             isCamera = true;
+            cameraController = cam.GetComponent<CameraController>();
         }
     }
 
@@ -623,24 +299,19 @@ public class TimelineTrack : MonoBehaviour
 
         if (isCamera)
         {
-            clip.fov = cam.fieldOfView;
-            if (dof != null)
-            {
-                clip.focusDistance = dof.focusDistance.value;
-            }
-            else
-            {
-                clip.focusDistance = 5f;
-            }
+            clip.fov = cameraController.GetFOV();
+            clip.focusDistance = cameraController.GetFocusDistance();
 
             // 同步UI中的相机激活状态
-            if (objectTimelineUI != null && objectTimelineUI.camActiveToggle != null)
+            if (objectTimelineUI != null)
             {
-                clip.isCameraActiveAtTime = isCameraActive;
+                clip.isCameraActiveAtTime = objectTimelineUI.camActiveToggle.isOn;
+                clip.fov = objectTimelineUI.fovSlider.value;
+                clip.focusDistance = objectTimelineUI.focusDistanceSlider.value;
             }
             else
             {
-                clip.isCameraActiveAtTime = false;
+                Debug.LogError("objectTimelineUI报空");
             }
         }
         else
@@ -686,25 +357,16 @@ public class TimelineTrack : MonoBehaviour
 
         if (isCamera)
         {
-            clip.fov = cam.fieldOfView;
-            if (dof != null)
-            {
-                clip.focusDistance = dof.focusDistance.value;
-            }
-            else
-            {
-                clip.focusDistance = 5f;
-            }
-
             // 同步UI中的相机激活状态
-            if (objectTimelineUI != null && objectTimelineUI.camActiveToggle != null)
+            if (objectTimelineUI != null)
             {
                 clip.isCameraActiveAtTime = objectTimelineUI.camActiveToggle.isOn;
+                clip.fov = objectTimelineUI.fovSlider.value;
+                clip.focusDistance = objectTimelineUI.focusDistanceSlider.value;
             }
             else
             {
-                // 如果UI不可用，默认激活
-                clip.isCameraActiveAtTime = false;
+                Debug.LogError("ObjectTimelineUI报空");
             }
         }
         else
@@ -1028,11 +690,10 @@ public class TimelineTrack : MonoBehaviour
             transform.position = first.position;
             transform.rotation = first.rotation;
             transform.localScale = first.scale;
-            if (cam != null)
+            if (isCamera)
             {
-                cam.fieldOfView = first.fov;
-                if (dof != null)
-                    dof.focusDistance.value = first.focusDistance;
+                cameraController.SetFOV(first.fov);
+                cameraController.SetFocusDistance(first.focusDistance);
             }
 
             return;
@@ -1046,11 +707,10 @@ public class TimelineTrack : MonoBehaviour
             transform.position = last.position;
             transform.rotation = last.rotation;
             transform.localScale = last.scale;
-            if (cam != null)
+            if (isCamera)
             {
-                cam.fieldOfView = last.fov;
-                if (dof != null)
-                    dof.focusDistance.value = last.focusDistance;
+                cameraController.SetFOV(last.fov);
+                cameraController.SetFocusDistance(last.focusDistance);
             }
 
             // 检查并触发动画关键帧
@@ -1069,40 +729,7 @@ public class TimelineTrack : MonoBehaviour
                 break;
             }
         }
-        // 找到当前时间点之前最近且激活摄像机的关键帧
-        /*TimelineClip activeCamClip = null;
-        for (int i = nonAutoAnimationClips.Count - 1; i >= 0; i--)
-        {
-            if (nonAutoAnimationClips[i].time <= time && nonAutoAnimationClips[i].isCameraActiveAtTime)
-            {
-                activeCamClip = nonAutoAnimationClips[i];
-                break;
-            }
-        }
-
-        if (activeCamClip != null)
-        {
-            int activeID = activeCamClip.activeCameraID;
-            CameraController toActivate = null;
-
-            if (CameraManager.Instance != null)
-            {
-                foreach (var camCtrl in CameraManager.Instance.GetAllCameras())
-                {
-                    if (camCtrl.GetInstanceID() == activeID)
-                    {
-                        toActivate = camCtrl;
-                        break;
-                    }
-                }
-
-                if (toActivate != null)
-                {
-                    CameraManager.Instance.SelectCamera(toActivate);
-                }
-            }
-        }*/
-
+        
         // 检查并触发动画关键帧
         CheckAndTriggerAnimationClip(time);
         if (prev == null || next == null) return; // 理论上不会发生
@@ -1119,11 +746,10 @@ public class TimelineTrack : MonoBehaviour
         transform.localScale = Vector3.Lerp(prev.scale, next.scale, t);
 
         //TODO: 摄像机
-        if (cam != null)
+        if (isCamera)
         {
-            cam.fieldOfView = Mathf.Lerp(prev.fov, next.fov, t);
-            if (dof != null)
-                dof.focusDistance.value = Mathf.Lerp(prev.focusDistance, next.focusDistance, t);
+            cameraController.SetFOV(Mathf.Lerp(prev.fov, next.fov, t));
+            cameraController.SetFocusDistance(Mathf.Lerp(prev.focusDistance, next.focusDistance, t));
         }
     }
 
@@ -1425,7 +1051,7 @@ public class TimelineTrack : MonoBehaviour
     }
 
     // 清空预览纹理
-    private void ClearPreviewTexture()
+    /*private void ClearPreviewTexture()
     {
         if (CameraManager.Instance != null && CameraManager.Instance.previewTexture != null)
         {
@@ -1434,7 +1060,7 @@ public class TimelineTrack : MonoBehaviour
             RenderTexture.active = null;
             //Debug.Log($"[{gameObject.name}] 清空预览纹理");
         }
-    }
+    }*/
 
     public CameraController GetExpectedActiveCameraControllerAtTime(float time)
     {

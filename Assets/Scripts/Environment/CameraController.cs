@@ -6,7 +6,6 @@ using MyGame.Selection;
 
 public class CameraController : MonoBehaviour, ICustomSelectable
 {
-    public GameObject worldCanvas; // °´Å¥Canvas£¬¹ÒÔØÔÚÉãÏñ»úPrefabÏÂ
     public Camera mainPlayerCamera;
     public PostProcessVolume postProcessVolume;  // ÐÂÔö£ººóÆÚ´¦ÀíVolumeÒýÓÃ
     public DepthOfField dof;  // DepthOfFieldÉèÖÃ»º´æ
@@ -22,8 +21,7 @@ public class CameraController : MonoBehaviour, ICustomSelectable
         }
 
         cam = GetComponent<Camera>();
-
-        // ÆôÓÃÉãÏñ»ú£¬µ«Ä¬ÈÏ²»Ð´Èë RT£¬·ÀÖ¹ºÚÆÁ bug
+        
         cam.enabled = true;
         cam.targetTexture = null;
 
@@ -54,30 +52,23 @@ public class CameraController : MonoBehaviour, ICustomSelectable
         }
     }
 
-   
+    
     public void EnablePreview(RenderTexture rt)
     {
-        //Debug.Log($"启用预览 {gameObject.name}");
-        cam.enabled = false;
-        cam.targetTexture = null;  // 先清空一下，确保刷新
-        cam.targetTexture = rt;
-
-        // ·ÀÖ¹Êä³öµ½Ö÷ÆÁÄ»£ºÖ»ÓÐÉèÖÃ targetTexture ºóÔÙÆôÓÃÉãÏñ»ú
-        if (rt != null)
+        if (cam != null)
         {
+            cam.targetTexture = rt;
             cam.enabled = true;
         }
-
-        /*if (worldCanvas != null)
-            worldCanvas.SetActive(false);*/
     }
-
 
     public void DisablePreview()
     {
-        cam.enabled = false;
-        cam.targetTexture = null;
-        //Debug.Log($"DisablePreview called on {gameObject.name}");
+        if (cam != null)
+        {
+            cam.targetTexture = null;
+            cam.enabled = false;
+        }
     }
 
 
@@ -100,28 +91,14 @@ public class CameraController : MonoBehaviour, ICustomSelectable
     {
         return cam.fieldOfView;
     }
-
-    /*[ContextMenu("Toggle WorldCanvas")]
-    public void ToggleWorldCanvas()
-    {
-        if (worldCanvas == null)
-        {
-            Debug.LogWarning("worldCanvas Î´¸³Öµ");
-            return;
-        }
-
-        bool isActive = worldCanvas.activeSelf;
-        worldCanvas.SetActive(!isActive);
-
-        Debug.Log($"worldCanvas ×´Ì¬ÇÐ»»Îª {!isActive}");
-    }*/
+    
     public void SetFocusDistance(float value)
     {
         if (dof != null)
         {
             dof.focusDistance.value = value;
             dof.enabled.value = true;  // È·±£¾°Éî¿ªÆô
-            Debug.Log($"ÉèÖÃ¾°Éî½¹¾àÎª {value}");
+            //Debug.Log($"ÉèÖÃ¾°Éî½¹¾àÎª {value}");
         }
     }
     public float GetFocusDistance()
@@ -129,7 +106,7 @@ public class CameraController : MonoBehaviour, ICustomSelectable
         if (dof != null)
             return dof.focusDistance.value;
         else
-            return 0f;
+            return 5f;
     }
 
     [ContextMenu("Test Set Focus Distance 3")]
@@ -142,24 +119,21 @@ public class CameraController : MonoBehaviour, ICustomSelectable
     {
         Debug.Log($"{gameObject.name} 被选中：OnSelect 被调用，当前FOV为 {GetFOV()}");
 
-        worldCanvas?.SetActive(true);
+        //worldCanvas?.SetActive(true);
         CameraManager.Instance.SelectCamera(this);
-
-        //
-        CameraFOVSlider.Instance?.SyncSlider(this);
-
+        
         TimelineTrack track = this.gameObject.GetComponentInParent<TimelineTrack>();
-        if (track != null)
+        if (track != null && !track.isControlledByMaster)
         {
             track.showUI();
         }
     }
 
-
-
+    //TODO:取消选择
     public void OnDeselect()
     {
-        Debug.Log($"{gameObject.name} È¡ÏûÑ¡ÖÐ");
+        CameraManager.Instance.ClearSelectedCamera(this);
+        Debug.Log($"{gameObject.name} 挂下CameraManager");
     }
 
     [ContextMenu("Test OnSelect")]

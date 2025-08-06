@@ -82,7 +82,7 @@ public class MasterTimelineTrack : MonoBehaviour
                 {
                     if (track.isControlledByMaster)
                     {
-                        track.SetTimeWithoutCameraActivation(currentTime);
+                        //track.SetTimeWithoutCameraActivation(currentTime);
                     }
                 }
             }

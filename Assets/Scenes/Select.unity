@@ -4908,7 +4908,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ee1d0a4d62872b4d9fa8e81e40c8c46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExecuteOnStart: 1
+  ExecuteOnStart: 0
   Options: 
   PrintStdErr: 0
   CaptureSources:

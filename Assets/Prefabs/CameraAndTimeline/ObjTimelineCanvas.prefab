@@ -147,6 +147,11 @@ MonoBehaviour:
   timelineContent: {fileID: 6379546188523929289}
   timelineWidth: 600
   maxTime: 20
+  camActiveToggle: {fileID: 0}
+  fovSlider: {fileID: 0}
+  fovText: {fileID: 0}
+  focusDistanceSlider: {fileID: 0}
+  focusDistanceValueText: {fileID: 0}
   currentTrack: {fileID: 0}
 --- !u!1001 &170518066821983852
 PrefabInstance:

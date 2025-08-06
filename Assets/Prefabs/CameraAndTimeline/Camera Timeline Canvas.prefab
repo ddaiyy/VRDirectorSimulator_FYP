@@ -1076,8 +1076,6 @@ GameObject:
   - component: {fileID: 4752558159289468525}
   - component: {fileID: 7986303371052281537}
   - component: {fileID: 3375028964885028719}
-  - component: {fileID: 1707467979461852973}
-  - component: {fileID: 177364188919614945}
   m_Layer: 5
   m_Name: Camera Timeline Canvas
   m_TagString: Untagged
@@ -1150,7 +1148,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &4752558159289468525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1212,39 +1210,11 @@ MonoBehaviour:
   timelineWidth: 600
   maxTime: 20
   camActiveToggle: {fileID: 5561199128848362094}
-  fovSlider: {fileID: 0}
-  fovText: {fileID: 0}
-  dofSlider: {fileID: 0}
-  dofText: {fileID: 0}
-  currentTrack: {fileID: 0}
---- !u!114 &1707467979461852973
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7402487073939681752}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a5d6227ee0cb604b8a208d39d1d43b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   fovSlider: {fileID: 1973370487690721418}
-  fovValueText: {fileID: 2139297637207344669}
---- !u!114 &177364188919614945
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7402487073939681752}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23367ac19de4ff147978e2a678588eb3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  fovText: {fileID: 2139297637207344669}
   focusDistanceSlider: {fileID: 1462571285653837233}
   focusDistanceValueText: {fileID: 248646503409695662}
+  currentTrack: {fileID: 0}
 --- !u!1 &7803970510715223928
 GameObject:
   m_ObjectHideFlags: 0
