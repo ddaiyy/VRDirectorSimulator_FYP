@@ -4,21 +4,26 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class CanvasSpawner : MonoBehaviour
 {
-    [Header("Canvas Ô¤ÖÆÌå")]
+    [Header("Canvas Ô¤ï¿½ï¿½ï¿½ï¿½")]
     public GameObject canvasPrefab;
 
     private GameObject currentCanvasInstance;
 
+    public GameObject clikOnCanvas;
     void Start()
     {
-        // È·±£ÉãÏñ»ú´æÔÚ
+        // È·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (Camera.main == null)
         {
-            Debug.LogError("Ã»ÓÐÕÒµ½Ö÷ÉãÏñ»ú£¡");
+            Debug.LogError("Ã»ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
         }
     }
 
-    // Õâ¸öº¯ÊýÔÚ°´Å¥µã»÷Ê±±»µ÷ÓÃ
+    public void ClikOnCanvas()
+    {
+        clikOnCanvas.SetActive(!clikOnCanvas.activeSelf);
+    }
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú°ï¿½Å¥ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public void ToggleCanvas()
     {
         if (currentCanvasInstance == null)
@@ -36,21 +41,21 @@ public class CanvasSpawner : MonoBehaviour
     {
         if (canvasPrefab == null || Camera.main == null) return;
 
-        // »ñÈ¡ÉãÏñ»úÎ»ÖÃºÍ·½Ïò
+        // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ÃºÍ·ï¿½ï¿½ï¿½
         Transform cam = Camera.main.transform;
 
-        Vector3 spawnPosition = cam.position + cam.forward * 10f + Vector3.up * -0.2f; // ÉÔÎ¢ÏÂÒÆÒ»µã
+        Vector3 spawnPosition = cam.position + cam.forward * 10f + Vector3.up * -0.2f; // ï¿½ï¿½Î¢ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
         Quaternion rotation = Quaternion.LookRotation(cam.forward);
 
         currentCanvasInstance = Instantiate(canvasPrefab, spawnPosition, rotation);
         currentCanvasInstance.SetActive(true);
 
-        // ¿ÉÑ¡£ºÈÃ Canvas Ê¼ÖÕÕý¶ÔÍæ¼Ò£¨Ö»ÈÆ Y£©
+        // ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ Canvas Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò£ï¿½Ö»ï¿½ï¿½ Yï¿½ï¿½
         Vector3 lookPos = new Vector3(cam.position.x, currentCanvasInstance.transform.position.y, cam.position.z);
         currentCanvasInstance.transform.LookAt(lookPos);
-        currentCanvasInstance.transform.Rotate(0, 180, 0); // ·´ÏòÊ¹ UI Õý¶Ô
+        currentCanvasInstance.transform.Rotate(0, 180, 0); // ï¿½ï¿½ï¿½ï¿½Ê¹ UI ï¿½ï¿½ï¿½ï¿½
 
-        // ×Ô¶¯°ó¶¨ Close °´Å¥
+        // ï¿½Ô¶ï¿½ï¿½ï¿½ Close ï¿½ï¿½Å¥
         Button closeBtn = currentCanvasInstance.GetComponentInChildren<Button>();
         if (closeBtn != null)
         {
@@ -67,21 +72,21 @@ public class CanvasSpawner : MonoBehaviour
         }
     }
 
-    [ContextMenu("²âÊÔ/´´½¨ Canvas")]
+    [ContextMenu("ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ Canvas")]
     void Debug_SpawnCanvas()
     {
         if (currentCanvasInstance == null)
             SpawnCanvasInFrontOfUser();
         else
-            Debug.LogWarning("Canvas ÒÑ´æÔÚ£¬Ìø¹ý´´½¨");
+            Debug.LogWarning("Canvas ï¿½Ñ´ï¿½ï¿½Ú£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
     }
 
-    [ContextMenu("²âÊÔ/Ïú»Ù Canvas")]
+    [ContextMenu("ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ Canvas")]
     void Debug_DestroyCanvas()
     {
         if (currentCanvasInstance != null)
             CloseCanvas();
         else
-            Debug.LogWarning("Ã»ÓÐ Canvas ¿ÉÏú»Ù");
+            Debug.LogWarning("Ã»ï¿½ï¿½ Canvas ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
     }
 }

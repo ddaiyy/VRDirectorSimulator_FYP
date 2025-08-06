@@ -3759,7 +3759,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a8b89c50a6085d45b11a09b59ea4478, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvasPrefab: {fileID: 6173132215163835928}
+  canvasPrefab: {fileID: 0}
+  clikOnCanvas: {fileID: 6173132215163835928}
 --- !u!114 &1360396605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3806,7 +3807,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1360396604}
         m_TargetAssemblyTypeName: CanvasSpawner, Assembly-CSharp
-        m_MethodName: ToggleCanvas
+        m_MethodName: ClikOnCanvas
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3815,7 +3816,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
 --- !u!114 &1360396606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4568,6 +4569,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasPrefab: {fileID: 250932544}
+  clikOnCanvas: {fileID: 0}
 --- !u!114 &1740784376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4830,7 +4832,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64a30dde41f1ee748a691f186b9f1b2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  previewTexture: {fileID: 8400000, guid: d7391bef485e8b4489934be694d51de6, type: 2}
   cameraPrefab: {fileID: 501570407239413944, guid: 764b60b326f323a40bfc2e61e20f7e04, type: 3}
   cameraSpawnPoint: {fileID: 343348646}
   cameraList: []
@@ -4838,6 +4839,7 @@ MonoBehaviour:
   currentCamera: {fileID: 0}
   startCamera: {fileID: 0}
   previewPlaneRenderer: {fileID: 2030494349}
+  previewTexture: {fileID: 8400000, guid: d7391bef485e8b4489934be694d51de6, type: 2}
 --- !u!114 &1804851387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6354,6 +6356,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasPrefab: {fileID: 6466212794866213612, guid: 3f48b6df86a666a4e81e8ac1bf5f52a5, type: 3}
+  clikOnCanvas: {fileID: 0}
 --- !u!222 &34828315691159530
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7286,8 +7289,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7122577220660025890}
   m_HandleRect: {fileID: 5332097764125725809}
   m_Direction: 2
-  m_Value: -0.000003782093
-  m_Size: 0.609995
+  m_Value: -0.000000391251
+  m_Size: 0.61
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7722,7 +7725,7 @@ RectTransform:
   m_Father: {fileID: 4258536147906037633}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0.609995}
+  m_AnchorMax: {x: 1, y: 0.61}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -7900,7 +7903,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 6.66, y: 3.9776273}
+  m_AnchoredPosition: {x: -1.35, y: 3.9776273}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6235764048692604122
@@ -8005,7 +8008,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0007854029, y: 117.00046}
+  m_AnchoredPosition: {x: 0.0007854029, y: 117.000046}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &6827489436665260076

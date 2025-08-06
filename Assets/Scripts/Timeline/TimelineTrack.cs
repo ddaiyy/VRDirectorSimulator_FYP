@@ -97,10 +97,6 @@ public class TimelineTrack : MonoBehaviour
         {
             bool shouldBeActive = currentActiveClip.isCameraActiveAtTime;
 
-            
-            //Debug.Log($"[{gameObject.name}] ：shouldBeActive: {shouldBeActive}");
-            //lastCameraActiveState = shouldBeActive;
-
             // 检查当前相机的激活状态
             if (CameraManager.Instance != null)
             {
@@ -112,17 +108,20 @@ public class TimelineTrack : MonoBehaviour
                 {
                     if (isControlledByMaster)// 主线控制模式：通过CameraManager更新状态
                     {
-                        var cameraController = GetComponentInChildren<CameraController>();
-                        if (cameraController != null)
+                        if (isCurrentlyActive)//相机试图激活，且已经激活
                         {
-                            bool success =
+                            /*bool success =
                                 CameraManager.Instance.UpdateCameraStateForMasterControl(cameraController,
                                     shouldBeActive, time);
                             if (!success)
                             {
                                 // 如果更新失败，记录错误但不中断执行
                                 Debug.LogWarning($"[{gameObject.name}] 相机激活失败，可能存在冲突");
-                            }
+                            }*/
+                        }
+                        else//相机试图激活，且Manager上相机不是当前相机/是空
+                        {
+                            
                         }
                     }
                     else
@@ -155,19 +154,7 @@ public class TimelineTrack : MonoBehaviour
                 {
                     if (isControlledByMaster)
                     {
-                        // 主线控制模式：通过CameraManager更新状态
-                        var cameraController = GetComponentInChildren<CameraController>();
-                        if (cameraController != null)
-                        {
-                            bool success =
-                                CameraManager.Instance.UpdateCameraStateForMasterControl(cameraController,
-                                    shouldBeActive, time);
-                            if (!success)
-                            {
-                                // 如果更新失败，记录错误但不中断执行
-                                Debug.LogWarning($"[{gameObject.name}] 相机状态更新失败，可能存在冲突");
-                            }
-                        }
+                        
                     }
                     else
                     {
@@ -193,49 +180,7 @@ public class TimelineTrack : MonoBehaviour
             }
         }
     }
-
-    /// <summary>
-    /// 只处理相机关闭，不处理激活
-    /// </summary>
-    public void HandleCameraDeactivationOnly(float time)
-    {
-        if (!isCamera) return; // 只有相机轨道才需要处理
-
-        var Clips = clips.OrderBy(c => c.time).ToList();
-        if (Clips.Count == 0) return;
-
-        // 找到当前时间点之前最近的关键帧
-        TimelineClip currentActiveClip = null;
-        for (int i = Clips.Count - 1; i >= 0; i--)
-        {
-            if (Clips[i].time <= time)
-            {
-                currentActiveClip = Clips[i];
-                break;
-            }
-        }
-
-        // 如果找到了关键帧，检查是否需要关闭
-        if (currentActiveClip != null && !currentActiveClip.isCameraActiveAtTime)
-        {
-            // 只处理关闭逻辑
-            if (isControlledByMaster)
-            {
-                var cameraController = GetComponentInChildren<CameraController>();
-                if (cameraController != null)
-                {
-                    bool success =
-                        CameraManager.Instance.UpdateCameraStateForMasterControl(cameraController, false, time);
-                    if (!success)
-                    {
-                        Debug.LogWarning($"[{gameObject.name}] 相机关闭失败");
-                    }
-                }
-            }
-        }
-    }
     
-
     void CheckCameraExists()
     {
         //cam = gameObject.GetComponent<Camera>();
@@ -633,17 +578,7 @@ public class TimelineTrack : MonoBehaviour
         // 重置相机激活状态，确保在播放开始时正确处理
         lastCameraActiveState = clips[0].isCameraActiveAtTime;
 
-        /*// 强制处理0秒时的相机激活状态
-        if (isCamera)
-        {
-            var zeroClip = clips.FirstOrDefault(c => c.time == 0f);
-            if (zeroClip != null)
-            {
-                //
-                lastCameraActiveState = zeroClip.isCameraActiveAtTime;
-                Debug.Log($"[{gameObject.name}] 强制设置lastCameraActiveState为 {lastCameraActiveState}，确保0秒关键帧生效");
-            }
-        }*/
+        
 
         Debug.Log($"[{gameObject.name}] 开始播放时间线，已重置动画状态");
     }
@@ -1062,6 +997,8 @@ public class TimelineTrack : MonoBehaviour
         }
     }*/
 
+    
+    //TODO:查找冲突
     public CameraController GetExpectedActiveCameraControllerAtTime(float time)
     {
         // 找到当前时间点最近的关键帧
@@ -1078,7 +1015,7 @@ public class TimelineTrack : MonoBehaviour
 
         if (currentActiveClip != null && currentActiveClip.isCameraActiveAtTime)
         {
-            return GetComponentInChildren<CameraController>();
+            return cameraController;
         }
 
         return null;

@@ -253,18 +253,16 @@ MonoBehaviour:
   isPlaying: 0
   duration: 5
   isControlledByMaster: 0
-  volume: {fileID: 6256381692250732556}
   objectTimelineUI: {fileID: 0}
   objectTimelineUIPrefab: {fileID: 0}
   cameraTimelineUIPrefab: {fileID: 7402487073939681752, guid: 29468b9e82445a64bb491dc37b645c0f, type: 3}
   startPosition: {x: 0, y: 0, z: 0}
   startRotation: {x: 0, y: 0, z: 0, w: 0}
-  fov: 60
+  startFov: 27
+  startFocusDistance: 10
   startScale: {x: 0, y: 0, z: 0}
-  startIsActive: 1
-  startFocusDistance: 5
-  startActiveCameraID: 0
   isCamera: 0
+  cameraController: {fileID: 0}
   animName: Test Animation Name
   animDuration: 5
   isAnimPlaying: 0
@@ -871,7 +869,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f19d45f8a4371146b82b66d394cd3a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldCanvas: {fileID: 2851488713231759452}
   mainPlayerCamera: {fileID: 0}
   postProcessVolume: {fileID: 6256381692250732556}
   dof: {fileID: 0}
