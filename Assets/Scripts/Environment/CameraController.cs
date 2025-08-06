@@ -6,7 +6,7 @@ using MyGame.Selection;
 
 public class CameraController : MonoBehaviour, ICustomSelectable
 {
-    public GameObject worldCanvas; // °´Å¥Canvas£¬¹ÒÔØÔÚÉãÏñ»úPrefabÏÂ
+    //public GameObject worldCanvas; // °´Å¥Canvas£¬¹ÒÔØÔÚÉãÏñ»úPrefabÏÂ
     public Camera mainPlayerCamera;
     public PostProcessVolume postProcessVolume;  // ÐÂÔö£ººóÆÚ´¦ÀíVolumeÒýÓÃ
     public DepthOfField dof;  // DepthOfFieldÉèÖÃ»º´æ
@@ -142,7 +142,7 @@ public class CameraController : MonoBehaviour, ICustomSelectable
     {
         Debug.Log($"{gameObject.name} 被选中：OnSelect 被调用，当前FOV为 {GetFOV()}");
 
-        worldCanvas?.SetActive(true);
+       // worldCanvas?.SetActive(true);
         CameraManager.Instance.SelectCamera(this);
 
         //

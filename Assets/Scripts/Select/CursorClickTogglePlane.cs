@@ -3,32 +3,30 @@
 public class CursorClickTogglePlane : MonoBehaviour
 {
     public GameObject selectionPlanePrefab; // 拖入预制体
-    private GameObject spawnedPlaneInstance;
-    private bool isPlaneSpawned = false;
+    private static GameObject spawnedPlaneInstance;
+    /*private bool isPlaneSpawned = false;*/
     public string spawnPointName = "SelectionPlaneSpawnPoint"; // 各场景共用的锚点名
 
     // 将此方法绑定到 UI 按钮的 OnClick 事件
     public void TogglePlaneByButton()
     {
+        Debug.Log("TogglePlaneByButton clicked.");
         if (selectionPlanePrefab == null)
         {
             Debug.LogWarning("No prefab assigned!");
             return;
         }
 
-        isPlaneSpawned = !isPlaneSpawned;
-
-        /*if (isPlaneSpawned)
+        // 如果平面已经生成，则销毁它
+        if (spawnedPlaneInstance != null)
         {
-            Vector3 prefabPosition = selectionPlanePrefab.transform.position;
-            Quaternion prefabRotation = selectionPlanePrefab.transform.rotation;
-
-            spawnedPlaneInstance = Instantiate(selectionPlanePrefab, prefabPosition, prefabRotation);
-            Debug.Log("Generated at the original position of the prefab.");
-        }*/
-        if (isPlaneSpawned)
+            Debug.Log("Destroying: " + spawnedPlaneInstance.name);
+            Destroy(spawnedPlaneInstance);
+            spawnedPlaneInstance = null;
+            Debug.Log("Plane destroyed.");
+        }
+        else // 否则，创建一个新平面
         {
-            // 在场景中查找锚点
             GameObject spawnPoint = GameObject.Find(spawnPointName);
             if (spawnPoint == null)
             {
@@ -42,15 +40,7 @@ public class CursorClickTogglePlane : MonoBehaviour
                 spawnPoint.transform.rotation
             );
 
-            Debug.Log("Generated at spawn point in scene.");
-        }
-        else
-        {
-            if (spawnedPlaneInstance != null)
-            {
-                Destroy(spawnedPlaneInstance);
-                Debug.Log("Destroyed.");
-            }
+            Debug.Log("Plane generated at spawn point.");
         }
     }
 }

@@ -7,7 +7,7 @@ public class CanvasSpawner : MonoBehaviour
     [Header("Canvas Ô¤ÖÆÌå")]
     public GameObject canvasPrefab;
 
-    private GameObject currentCanvasInstance;
+    private static GameObject currentCanvasInstance;
 
     void Start()
     {
@@ -19,7 +19,7 @@ public class CanvasSpawner : MonoBehaviour
     }
 
     // Õâ¸öº¯ÊýÔÚ°´Å¥µã»÷Ê±±»µ÷ÓÃ
-    public void ToggleCanvas()
+    /*public void ToggleCanvas()
     {
         if (currentCanvasInstance == null)
         {
@@ -30,7 +30,19 @@ public class CanvasSpawner : MonoBehaviour
             Destroy(currentCanvasInstance);
             currentCanvasInstance = null;
         }
+    }*/
+
+    public void ToggleCanvas()
+    {
+        if (currentCanvasInstance != null)
+        {
+            Destroy(currentCanvasInstance);
+            currentCanvasInstance = null;
+        }
+
+        SpawnCanvasInFrontOfUser();
     }
+
 
     void SpawnCanvasInFrontOfUser()
     {

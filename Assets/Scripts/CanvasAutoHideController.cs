@@ -12,7 +12,7 @@ public class CanvasAutoHideController : MonoBehaviour
         canvasGroup = GetComponent<CanvasGroup>();
         if (canvasGroup == null)
         {
-            Debug.LogError("?? CanvasGroup ??");
+            Debug.LogError("Missing CanvasGroup component!");
         }
     }
 
@@ -37,7 +37,8 @@ public class CanvasAutoHideController : MonoBehaviour
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
 
-        Debug.Log("Canvas ?????");
+        Debug.Log("Canvas will now be destroyed.");
+        Destroy(gameObject); // ✅ 彻底销毁 Canvas 对象
     }
 
     // ??????????
