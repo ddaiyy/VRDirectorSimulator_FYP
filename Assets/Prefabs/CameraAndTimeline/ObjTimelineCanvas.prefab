@@ -1564,7 +1564,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &4375261358268256519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1628,8 +1628,8 @@ MonoBehaviour:
   camActiveToggle: {fileID: 0}
   fovSlider: {fileID: 0}
   fovText: {fileID: 0}
-  dofSlider: {fileID: 0}
-  dofText: {fileID: 0}
+  focusDistanceSlider: {fileID: 0}
+  focusDistanceValueText: {fileID: 0}
   currentTrack: {fileID: 0}
 --- !u!114 &909939589247278252
 MonoBehaviour:

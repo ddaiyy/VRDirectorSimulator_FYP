@@ -1680,8 +1680,6 @@ GameObject:
   - component: {fileID: 6068445368914187906}
   - component: {fileID: 4959163193771382674}
   - component: {fileID: 909939589247278252}
-  - component: {fileID: 8799518954643699130}
-  - component: {fileID: 2985537540234865128}
   - component: {fileID: 6632453832913957307}
   - component: {fileID: 5984971487352792939}
   - component: {fileID: 5868575110925207655}
@@ -1758,7 +1756,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &4375261358268256519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1820,10 +1818,10 @@ MonoBehaviour:
   timelineWidth: 600
   maxTime: 20
   camActiveToggle: {fileID: 6701977132949632637}
-  fovSlider: {fileID: 0}
-  fovText: {fileID: 0}
-  dofSlider: {fileID: 0}
-  dofText: {fileID: 0}
+  fovSlider: {fileID: 5302024907476812754}
+  fovText: {fileID: 2355631080230473207}
+  focusDistanceSlider: {fileID: 9143082308476647458}
+  focusDistanceValueText: {fileID: 132132819996451547}
   currentTrack: {fileID: 0}
 --- !u!114 &909939589247278252
 MonoBehaviour:
@@ -1838,34 +1836,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   closeButton: {fileID: 8370318648227463955}
---- !u!114 &8799518954643699130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2791715501363014936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a5d6227ee0cb604b8a208d39d1d43b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fovSlider: {fileID: 5302024907476812754}
-  fovValueText: {fileID: 2355631080230473207}
---- !u!114 &2985537540234865128
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2791715501363014936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23367ac19de4ff147978e2a678588eb3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  focusDistanceSlider: {fileID: 9143082308476647458}
-  focusDistanceValueText: {fileID: 132132819996451547}
 --- !u!65 &6632453832913957307
 BoxCollider:
   m_ObjectHideFlags: 0

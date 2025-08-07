@@ -1951,16 +1951,16 @@ MonoBehaviour:
   isPlaying: 0
   duration: 0
   isControlledByMaster: 0
-  volume: {fileID: 0}
-  isCameraActive: 0
   objectTimelineUI: {fileID: 0}
-  objectTimelineUIPrefab: {fileID: 0}
+  objectTimelineUIPrefab: {fileID: 2791715501363014936, guid: 490edafdc819bc440a89a8cb59aa1d04, type: 3}
   cameraTimelineUIPrefab: {fileID: 0}
   startPosition: {x: 0, y: 0, z: 0}
   startRotation: {x: 0, y: 0, z: 0, w: 0}
-  fov: 60
+  startFov: 27
+  startFocusDistance: 10
   startScale: {x: 0, y: 0, z: 0}
   isCamera: 0
+  cameraController: {fileID: 0}
   animName: Test Animation Name
   animDuration: 5
   isAnimPlaying: 0
