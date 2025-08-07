@@ -18,20 +18,6 @@ public class CanvasSpawner : MonoBehaviour
         }
     }
 
-    // Õâ¸öº¯ÊýÔÚ°´Å¥µã»÷Ê±±»µ÷ÓÃ
-    /*public void ToggleCanvas()
-    {
-        if (currentCanvasInstance == null)
-        {
-            SpawnCanvasInFrontOfUser();
-        }
-        else
-        {
-            Destroy(currentCanvasInstance);
-            currentCanvasInstance = null;
-        }
-    }*/
-
     public void ToggleCanvas()
     {
         if (currentCanvasInstance != null)

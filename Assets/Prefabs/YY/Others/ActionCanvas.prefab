@@ -7691,7 +7691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 248de5c7b185add4fa0b36bc67200a2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvasPrefab: {fileID: 570588088872022994, guid: 490edafdc819bc440a89a8cb59aa1d04, type: 3}
+  canvasPrefab: {fileID: 2791715501363014936, guid: 490edafdc819bc440a89a8cb59aa1d04, type: 3}
 --- !u!1 &6389292680770682451
 GameObject:
   m_ObjectHideFlags: 0

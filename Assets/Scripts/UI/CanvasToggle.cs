@@ -3,9 +3,7 @@
 public class CanvasToggle : MonoBehaviour
 {
     public GameObject canvasPrefab; // 拖入Canvas预制体
-    private GameObject spawnedCanvas;
-
-    private bool isCanvasSpawned = false;
+    private static GameObject spawnedCanvas;
 
     // 这个方法给按钮绑定，点击时切换生成/销毁Canvas
     public void OnButtonClick()
@@ -16,11 +14,10 @@ public class CanvasToggle : MonoBehaviour
             return;
         }
 
-        isCanvasSpawned = !isCanvasSpawned;
-
-        if (isCanvasSpawned)
+        // 切换显示状态
+        if (spawnedCanvas == null)
         {
-            // 生成，使用 prefab 原位置和旋转
+            // 创建Canvas实例，使用 prefab 原位置和旋转
             Vector3 prefabPos = canvasPrefab.transform.position;
             Quaternion prefabRot = canvasPrefab.transform.rotation;
 
@@ -29,11 +26,10 @@ public class CanvasToggle : MonoBehaviour
         }
         else
         {
-            if (spawnedCanvas != null)
-            {
-                Destroy(spawnedCanvas);
-                Debug.Log("Canvas已销毁");
-            }
+            // 销毁Canvas实例
+            Destroy(spawnedCanvas);
+            spawnedCanvas = null;
+            Debug.Log("Canvas已销毁");
         }
     }
 }
