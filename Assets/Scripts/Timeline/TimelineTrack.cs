@@ -14,9 +14,7 @@ public class TimelineTrack : MonoBehaviour
     public bool isPlaying = false;
     public float duration = 0f; // 轨道总时长，可根据clips自动计算
     public bool isControlledByMaster = false;
-    //public PostProcessVolume volume; // Inspector 里拖入
-    //private DepthOfField dof;
-    //public bool isCameraActive = false;
+    
 
     [Header("UI相关配置")] public ObjectTimelineUI objectTimelineUI;
     public GameObject objectTimelineUIPrefab;
@@ -161,9 +159,6 @@ public class TimelineTrack : MonoBehaviour
                         // 独立模式：应该禁用，但现在激活
                         if (isCurrentlyActive)
                         {
-                            //cameraController.DisablePreview();
-                            //ClearPreviewTexture(); // 清空预览纹理
-                            //Debug.Log($"[{gameObject.name}] 独立模式禁用相机预览 (时间: {time:F2}s)");
                             CameraManager.Instance.ClearSelectedCamera(cameraController);
                         }
                         else
@@ -183,7 +178,6 @@ public class TimelineTrack : MonoBehaviour
     
     void CheckCameraExists()
     {
-        //cam = gameObject.GetComponent<Camera>();
         cam = gameObject.GetComponentInChildren<Camera>();
         if (cam == null)
         {
@@ -577,9 +571,6 @@ public class TimelineTrack : MonoBehaviour
 
         // 重置相机激活状态，确保在播放开始时正确处理
         lastCameraActiveState = clips[0].isCameraActiveAtTime;
-
-        
-
         Debug.Log($"[{gameObject.name}] 开始播放时间线，已重置动画状态");
     }
 
@@ -857,8 +848,8 @@ public class TimelineTrack : MonoBehaviour
             else
             {
                 animator.Play(animationClip.animationName);
-                animator.SetFloat("Speed", 1f); // 确保有一个控制速度的参数
-                StartCoroutine(StopAnimationAfterTime(duration));
+                //animator.SetFloat("Speed", 1f); // 确保有一个控制速度的参数
+                StartCoroutine(StopAnimationAfterTime(animationClip.animationDuration));
             }
         }
 
@@ -875,7 +866,7 @@ public class TimelineTrack : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         Animator animator = gameObject.GetComponent<Animator>();
-        animator.SetFloat("Speed", 0f); // 停止播放
+        //animator.SetFloat("Speed", 0f); // 停止播放
         animator.Play("T-Pose");
         isAnimPlaying = false;
         Debug.Log($"[{gameObject.name}] 停止播放动画 (时间: {currentTime:F2}s");
