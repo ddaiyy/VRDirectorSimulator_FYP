@@ -76,6 +76,7 @@ public class MasterTimelineTrack : MonoBehaviour
                 }else if (conflictingCameras.Count == 0)
                 {
                     //TODO:清空黑
+                    CameraManager.Instance.ClearSelectedCamera(CameraManager.Instance.currentSelected);
                 }
                 else if(conflictingCameras.Count == 1)
                 {
