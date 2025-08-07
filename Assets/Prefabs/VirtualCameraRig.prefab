@@ -256,7 +256,7 @@ MonoBehaviour:
   isCameraActive: 0
   objectTimelineUI: {fileID: 0}
   objectTimelineUIPrefab: {fileID: 0}
-  cameraTimelineUIPrefab: {fileID: 7402487073939681752, guid: 29468b9e82445a64bb491dc37b645c0f, type: 3}
+  cameraTimelineUIPrefab: {fileID: 2791715501363014936, guid: fcb69a79499469643986efdc55052e41, type: 3}
   startPosition: {x: 0, y: 0, z: 0}
   startRotation: {x: 0, y: 0, z: 0, w: 0}
   fov: 60
@@ -461,8 +461,8 @@ MonoBehaviour:
       colorBlindnessType: 0
       colorBlindnessStrength: 1
   m_Resources: {fileID: 11400000, guid: d82512f9c8e5d4a4d938b575d47f88d4, type: 2}
-  m_ShowToolkit: 0
-  m_ShowCustomSorter: 0
+  m_ShowToolkit: 1
+  m_ShowCustomSorter: 1
   breakBeforeColorGrading: 0
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
