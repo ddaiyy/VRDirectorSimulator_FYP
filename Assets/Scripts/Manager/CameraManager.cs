@@ -8,7 +8,7 @@ public class CameraManager : MonoBehaviour
 {
     public static CameraManager Instance;
 
-    public RenderTexture previewTexture; // Ԥ����RT
+    
     public GameObject cameraPrefab; // �����Ԥ����
     public Transform cameraSpawnPoint; // ����λ��
 
@@ -18,10 +18,13 @@ public class CameraManager : MonoBehaviour
 
     [SerializeField] public List<CameraController> cameraList = new List<CameraController>();
     [SerializeField] public CameraController currentSelected;
+    
     public GameObject currentCamera;
     public GameObject startCamera;
+    
     public Renderer previewPlaneRenderer;
-
+    public RenderTexture previewTexture;
+    
     private void Awake()
     {
         Instance = this;
@@ -94,76 +97,6 @@ public class CameraManager : MonoBehaviour
     
 
     /// <summary>
-    /// 根据时间点获取应该激活的相机
-    /// </summary>
-    /// <param name="currentTime">当前时间点</param>
-    /// <returns>应该激活的相机，如果没有则返回null</returns>
-    public CameraController GetExpectedActiveCameraAtTime(float currentTime)
-    {
-        foreach (var track in TimelineManager.Instance.GetAllTracks())
-        {
-            if (track.isControlledByMaster && track.isCamera)
-            {
-                var expectedController = track.GetExpectedActiveCameraControllerAtTime(currentTime);
-                if (expectedController != null)
-                {
-                    return expectedController;
-                }
-            }
-        }
-        return null;
-    }
-
-    /// <summary>
-    /// 主线控制下更新相机状态 - 如果已经有相机激活，返回false
-    /// </summary>
-    /// <param name="cameraController">要更新的相机</param>
-    /// <param name="shouldBeActive">是否应该激活</param>
-    /// <param name="time">当前时间</param>
-    /// <returns>是否成功更新状态</returns>
-    public bool UpdateCameraStateForMasterControl(CameraController cameraController, bool shouldBeActive, float time)
-    {
-        if (shouldBeActive)
-        {
-            // 如果要激活相机，检查是否已经有其他相机激活
-            if (currentSelected != null && currentSelected != cameraController)
-            {
-                //Debug.LogError($"[CameraManager] 主线控制：{cameraController.transform.parent.gameObject.name} 试图激活，但 {currentSelected.transform.parent.gameObject.name} 已经激活 (时间: {time:F2}s)");
-                return false; // 冲突，返回false
-            }
-            
-            // 如果是同一个相机重复激活，直接返回成功
-            if (currentSelected == cameraController)
-            {
-                //Debug.Log($"[CameraManager] 主线控制：{cameraController.transform.parent.gameObject.name} 已经是激活状态 (时间: {time:F2}s)");
-                return true;
-            }
-            
-            // 激活相机
-            SelectCamera(cameraController);
-            //Debug.Log($"[CameraManager] 主线控制：{cameraController.transform.parent.gameObject.name} 激活 (时间: {time:F2}s)");
-            return true;
-        }
-        else
-        {
-            // 如果要禁用相机，检查是否是当前激活的相机
-            if (currentSelected == cameraController)
-            {
-                // 禁用当前相机
-                currentSelected.DisablePreview();
-                currentSelected = null;
-                currentCamera = null;
-                
-                Debug.Log($"[CameraManager] 主线控制：{cameraController.transform.parent.gameObject.name} 禁用 (时间: {time:F2}s)");
-                
-                // 注意：这里不自动切换到其他相机，让其他轨道的激活逻辑来处理
-                // 这样可以避免在并行执行时产生冲突
-            }
-            return true; // 禁用总是成功的
-        }
-    }
-
-    /// <summary>
     /// 检测当前时间点是否有多个相机试图同时激活
     /// </summary>
     /// <param name="currentTime">当前时间点</param>
@@ -195,7 +128,7 @@ public class CameraManager : MonoBehaviour
         if (conflictingCameras.Count <= 1)
         {
             //Debug.Log($"[CameraManager] 时间 {currentTime:F2}s: 没有冲突，激活相机数量: {conflictingCameras.Count}");
-            return new List<CameraController>();
+            return conflictingCameras;
         }
         
         Debug.LogError($"[CameraManager] 时间 {currentTime:F2}s: 检测到冲突！冲突相机数量: {conflictingCameras.Count}");
@@ -229,7 +162,7 @@ public class CameraManager : MonoBehaviour
             }
         }
 
-        if (currentSelected != null)
+        if (currentSelected!=null && currentSelected !=controller)
         {
             currentSelected.DisablePreview();
         }
@@ -240,11 +173,36 @@ public class CameraManager : MonoBehaviour
 
         //Debug.Log($"Selected camera: {controller.gameObject.name}");
 
-        FindObjectOfType<CameraFOVSlider>()?.SyncSlider(controller);
-        OnSelectedCameraChanged?.Invoke(currentSelected);
+        //FindObjectOfType<CameraFOVSlider>()?.SyncSlider(controller);
+        //OnSelectedCameraChanged?.Invoke(currentSelected);
     }
 
+    public void ClearSelectedCamera(CameraController cameraController)
+    {
+        if(currentSelected!=cameraController) return;
+        
+        // 禁用相机输出
+        if (currentSelected != null)
+        {
+            currentSelected.DisablePreview();
+        }
 
+        currentSelected = null;
+        currentCamera = null;
+        
+        //TODO:如果画面卡住前一个加强制
+        if (previewTexture != null)
+        {
+            RenderTexture activeRT = RenderTexture.active;
+            RenderTexture.active = previewTexture;
+            GL.Clear(true, true, Color.clear);
+            RenderTexture.active = activeRT;
+
+            previewPlaneRenderer.material.mainTexture = previewTexture;
+        }
+        
+    } 
+    
     public void AddNewCamera()
     {
         GameObject camObj = Instantiate(cameraPrefab, cameraSpawnPoint.position, cameraSpawnPoint.rotation);
@@ -288,7 +246,7 @@ public class CameraManager : MonoBehaviour
                return cameraPrefabName + nextIndex;
     }
 
-    public CameraController GetCurrentSelectedCamera()
+    public CameraController GetCurrentSelectedCameraController()
     {
         return currentSelected;
     }

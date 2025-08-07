@@ -46,6 +46,14 @@ public class MasterTimelineTrack : MonoBehaviour
             }
             else
             {
+                // 推进所有轨道
+                foreach (var track in TimelineManager.Instance.GetAllTracks())
+                {
+                    if (track.isControlledByMaster){
+                        track.SetTime(currentTime);
+                    }
+                }
+                
                 // 检测相机冲突
                 var conflictingCameras = CameraManager.Instance.CheckCameraConflictAtTime(currentTime);
                 if (conflictingCameras.Count > 1)
@@ -61,30 +69,29 @@ public class MasterTimelineTrack : MonoBehaviour
                         if (track.isControlledByMaster)
                         {
                             track.isControlledByMaster = false;
+                            track.SetTime(track.clips[0].time);
                         }
                     }
                     return; // 不执行后续的轨道更新
-                }
-                
-                // 分两步处理：先处理所有相机的关闭，再处理激活
-                var cameraTracks = TimelineManager.Instance.GetAllTracks()
-                    .Where(track => track.isControlledByMaster && track.isCamera)
-                    .ToList();
-                
-                // 第一步：处理所有相机的关闭
-                foreach (var track in cameraTracks)
+                }else if (conflictingCameras.Count == 0)
                 {
-                    track.HandleCameraDeactivationOnly(currentTime);
+                    //TODO:清空黑
+                    CameraManager.Instance.ClearSelectedCamera(CameraManager.Instance.currentSelected);
                 }
-                
-                // 第二步：处理所有相机的激活和其他属性
-                foreach (var track in TimelineManager.Instance.GetAllTracks())
+                else if(conflictingCameras.Count == 1)
                 {
-                    if (track.isControlledByMaster)
+                    if (CameraManager.Instance.currentSelected != conflictingCameras.First())
                     {
-                        track.SetTimeWithoutCameraActivation(currentTime);
+                        CameraManager.Instance.ClearSelectedCamera(CameraManager.Instance.currentSelected);
+                        CameraManager.Instance.SelectCamera(conflictingCameras.First());
+                    }
+                    else
+                    {
+                        //A在播放，A激活
                     }
                 }
+                
+                
             }
         }
     }
@@ -95,25 +102,14 @@ public class MasterTimelineTrack : MonoBehaviour
         isPlaying = true;
         currentTime = 0f;
         duration = GetDuration();
-        ClearPreviewTexture();
+        //ClearPreviewTexture();
         
         foreach (var track in TimelineManager.Instance.GetAllTracks())
         {
             track.isControlledByMaster = true;
         }
     }
-    private void ClearPreviewTexture()
-    {
-        if (CameraManager.Instance != null && CameraManager.Instance.previewTexture != null)
-        {
-            RenderTexture.active = CameraManager.Instance.previewTexture;
-            CameraManager.Instance.currentSelected = null;
-            CameraManager.Instance.currentCamera = null;
-            GL.Clear(true, true, Color.clear);
-            RenderTexture.active = null;
-            Debug.Log($"[{gameObject.name}] 清空预览纹理");
-        }
-    }
+    
 
     [ContextMenu("暂停")]
     public void Pause()

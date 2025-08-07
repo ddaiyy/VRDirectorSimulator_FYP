@@ -35,8 +35,8 @@ public class ObjectTimelineUI : MonoBehaviour
     public Toggle camActiveToggle;
     public Slider fovSlider;
     public Text fovText;
-    public Slider dofSlider;
-    public Text dofText;
+    public Slider focusDistanceSlider;
+    public Text focusDistanceValueText;
     
     
     [Header("对应TimelineObject")]
@@ -50,18 +50,32 @@ public class ObjectTimelineUI : MonoBehaviour
         timeSlider.onValueChanged.AddListener(OnSliderChanged);
         addKeyframeButton.onClick.AddListener(OnAddKeyframeClicked);
         
-        //fov and dof
-        /*fovSlider.onValueChanged.AddListener(OnFOVChanged);
-        dofSlider.minValue = 0.1f;
-        dofSlider.maxValue = 10f;
-        dofSlider.onValueChanged.AddListener(OnDofChanged);*/
-        
         //SelectCamera
         if (camActiveToggle != null)
         {
             camActiveToggle.onValueChanged.AddListener(OnCamActiveChanged);
+            //dof
+            focusDistanceSlider.minValue = 0.1f;
+            focusDistanceSlider.maxValue = 10f;
+            focusDistanceSlider.onValueChanged.AddListener(OnFocusDistanceChanged);
+            //fov
+            fovSlider.onValueChanged.AddListener(OnFOVChanged);
+            
+            
         }
         //HidePanel();
+    }
+
+    private void OnFOVChanged(float value)
+    {
+        currentTrack.cameraController.SetFOV(value);
+        fovText.text = value.ToString("F0");
+    }
+
+    private void OnFocusDistanceChanged(float value)
+    {
+        currentTrack.cameraController.SetFocusDistance(value);
+        focusDistanceValueText.text = value.ToString("F0");
     }
 
     // 处理相机激活状态变化
@@ -80,8 +94,8 @@ public class ObjectTimelineUI : MonoBehaviour
             // 如果当前轨道对应的相机是当前选中的相机，更新CameraManager
             if (CameraManager.Instance != null)
             {
-                var currentSelectedCamera = CameraManager.Instance.GetCurrentSelectedCamera();
-                if (currentSelectedCamera != null && currentSelectedCamera.transform.parent.gameObject == currentTrack.gameObject)
+                var currentSelectedCamera = CameraManager.Instance.GetCurrentSelectedCameraController();
+                if (currentSelectedCamera != null && currentSelectedCamera!=currentTrack.cameraController)
                 {
                     if (isActive)
                     {
@@ -89,78 +103,18 @@ public class ObjectTimelineUI : MonoBehaviour
                     }
                     else
                     {
-                        // 如果当前相机被禁用，可以选择其他相机或清空选择
-                        var allCameras = CameraManager.Instance.GetAllCameras();
-                        var otherCamera = allCameras.FirstOrDefault(c => c != currentSelectedCamera);
-                        if (otherCamera != null)
-                        {
-                            CameraManager.Instance.SelectCamera(otherCamera);
-                        }
+                        CameraManager.Instance.ClearSelectedCamera(currentSelectedCamera);
                     }
                 }
             }
         }
     }
-    //
-    // private void OnDofChanged(float arg0)
-    // {
-    //     
-    // }
-    //
-    // private void OnFOVChanged(float value)
-    // {
-    //     if (CameraManager.Instance != null)
-    //     {
-    //         CameraController selected = CameraManager.Instance.GetCurrentSelectedCamera();
-    //         if (selected != null)
-    //         {
-    //             selected.SetFOV(value);
-    //         }
-    //     }
-    //
-    //     if (fovText != null)
-    //     {
-    //         fovText.text = value.ToString("F0");
-    //     }
-    // }
-    // public void SyncSlider(CameraController controller)
-    // {
-    //     if (controller != null && fovSlider != null)
-    //     {
-    //         fovSlider.value = controller.GetFOV();
-    //         if (fovText != null)
-    //         {
-    //             fovText.text = controller.GetFOV().ToString("F0");
-    //         }
-    //     }
-    // }
+    
     public void ShowPanel(TimelineTrack track)
     {
-        currentTrack = track;
+        Initialize(track);
+        RefreshAll();
         gameObject.SetActive(true);
-
-        titleText.text = "Timeline- " + track.gameObject.name;
-        timeSlider.minValue = 0;
-        timeSlider.maxValue = 20f;
-        timeSlider.value = track.currentTime;
-
-        // 如果是相机轨道，同步激活状态
-        if (track.isCamera && camActiveToggle != null)
-        {
-            var currentClip = track.GetClipAtTime(track.currentTime);
-            if (currentClip != null)
-            {
-                camActiveToggle.isOn = currentClip.isCameraActiveAtTime;
-            }
-            else
-            {
-                // 如果没有关键帧，默认激活
-                camActiveToggle.isOn = false;
-            }
-        }
-
-        RefreshKeyframeList();
-        RefreshTime();
     }
 
     public void HidePanel()
@@ -173,17 +127,17 @@ public class ObjectTimelineUI : MonoBehaviour
         if (currentTrack != null && gameObject.activeSelf)
         {
             RefreshTime();
-            
-            // 如果是相机轨道，实时同步激活状态
-            if (currentTrack.isCamera && camActiveToggle != null)
-            {
-                var currentClip = currentTrack.GetClipAtTime(currentTrack.currentTime);
-                if (currentClip != null && camActiveToggle.isOn != currentClip.isCameraActiveAtTime)
-                {
-                    camActiveToggle.isOn = currentClip.isCameraActiveAtTime;
-                }
-            }
         }
+    }
+
+    private void RefreshCamera()
+    {
+        camActiveToggle.isOn = currentTrack.GetPreCameraClipActive(currentTrack.currentTime);
+        fovSlider.value = currentTrack.cameraController.GetFOV();
+        fovText.text=fovSlider.value.ToString("F0");
+
+        focusDistanceSlider.value = currentTrack.cameraController.GetFocusDistance();
+        focusDistanceValueText.text = focusDistanceSlider.value.ToString("F0");
     }
 
     void RefreshTime()
@@ -236,6 +190,7 @@ public class ObjectTimelineUI : MonoBehaviour
                     {
                         currentTrack.SetTime(t);
                         RefreshTime();
+                        RefreshCamera();
                     });
                 }
             }
@@ -257,7 +212,15 @@ public class ObjectTimelineUI : MonoBehaviour
     void OnSliderChanged(float value)
     {
         if (currentTrack != null)
+        {
             currentTrack.SetTime(value);
+
+            if (currentTrack.isCamera)
+            {
+                RefreshCamera();
+            }
+        }
+        
     }
 
     void OnAddKeyframeClicked()
@@ -277,16 +240,39 @@ public class ObjectTimelineUI : MonoBehaviour
 
     public void Initialize(TimelineTrack track)
     {
-        currentTrack = track; // 保存对 TimelineTrack 的引用
+        currentTrack = track;
+        gameObject.SetActive(true);
 
-        gameObject.SetActive(true); // 激活UI
-        titleText.text = "Timeline- " + track.gameObject.name; // 设置标题
-        timeSlider.minValue = 0; // 设置时间轴范围
+        titleText.text = "Timeline- " + track.gameObject.name;
+        timeSlider.minValue = 0;
         timeSlider.maxValue = 20f;
-        timeSlider.value = track.currentTime; // 设置当前时间
+        timeSlider.value = track.currentTime;
 
-        RefreshKeyframeList(); // 刷新关键帧列表
-        RefreshTime(); // 刷新时间显示
+        // 如果是相机轨道，同步激活状态
+        if (track.isCamera)
+        {
+            var currentClip = track.GetClipAtTime(track.currentTime);
+            if (currentClip != null)
+            {
+                camActiveToggle.isOn = currentClip.isCameraActiveAtTime;
+                focusDistanceSlider.value = currentClip.focusDistance;
+                fovSlider.value = currentClip.fov;
+                
+                focusDistanceValueText.text = currentClip.focusDistance.ToString("F0");
+                fovText.text=currentClip.fov.ToString("F0");
+            }
+            else
+            {
+                // 如果没有关键帧，默认激活
+                camActiveToggle.isOn = false;
+                focusDistanceSlider.value = track.startFocusDistance;
+                fovSlider.value = track.startFov;
+                
+                fovText.text = track.startFov.ToString("F0");
+                focusDistanceValueText.text = track.startFocusDistance.ToString("F0");
+            }
+        }
+
     }
 
     public void RefreshAll()
@@ -307,54 +293,10 @@ public class ObjectTimelineUI : MonoBehaviour
         RefreshTime();
 
         // 如果是相机轨道，同步激活状态
-        if (currentTrack.isCamera && camActiveToggle != null)
+        if (currentTrack.isCamera )
         {
-            var currentClip = currentTrack.GetClipAtTime(currentTrack.currentTime);
-            if (currentClip != null)
-            {
-                camActiveToggle.isOn = currentClip.isCameraActiveAtTime;
-            }
-            else
-            {
-                // 如果没有关键帧，默认激活
-                camActiveToggle.isOn = true;
-            }
+            RefreshCamera();
         }
     }
-
-    // 同步相机激活状态
-    public void SyncCameraActiveState()
-    {
-        if (currentTrack != null && currentTrack.isCamera && camActiveToggle != null)
-        {
-            var currentClip = currentTrack.GetClipAtTime(currentTrack.currentTime);
-            if (currentClip != null)
-            {
-                camActiveToggle.isOn = currentClip.isCameraActiveAtTime;
-            }
-            else
-            {
-                camActiveToggle.isOn = true;
-            }
-        }
-    }
-
-    // 获取当前相机激活状态
-    public bool GetCameraActiveState()
-    {
-        if (currentTrack != null && currentTrack.isCamera && camActiveToggle != null)
-        {
-            return camActiveToggle.isOn;
-        }
-        return true; // 默认激活
-    }
-
-    // 设置相机激活状态
-    public void SetCameraActiveState(bool isActive)
-    {
-        if (currentTrack != null && currentTrack.isCamera && camActiveToggle != null)
-        {
-            camActiveToggle.isOn = isActive;
-        }
-    }
+    
 }

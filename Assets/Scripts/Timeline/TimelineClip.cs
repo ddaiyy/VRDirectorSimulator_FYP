@@ -13,17 +13,16 @@ public class TimelineClip
     //旋转
     public Quaternion rotation;
     
-    //摄像机视野角度
-    public float fov = 60f;
-    
     //缩放
     public Vector3 scale;
     
     //是否激活
-    //public bool isActive = true;
     public bool isCameraActiveAtTime = false;
+    
+    //摄像机视野角度
+    public float fov;
     // 记录景深焦距
-    public float focusDistance = 5f;
+    public float focusDistance;
 
     //记录摄像机的ID
     //public int activeCameraID;

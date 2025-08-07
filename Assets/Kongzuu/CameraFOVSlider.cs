@@ -15,7 +15,7 @@ public class CameraFOVSlider : MonoBehaviour
 
     private void Start()
     {
-        // ³õÊ¼»¯»¬¶¯Ìõ¼àÌýÆ÷
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (fovSlider != null)
         {
             fovSlider.onValueChanged.AddListener(OnFOVChanged);
@@ -26,7 +26,7 @@ public class CameraFOVSlider : MonoBehaviour
     {
         if (CameraManager.Instance != null)
         {
-            CameraController selected = CameraManager.Instance.GetCurrentSelectedCamera();
+            CameraController selected = CameraManager.Instance.GetCurrentSelectedCameraController();
             if (selected != null)
             {
                 selected.SetFOV(value);
