@@ -816,6 +816,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -2076047912913872149, guid: 7b0b2340fa533d24f9607f89cb51b86a, type: 3}
+      propertyPath: propUIPrefab
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5683244736192656519, guid: 7b0b2340fa533d24f9607f89cb51b86a, type: 3}
       propertyPath: m_Name
       value: SodaBottle
@@ -867,10 +871,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5683244736192656519, guid: 7b0b2340fa533d24f9607f89cb51b86a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 702680292}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b0b2340fa533d24f9607f89cb51b86a, type: 3}
 --- !u!1 &594127938
 GameObject:
@@ -918,23 +919,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &702680286 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5683244736192656519, guid: 7b0b2340fa533d24f9607f89cb51b86a, type: 3}
-  m_PrefabInstance: {fileID: 530924382}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &702680292
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 702680286}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1318a14c1a9c2246bdfad9635b36e7d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &783395208 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 400826140779084929, guid: 165f888ec6fb0ea43b406cf5a71761c9, type: 3}
@@ -3214,7 +3198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputSource: 4
   rotationSpeed: 60
-  propUIPrefab: {fileID: 0}
+  currentCanvasInstance: {fileID: 0}
 --- !u!222 &820442124820969134
 CanvasRenderer:
   m_ObjectHideFlags: 0

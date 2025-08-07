@@ -11,11 +11,16 @@ namespace MyGame.Selection
         private InputDevice device;
         private bool isSelected = false;
         [Header("UI Prefab，在 Inspector 里拖拽")]
-        public GameObject propUIPrefab;
-        private GameObject currentCanvasInstance;
+        //public GameObject propUIPrefab;
+        [SerializeField] private GameObject currentCanvasInstance;
         void Start()
         {
             device = InputDevices.GetDeviceAtXRNode(inputSource);
+            TimelineTrack timelineTrack= gameObject.GetComponent<TimelineTrack>();
+            if (timelineTrack != null)
+            {
+                currentCanvasInstance = timelineTrack.objectTimelineUI.gameObject;
+            }
         }
 
         void Update()
@@ -39,10 +44,9 @@ namespace MyGame.Selection
         {
             isSelected = true;
 
-            if (currentCanvasInstance == null)
+            if (!currentCanvasInstance.activeSelf)
             {
-                currentCanvasInstance = Instantiate(propUIPrefab);
-
+                currentCanvasInstance.SetActive(true);
                 Vector3 offset = new Vector3(0, 1.5f, 0);
                 currentCanvasInstance.transform.position = transform.position + offset;
 
@@ -63,8 +67,9 @@ namespace MyGame.Selection
             }
             else
             {
-                Destroy(currentCanvasInstance);
-                currentCanvasInstance = null;
+                //Destroy(currentCanvasInstance);
+                currentCanvasInstance.SetActive(false);
+                isSelected = false;
                 Debug.Log($"{gameObject.name} 已取消选中，关闭 UI");
             }
         }
@@ -74,10 +79,9 @@ namespace MyGame.Selection
         public void OnDeselect()
         {
             isSelected = false;
-            if (currentCanvasInstance != null)
+            if (currentCanvasInstance.activeSelf)
             {
-                Destroy(currentCanvasInstance);
-                currentCanvasInstance = null;
+                currentCanvasInstance.SetActive(false);
                 Debug.Log($"{gameObject.name} 被取消选择，隐藏 UI");
             }
         }

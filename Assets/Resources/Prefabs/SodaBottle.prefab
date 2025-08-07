@@ -380,7 +380,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputSource: 4
   rotationSpeed: 60
-  propUIPrefab: {fileID: 7744647478856392294, guid: 7f8da1e9e79777b418067ef139b5b5ad, type: 3}
+  propUIPrefab: {fileID: 0}
 --- !u!114 &147248948438788315
 MonoBehaviour:
   m_ObjectHideFlags: 0
