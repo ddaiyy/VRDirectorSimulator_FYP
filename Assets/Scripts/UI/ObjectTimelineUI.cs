@@ -42,6 +42,8 @@ public class ObjectTimelineUI : MonoBehaviour
     [Header("对应TimelineObject")]
     [SerializeField] private TimelineTrack currentTrack;
 
+    [Header("属性")]
+    [SerializeField] private string[] properties;
     void Start()
     {
         // 绑定按钮事件
@@ -148,26 +150,25 @@ public class ObjectTimelineUI : MonoBehaviour
 
     void RefreshKeyframeList()
     {
-        // 清空旧的
-        foreach (Transform child in keyframeListContent)
-            Destroy(child.gameObject);
-
-        // 你要支持的属性
-        string[] properties = { "Position", "Rotation", "Scale" };
-        // 如果是摄像机，加上FOV
-        if (currentTrack.GetComponentInChildren<Camera>() != null)
+        // 遍历每个 Track Row
+        foreach (Transform trackRow in keyframeListContent)
         {
-            properties = new string[] { "Position", "Rotation", "Scale", "FOV" };
+            // 找到 "Track Content" 容器
+            RectTransform trackContent = trackRow.Find("Track Content").GetComponent<RectTransform>();
+
+            // 先清空旧的关键帧点
+            foreach (Transform point in trackContent)
+            {
+                Destroy(point.gameObject);
+            }
         }
 
-        foreach (string prop in properties)
+        // 重新生成关键帧点
+        foreach (Transform trackRow in keyframeListContent)
         {
-            GameObject trackRow = Instantiate(propertyTrackPrefab, keyframeListContent);
-            trackRow.GetComponentInChildren<TextMeshProUGUI>().text = prop;
+            string propName = trackRow.GetComponentInChildren<TextMeshProUGUI>().text;
+            RectTransform trackContent = trackRow.Find("Track Content").GetComponent<RectTransform>();
 
-            RectTransform trackContent = trackRow.transform.Find("Track Content").GetComponent<RectTransform>();
-
-            // 这里直接遍历所有关键帧
             foreach (var clip in currentTrack.clips)
             {
                 GameObject point = Instantiate(keyframeItemPrefab, trackContent);
@@ -176,12 +177,11 @@ public class ObjectTimelineUI : MonoBehaviour
                 var rect = point.GetComponent<RectTransform>();
                 rect.anchoredPosition = new Vector2(x, 0);
 
-                // 可选：显示时间
+                /*// 可选：显示时间
                 var text = point.GetComponentInChildren<TextMeshProUGUI>();
                 if (text != null)
-                    text.text = $"{clip.time:F2}";
-
-                // 可选：点击跳转
+                    text.text = $"{clip.time:F2}";*/
+                
                 var btn = point.GetComponent<Button>();
                 if (btn != null)
                 {
@@ -196,6 +196,7 @@ public class ObjectTimelineUI : MonoBehaviour
             }
         }
     }
+
 
     void OnPlayClicked()
     {
@@ -243,7 +244,7 @@ public class ObjectTimelineUI : MonoBehaviour
         currentTrack = track;
         gameObject.SetActive(true);
 
-        titleText.text = "Timeline- " + track.gameObject.name;
+        titleText.text = track.gameObject.name;
         timeSlider.minValue = 0;
         timeSlider.maxValue = 20f;
         timeSlider.value = track.currentTime;
@@ -273,6 +274,20 @@ public class ObjectTimelineUI : MonoBehaviour
             }
         }
 
+        // 你要支持的属性
+        properties = new []{ "Position", "Rotation", "Scale" };
+        // 如果是摄像机，加上FOV
+        if (currentTrack.GetComponentInChildren<Camera>() != null)
+        {
+            properties = new []{ "Position", "Rotation", "Scale", "FOV", "DOF"};
+        }
+
+        foreach (string prop in properties)
+        {
+            GameObject trackRow = Instantiate(propertyTrackPrefab, keyframeListContent);
+            trackRow.GetComponentInChildren<TextMeshProUGUI>().text = prop;
+            
+        }
     }
 
     public void RefreshAll()

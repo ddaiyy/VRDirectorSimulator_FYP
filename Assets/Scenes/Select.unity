@@ -824,6 +824,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SodaBottle
       objectReference: {fileID: 0}
+    - target: {fileID: 5683244736192656519, guid: 7b0b2340fa533d24f9607f89cb51b86a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6062126019278845201, guid: 7b0b2340fa533d24f9607f89cb51b86a, type: 3}
       propertyPath: rightHandGrab
       value: 
