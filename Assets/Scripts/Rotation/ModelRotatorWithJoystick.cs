@@ -72,13 +72,13 @@ namespace MyGame.Selection
             
             if (buttonDevice.TryGetFeatureValue(CommonUsages.secondaryButton, out bool secondaryPressed) && secondaryPressed)
             {
-                ScaleObject(1 - scaleSpeed * Time.deltaTime);
+                ScaleObject(1 + scaleSpeed * Time.deltaTime);
             }
 
             // 左手 X 按钮（缩小）
             if (buttonDevice.TryGetFeatureValue(CommonUsages.primaryButton, out bool primaryPressed) && primaryPressed)
             {
-                ScaleObject(1 + scaleSpeed * Time.deltaTime);
+                ScaleObject(1 - scaleSpeed * Time.deltaTime);
             }
 
         }
