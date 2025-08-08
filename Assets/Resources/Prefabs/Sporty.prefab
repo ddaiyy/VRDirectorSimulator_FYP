@@ -2286,6 +2286,8 @@ GameObject:
   - component: {fileID: 2235182043282927433}
   - component: {fileID: 440624756583886050}
   - component: {fileID: 4630201259409956005}
+  - component: {fileID: 3739785153135149030}
+  - component: {fileID: -7223878518528445329}
   m_Layer: 0
   m_Name: Sporty
   m_TagString: Untagged
@@ -2593,6 +2595,32 @@ MonoBehaviour:
   animName: Test Animation Name
   animDuration: 5
   isAnimPlaying: 0
+--- !u!114 &3739785153135149030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4051780915273838970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e06540ae13bd01489db6cda9b295434, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  originalPrefab: {fileID: 0}
+--- !u!114 &-7223878518528445329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4051780915273838970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50e38f0280cc260408926f4f5590060c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabOriginalName: Sporty
 --- !u!1 &4226887411249802471
 GameObject:
   m_ObjectHideFlags: 0

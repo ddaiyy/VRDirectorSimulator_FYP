@@ -150,6 +150,8 @@ GameObject:
   - component: {fileID: 6062126019278845201}
   - component: {fileID: -2076047912913872149}
   - component: {fileID: 147248948438788315}
+  - component: {fileID: -8536225418950272555}
+  - component: {fileID: 4169016907946015526}
   m_Layer: 0
   m_Name: SodaBottle
   m_TagString: Untagged
@@ -380,7 +382,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputSource: 4
   rotationSpeed: 60
-  propUIPrefab: {fileID: 0}
+  currentCanvasInstance: {fileID: 0}
 --- !u!114 &147248948438788315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -411,3 +413,29 @@ MonoBehaviour:
   animName: Test Animation Name
   animDuration: 5
   isAnimPlaying: 0
+--- !u!114 &-8536225418950272555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5683244736192656519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e06540ae13bd01489db6cda9b295434, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  originalPrefab: {fileID: 0}
+--- !u!114 &4169016907946015526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5683244736192656519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50e38f0280cc260408926f4f5590060c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabOriginalName: SodaBottle

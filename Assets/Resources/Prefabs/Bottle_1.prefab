@@ -119,6 +119,7 @@ GameObject:
   - component: {fileID: 2603086145308688668}
   - component: {fileID: 1289817799526750695}
   - component: {fileID: -2068475046729624160}
+  - component: {fileID: -1107488362009198052}
   m_Layer: 0
   m_Name: Bottle_1
   m_TagString: Untagged
@@ -348,7 +349,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputSource: 4
   rotationSpeed: 60
-  propUIPrefab: {fileID: 7744647478856392294, guid: 7f8da1e9e79777b418067ef139b5b5ad, type: 3}
+  currentCanvasInstance: {fileID: 0}
 --- !u!114 &-2068475046729624160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -379,3 +380,16 @@ MonoBehaviour:
   animName: Test Animation Name
   animDuration: 5
   isAnimPlaying: 0
+--- !u!114 &-1107488362009198052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7962169333856545977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50e38f0280cc260408926f4f5590060c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabOriginalName: Bottle_1

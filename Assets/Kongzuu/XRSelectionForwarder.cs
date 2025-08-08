@@ -31,7 +31,7 @@ public class XRSelectionForwarder : MonoBehaviour
 
             if (triggerValue > 0.1f)
             {
-                Debug.Log("Trigger Pressed (activateAction)");
+                /*Debug.Log("Trigger Pressed (activateAction)");*/
 
                 if (currentHoverSelectable != null)
                 {

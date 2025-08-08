@@ -1102,6 +1102,7 @@ GameObject:
   - component: {fileID: 4651477063809589424}
   - component: {fileID: 2848972011937757050}
   - component: {fileID: 7475448639621484683}
+  - component: {fileID: -5731227129453190997}
   m_Layer: 0
   m_Name: Doozy
   m_TagString: Untagged
@@ -1406,6 +1407,19 @@ MonoBehaviour:
   animName: Test Animation Name
   animDuration: 5
   isAnimPlaying: 0
+--- !u!114 &-5731227129453190997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4199056328295280206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50e38f0280cc260408926f4f5590060c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabOriginalName: Doozy
 --- !u!1 &4328014924097770974
 GameObject:
   m_ObjectHideFlags: 0

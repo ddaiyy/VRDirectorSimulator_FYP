@@ -15,11 +15,25 @@ public class SceneObjectManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
+    /*public void RegisterObject(GameObject go)
+    {
+        if (!spawnedObjects.Contains(go))
+            spawnedObjects.Add(go);
+    }*/
+
     public void RegisterObject(GameObject go)
     {
         if (!spawnedObjects.Contains(go))
             spawnedObjects.Add(go);
+
+        var info = go.GetComponent<SceneObjectInfo>();
+        if (info == null)
+        {
+            info = go.AddComponent<SceneObjectInfo>();
+            info.prefabOriginalName = go.name.Replace("(Clone)", "").Trim();
+        }
     }
+
 
     public void ClearAll()
     {
@@ -30,7 +44,7 @@ public class SceneObjectManager : MonoBehaviour
         spawnedObjects.Clear();
     }
 
-    public void SaveObjects(SaveData data)
+    /*public void SaveObjects(SaveData data)
     {
         data.placedObjects.Clear();
         foreach (var go in spawnedObjects)
@@ -46,7 +60,29 @@ public class SceneObjectManager : MonoBehaviour
             };
             data.placedObjects.Add(sod);
         }
+    }*/
+
+    public void SaveObjects(SaveData data)
+    {
+        data.placedObjects.Clear();
+        foreach (var go in spawnedObjects)
+        {
+            if (go == null) continue;
+
+            var info = go.GetComponent<SceneObjectInfo>();
+            string prefabName = info != null ? info.prefabOriginalName : go.name.Replace("(Clone)", "").Trim();
+
+            var sod = new SceneObjectData
+            {
+                prefabName = prefabName,
+                position = go.transform.position,
+                rotation = go.transform.rotation,
+                scale = go.transform.localScale
+            };
+            data.placedObjects.Add(sod);
+        }
     }
+
 
     public void LoadObjects(SaveData data)
     {

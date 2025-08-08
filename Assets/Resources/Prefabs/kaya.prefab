@@ -833,6 +833,7 @@ GameObject:
   - component: {fileID: 2699711140145053989}
   - component: {fileID: 1113276530041595299}
   - component: {fileID: 2283956167228419352}
+  - component: {fileID: -820600731906675300}
   m_Layer: 0
   m_Name: kaya
   m_TagString: Untagged
@@ -1140,6 +1141,19 @@ MonoBehaviour:
   animName: Test Animation Name
   animDuration: 5
   isAnimPlaying: 0
+--- !u!114 &-820600731906675300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1836936020492445810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50e38f0280cc260408926f4f5590060c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabOriginalName: kaya
 --- !u!1 &1849076958665312485
 GameObject:
   m_ObjectHideFlags: 0

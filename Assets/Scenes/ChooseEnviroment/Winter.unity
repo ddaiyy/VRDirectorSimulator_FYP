@@ -5152,6 +5152,34 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3472476761026091914, guid: 08230de32db27ca41aa1c89746a9457c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3472476761026091914, guid: 08230de32db27ca41aa1c89746a9457c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3472476761026091914, guid: 08230de32db27ca41aa1c89746a9457c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 881406212}
+    - target: {fileID: 3472476761026091914, guid: 08230de32db27ca41aa1c89746a9457c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3472476761026091914, guid: 08230de32db27ca41aa1c89746a9457c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SpawnLightAboveUserHead
+      objectReference: {fileID: 0}
+    - target: {fileID: 3472476761026091914, guid: 08230de32db27ca41aa1c89746a9457c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: LightSpawner, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3472476761026091914, guid: 08230de32db27ca41aa1c89746a9457c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 3786623012670404665, guid: 08230de32db27ca41aa1c89746a9457c, type: 3}
       propertyPath: saveNoticeUI
       value: 
@@ -5300,7 +5328,30 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4681959899828722054, guid: 08230de32db27ca41aa1c89746a9457c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 425949883}
+    - targetCorrespondingSourceObject: {fileID: 8374544684304875393, guid: 08230de32db27ca41aa1c89746a9457c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 881406212}
   m_SourcePrefab: {fileID: 100100000, guid: 08230de32db27ca41aa1c89746a9457c, type: 3}
+--- !u!1 &881406211 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8374544684304875393, guid: 08230de32db27ca41aa1c89746a9457c, type: 3}
+  m_PrefabInstance: {fileID: 881406210}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &881406212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881406211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3248f2bee22dc354d8ebb08127b871f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lightPrefab: {fileID: 4436273150059550955, guid: 7fdd06816d51b874f8130bab4cf378c4, type: 3}
+  xrCamera: {fileID: 1288960134}
+  heightOffset: 5
 --- !u!224 &892756419 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6358057464859101486, guid: 08230de32db27ca41aa1c89746a9457c, type: 3}

@@ -176,6 +176,7 @@ GameObject:
   - component: {fileID: 8616481323134706416}
   - component: {fileID: 2144556219631297523}
   - component: {fileID: 3510062528658913061}
+  - component: {fileID: -7204115100466908346}
   m_Layer: 0
   m_Name: Michelle
   m_TagString: Untagged
@@ -480,6 +481,19 @@ MonoBehaviour:
   animName: Test Animation Name
   animDuration: 5
   isAnimPlaying: 0
+--- !u!114 &-7204115100466908346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1384412809518333611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50e38f0280cc260408926f4f5590060c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabOriginalName: Michelle
 --- !u!1 &1386002455302445983
 GameObject:
   m_ObjectHideFlags: 0

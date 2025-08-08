@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SaveSlotButton : MonoBehaviour
 {
@@ -25,7 +26,43 @@ public class SaveSlotButton : MonoBehaviour
 
         if (deleteButtonGO != null)
             deleteButtonGO.SetActive(true);
+
+        // 重新绑定按钮点击事件，调用 OnClick()
+        var btn = GetComponent<Button>();
+        if (btn != null)
+        {
+            btn.onClick.RemoveAllListeners();
+            btn.onClick.AddListener(OnClick);
+        }
     }
+    public void SetupTutorialSlot()
+    {
+        currentData = null;
+        isNewSlot = false;
+        saveId = "";
+
+        if (label != null)
+            label.text = "Tutorial";
+
+        // 禁用删除按钮
+        if (deleteButtonGO != null)
+            deleteButtonGO.SetActive(false);
+
+        // 使按钮始终可点（默认是Button组件）
+        var btn = GetComponent<UnityEngine.UI.Button>();
+        if (btn != null)
+        {
+            btn.interactable = true;
+
+            btn.onClick.RemoveAllListeners();
+            btn.onClick.AddListener(() =>
+            {
+                // 直接跳转到Tutorial场景
+                SceneManager.LoadScene("Select"); // 改成你Tutorial场景名
+            });
+        }
+    }
+
 
     public void SetupNewSlot(bool disabled = false)
     {
@@ -36,7 +73,15 @@ public class SaveSlotButton : MonoBehaviour
         if (label != null)
             label.text = disabled ? "Archive is full" : "+";
 
-        GetComponent<UnityEngine.UI.Button>().interactable = !disabled;
+        var btn = GetComponent<Button>();
+        if (btn != null)
+        {
+            btn.interactable = !disabled;
+            btn.onClick.RemoveAllListeners();
+            btn.onClick.AddListener(OnClick);
+        }
+
+        //GetComponent<UnityEngine.UI.Button>().interactable = !disabled;
 
         if (deleteButtonGO != null)
             deleteButtonGO.SetActive(false);

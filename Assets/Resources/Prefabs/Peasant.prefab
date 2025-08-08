@@ -1660,6 +1660,7 @@ GameObject:
   - component: {fileID: 179434825456944928}
   - component: {fileID: 6611395900439971830}
   - component: {fileID: 3860262149888688998}
+  - component: {fileID: -8432639197497997335}
   m_Layer: 0
   m_Name: Peasant
   m_TagString: Untagged
@@ -1964,6 +1965,19 @@ MonoBehaviour:
   animName: Test Animation Name
   animDuration: 5
   isAnimPlaying: 0
+--- !u!114 &-8432639197497997335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5372288485508970322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50e38f0280cc260408926f4f5590060c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabOriginalName: Peasant
 --- !u!1 &5621541306978918869
 GameObject:
   m_ObjectHideFlags: 0

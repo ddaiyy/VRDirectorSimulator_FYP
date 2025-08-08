@@ -2181,6 +2181,7 @@ GameObject:
   - component: {fileID: 3609353130149329393}
   - component: {fileID: 4344185315501832144}
   - component: {fileID: 1781305892842954135}
+  - component: {fileID: -756734400191620386}
   m_Layer: 0
   m_Name: Jackie
   m_TagString: Untagged
@@ -2485,6 +2486,19 @@ MonoBehaviour:
   animName: Test Animation Name
   animDuration: 5
   isAnimPlaying: 0
+--- !u!114 &-756734400191620386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8025752508931190599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50e38f0280cc260408926f4f5590060c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabOriginalName: Jackie
 --- !u!1 &8111664243806537893
 GameObject:
   m_ObjectHideFlags: 0
