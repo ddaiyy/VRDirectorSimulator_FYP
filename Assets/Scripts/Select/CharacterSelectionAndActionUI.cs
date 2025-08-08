@@ -15,7 +15,7 @@ public class CharacterSelectionAndActionUI : MonoBehaviour, ICustomSelectable
     public Transform characterTransform;
 
     private GameObject currentCanvasInstance;
-    private bool isCanvasVisible = false;
+    /*private bool isCanvasVisible = false;*/
 
     // UI按钮调用此方法：选中角色并显示/隐藏动作Canvas
     public void OnCharacterButtonClicked()
@@ -84,13 +84,13 @@ public class CharacterSelectionAndActionUI : MonoBehaviour, ICustomSelectable
             }
 
             currentCanvasInstance.transform.SetParent(characterTransform);
-            isCanvasVisible = true;
+            /*isCanvasVisible = true;*/
         }
         else
         {
             Destroy(currentCanvasInstance);
             currentCanvasInstance = null;
-            isCanvasVisible = false;
+            /*isCanvasVisible = false;*/
         }
         
     }

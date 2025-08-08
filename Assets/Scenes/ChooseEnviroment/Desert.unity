@@ -4296,7 +4296,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2532667505598143028, guid: 08230de32db27ca41aa1c89746a9457c, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3786623012670404665, guid: 08230de32db27ca41aa1c89746a9457c, type: 3}
       propertyPath: saveNoticeUI

@@ -1,39 +1,4 @@
-﻿/*using UnityEngine;
-using UnityEngine.SceneManagement;
-
-public class ExitAndSave : MonoBehaviour
-{
-    public Transform playerTransform;
-    public SceneObjectManager sceneObjectManager;
-
-    public void SaveAndExit()
-    {
-        string id = PlayerPrefs.GetString("CurrentSaveId", "");
-        if (string.IsNullOrEmpty(id)) return;
-
-        SaveData data = SaveSystem.Load(id);
-        if (data == null) return;
-
-        data.lastScene = SceneManager.GetActiveScene().name;
-        data.saveTime = System.DateTime.Now;
-        data.playerX = playerTransform.position.x;
-        data.playerY = playerTransform.position.y;
-        data.playerZ = playerTransform.position.z;
-
-        data.timeOfDayIndex = PlayerPrefs.GetInt("UserTimeOfDay", 0); // 保存用户当前选择的天空盒
-
-        SceneObjectManager.Instance?.SaveObjects(data); // 👈 保存动态物体
-
-        SaveSystem.Save(data);
-
-        SceneManager.LoadScene("Start");
-        Debug.Log("SaveAndExit called!");
-
-    }
-}*/
-
-
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
@@ -79,7 +44,7 @@ public class ExitAndSave : MonoBehaviour
         }
 
         // 👇 等待两秒
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
 
         // 👇 加载 Start 场景
         SceneManager.LoadScene("Start");
