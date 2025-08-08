@@ -52,27 +52,35 @@ public class GrabScaleController_XRInput : MonoBehaviour
 
     void Update()
     {
+        if (rightHandGrab == null)
+        {
+            Debug.LogWarning("⚠️ rightHandGrab 没有赋值！");
+            return;
+        }
+
         if (rightHandGrab.hasSelection)
         {
-            if (rightHandGrab != null && rightHandGrab.hasSelection && rightHandGrab.firstInteractableSelected != null)
+            if (rightHandGrab.firstInteractableSelected != null)
             {
                 grabbedObject = rightHandGrab.firstInteractableSelected.transform;
             }
 
+            if (grabbedObject == null) return; // 防止空对象
 
-            // 缓存 Visual 子物体，避免每帧查找
             if (visualTarget == null || visualTarget.parent != grabbedObject)
             {
                 visualTarget = GetVisualTarget(grabbedObject);
             }
+
+            if (visualTarget == null) return; // 找不到可缩放目标就直接退出
 
             if (Time.time - lastScaleTime > debounceTime)
             {
                 bool xPressed = false;
                 bool yPressed = false;
 
-                leftController.TryGetFeatureValue(CommonUsages.primaryButton, out xPressed);    // X 按钮
-                leftController.TryGetFeatureValue(CommonUsages.secondaryButton, out yPressed);   // Y 按钮
+                leftController.TryGetFeatureValue(CommonUsages.primaryButton, out xPressed);
+                leftController.TryGetFeatureValue(CommonUsages.secondaryButton, out yPressed);
 
                 if (xPressed)
                 {
@@ -88,10 +96,11 @@ public class GrabScaleController_XRInput : MonoBehaviour
         }
         else
         {
-            visualTarget = null; // 无选中时清除缓存
+            grabbedObject = null;
+            visualTarget = null;
         }
-
     }
+
 
     void ScaleObject(float delta)
     {

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using MyGame.Selection;
+using System.Collections.Generic;
 
 public class XRSelectionForwarder : MonoBehaviour
 {
@@ -9,7 +10,10 @@ public class XRSelectionForwarder : MonoBehaviour
 
 
     private ICustomSelectable currentHoverSelectable;    // µ±Ç°ÉäÏßÖ¸ÏòµÄ¿ÉÑ¡ÖÐÎïÌå£¨hover£©
-    private ICustomSelectable currentSelectedSelectable; // µ±Ç°ÒÑÑ¡ÖÐµÄÎïÌå
+                                                         
+
+    private ICustomSelectable currentSelectedSelectable;
+
 
     private void OnEnable()
     {
@@ -29,7 +33,7 @@ public class XRSelectionForwarder : MonoBehaviour
         {
             float triggerValue = xrController.activateActionValue.action.ReadValue<float>();
 
-            if (triggerValue > 0.1f)
+            if (triggerValue > 0.1f && currentHoverSelectable != null)
             {
                 Debug.Log("Trigger Pressed (activateAction)");
 
@@ -38,7 +42,7 @@ public class XRSelectionForwarder : MonoBehaviour
                     if (currentHoverSelectable is MonoBehaviour mb)
                     {
                         var cameraController = mb.GetComponent<CameraController>();
-                       
+
 
                         bool isCamera = (cameraController != null);
                         
@@ -71,12 +75,34 @@ public class XRSelectionForwarder : MonoBehaviour
                         }
                     }
                 }
+
+                
+            }
             }
         }
-    }
 
+    /*private void OnHoverEntered(HoverEnterEventArgs args)
+    {
+        var selectable = args.interactableObject.transform.GetComponent<ICustomSelectable>()
+            ?? args.interactableObject.transform.GetComponentInChildren<ICustomSelectable>();
 
+        if (selectable != null)
+        {
+            currentHoverSelectable = selectable;
+            Debug.Log($"Hover进入了 {selectable}");
+        }
+    }*/
 
+    /*private void OnHoverExited(HoverExitEventArgs args)
+    {
+        var selectable = args.interactableObject.transform.GetComponent<ICustomSelectable>()
+            ?? args.interactableObject.transform.GetComponentInChildren<ICustomSelectable>();
+
+        if (selectable == currentHoverSelectable)
+        {
+            currentHoverSelectable = null;
+        }
+    }*/
 
 
     private void OnHoverEntered(HoverEnterEventArgs args)
@@ -108,5 +134,4 @@ public class XRSelectionForwarder : MonoBehaviour
             currentHoverSelectable = null;
         }
     }
-
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using MyGame.Selection;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -24,17 +25,29 @@ public class RoleSpawnProxy : MonoBehaviour
         }
         Quaternion rotation = Quaternion.Euler(0, 180f, 0);  // Y轴旋转180度
         GameObject newCharacter = Instantiate(originalPrefab, position, rotation);
+
         TimelineTrack tempTimelineTrack = newCharacter.GetComponent<TimelineTrack>();
-        // 注册到场景对象管理器用于保存
-        if (tempTimelineTrack)
+        if (tempTimelineTrack == null)
         {
-            newCharacter.name = GetCharacterNameWithIndex(originalPrefab.name);
+            Debug.LogWarning($"生成的物体 {newCharacter.name} 没有 TimelineTrack 组件！");
         }
-        SceneObjectManager.Instance?.RegisterObject(newCharacter);
-
-
-        
-        
+        else if (tempTimelineTrack.objectTimelineUI == null)
+        {
+            Debug.LogWarning($"生成的物体 {newCharacter.name} 的 TimelineTrack.objectTimelineUI 为空！");
+        }
+        else
+        {
+            var rotator = newCharacter.GetComponent<ModelRotatorWithJoystick>();
+            if (rotator == null)
+            {
+                Debug.LogWarning($"生成的物体 {newCharacter.name} 没有 ModelRotatorWithJoystick 组件！");
+            }
+            else
+            {
+                rotator.currentCanvasInstance = tempTimelineTrack.objectTimelineUI.gameObject;
+                Debug.Log($"✅ 给 {newCharacter.name} 的 ModelRotatorWithJoystick.currentCanvasInstance 赋值成功！");
+            }
+        }
         Debug.Log("✅ 在 " + position + " 生成角色: " + newCharacter.name);
         //注册Timeline
         TimelineManager.Instance.RegisterTrack(newCharacter.GetComponent<TimelineTrack>());
