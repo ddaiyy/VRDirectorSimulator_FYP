@@ -116,7 +116,6 @@ GameObject:
   - component: {fileID: 5851808772874112797}
   - component: {fileID: 2628585988150227143}
   - component: {fileID: 8854472868537062799}
-  - component: {fileID: 4800384628597055934}
   - component: {fileID: -7570247849819768941}
   - component: {fileID: 6854379212864235277}
   - component: {fileID: -8953535847637090170}
@@ -318,23 +317,6 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
---- !u!114 &4800384628597055934
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7565367646243623342}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39806c4aa032d334ca6a93abe44c1cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rightHandGrab: {fileID: 0}
-  scaleStep: 0.3
-  minScale: 0.5
-  maxScale: 8
-  debounceTime: 0.3
 --- !u!114 &-7570247849819768941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -347,9 +329,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa3ee69b0c2171d4ab56295bcfeb93ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputSource: 4
-  rotationSpeed: 60
+  type: 0
+  controllerForCharacter: {fileID: 0}
+  characterTransform: {fileID: 0}
+  ActionUI: {fileID: 0}
   currentCanvasInstance: {fileID: 0}
+  currentPropCanvasInstance: {fileID: 0}
+  inputSource: 4
+  buttonHand: 4
+  rotationSpeed: 60
+  scaleSpeed: 0.5
 --- !u!114 &6854379212864235277
 MonoBehaviour:
   m_ObjectHideFlags: 0

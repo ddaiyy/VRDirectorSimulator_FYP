@@ -2178,10 +2178,10 @@ GameObject:
   - component: {fileID: 6652548666921107569}
   - component: {fileID: 6664416708519458302}
   - component: {fileID: 5083038581258631808}
-  - component: {fileID: 3609353130149329393}
   - component: {fileID: 4344185315501832144}
   - component: {fileID: 1781305892842954135}
   - component: {fileID: -756734400191620386}
+  - component: {fileID: -8945930429384490689}
   m_Layer: 0
   m_Name: Jackie
   m_TagString: Untagged
@@ -2293,21 +2293,6 @@ MonoBehaviour:
   animator: {fileID: 2213968351009963515}
   actionSequence: []
   isPlacedCharacter: 1
---- !u!114 &3609353130149329393
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8025752508931190599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afbddb92ffbf54a41a246f6f1c912caf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controllerForThisCharacter: {fileID: 5083038581258631808}
-  propUI: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
-  characterTransform: {fileID: 2506800998407036457}
 --- !u!114 &4344185315501832144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2499,6 +2484,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabOriginalName: Jackie
+--- !u!114 &-8945930429384490689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8025752508931190599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa3ee69b0c2171d4ab56295bcfeb93ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  controllerForCharacter: {fileID: 5083038581258631808}
+  characterTransform: {fileID: 2506800998407036457}
+  ActionUI: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  currentCanvasInstance: {fileID: 0}
+  currentPropCanvasInstance: {fileID: 0}
+  inputSource: 4
+  buttonHand: 4
+  rotationSpeed: 60
+  scaleSpeed: 0.5
 --- !u!1 &8111664243806537893
 GameObject:
   m_ObjectHideFlags: 0

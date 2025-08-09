@@ -1100,9 +1100,9 @@ GameObject:
   - component: {fileID: 68407861621129087}
   - component: {fileID: 507248946596652778}
   - component: {fileID: 4651477063809589424}
-  - component: {fileID: 2848972011937757050}
   - component: {fileID: 7475448639621484683}
   - component: {fileID: -5731227129453190997}
+  - component: {fileID: 793521611240450614}
   m_Layer: 0
   m_Name: Doozy
   m_TagString: Untagged
@@ -1362,21 +1362,6 @@ MonoBehaviour:
   animator: {fileID: 7460388038537059013}
   actionSequence: []
   isPlacedCharacter: 1
---- !u!114 &2848972011937757050
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4199056328295280206}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afbddb92ffbf54a41a246f6f1c912caf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controllerForThisCharacter: {fileID: 4651477063809589424}
-  propUI: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
-  characterTransform: {fileID: 3435689413019917439}
 --- !u!114 &7475448639621484683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1420,6 +1405,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabOriginalName: Doozy
+--- !u!114 &793521611240450614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4199056328295280206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa3ee69b0c2171d4ab56295bcfeb93ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  controllerForCharacter: {fileID: 4651477063809589424}
+  characterTransform: {fileID: 3435689413019917439}
+  ActionUI: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
+  currentCanvasInstance: {fileID: 0}
+  currentPropCanvasInstance: {fileID: 0}
+  inputSource: 4
+  buttonHand: 4
+  rotationSpeed: 60
+  scaleSpeed: 0.5
 --- !u!1 &4328014924097770974
 GameObject:
   m_ObjectHideFlags: 0

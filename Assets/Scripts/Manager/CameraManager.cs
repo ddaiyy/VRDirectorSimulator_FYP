@@ -217,11 +217,10 @@ public class CameraManager : MonoBehaviour
             return;
         }
 
-        //  ���� Controller �������ĸ� Rig�����壩
         controller.rigRoot = camObj;
 
         RegisterCamera(controller);
-        SelectCamera(controller); // ������Զ�ѡ�У�Ԥ���������
+        SelectCamera(controller); 
     }
 
     private string GetCameraNameWithIndex(string cameraPrefabName)
