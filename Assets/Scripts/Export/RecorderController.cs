@@ -18,13 +18,11 @@ public class RecorderController : MonoBehaviour
     {
         captureCommand.ExecuteOnStart = false;
         startButton.onClick.AddListener(OnStartRecord);
-        //stopButton.onClick.AddListener(OnStopRecord);
     }
 
     void OnStartRecord()
     {
-        float duration = recordDuration; // 直接用public字段
-
+        float duration = TimelineManager.Instance.masterTrack.GetDuration();
         string fileName = outputFileName;
         if (!fileName.EndsWith(".mp4")) fileName += ".mp4";
 
@@ -35,12 +33,12 @@ public class RecorderController : MonoBehaviour
 #endif
         // 设置ffmpeg参数，注意空格
         captureCommand.CaptureOptions = $" \"{outputPath}\"";
-
+        
         if (recordCoroutine != null)
         {
             StopCoroutine(recordCoroutine);
         }
-
+        
         recordCoroutine = StartCoroutine(RecordForSeconds(duration));
 
     }
@@ -49,6 +47,7 @@ public class RecorderController : MonoBehaviour
     {
         captureCommand.StartFfmpeg(); // 开始录制
         Debug.Log("开始录制");
+        TimelineManager.Instance.masterTrack.Play();
         yield return new WaitForSeconds(seconds);
         captureCommand.StopFfmpeg(); // 停止录制
         Debug.Log("录制结束");

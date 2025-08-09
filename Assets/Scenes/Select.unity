@@ -3406,7 +3406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ee1d0a4d62872b4d9fa8e81e40c8c46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExecuteOnStart: 0
+  ExecuteOnStart: 1
   Options: 
   PrintStdErr: 0
   CaptureSources:
@@ -3416,14 +3416,6 @@ MonoBehaviour:
     FrameRate: 30
     SourceCamera: {fileID: 0}
     SourceRenderTexture: {fileID: 8400000, guid: d7391bef485e8b4489934be694d51de6, type: 2}
-    SourceAudio: {fileID: 0}
-    Mute: 0
-  - Type: 3
-    Width: -1
-    Height: 480
-    FrameRate: 30
-    SourceCamera: {fileID: 0}
-    SourceRenderTexture: {fileID: 0}
     SourceAudio: {fileID: 0}
     Mute: 0
   CaptureOptions: 
@@ -4708,6 +4700,10 @@ PrefabInstance:
     - target: {fileID: 3668522336405508543, guid: 131ee67f4406bf1458a33115cb1b2020, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4508577997960454906, guid: 131ee67f4406bf1458a33115cb1b2020, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5274333245001643470, guid: 131ee67f4406bf1458a33115cb1b2020, type: 3}
       propertyPath: m_PresetInfoIsWorld
