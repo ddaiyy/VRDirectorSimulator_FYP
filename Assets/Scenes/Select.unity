@@ -1302,7 +1302,7 @@ RectTransform:
   m_GameObject: {fileID: 681333284}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -6.7}
-  m_LocalScale: {x: 0.06450848, y: 0.036286023, z: 0.06450848}
+  m_LocalScale: {x: 0.07077871, y: 0.039813027, z: 0.07077871}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1920041477}
@@ -1715,7 +1715,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 412278146}
   m_FillRect: {fileID: 1215403867}
   m_HandleRect: {fileID: 412278145}
