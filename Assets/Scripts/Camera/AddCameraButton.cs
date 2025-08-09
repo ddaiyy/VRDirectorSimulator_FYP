@@ -14,6 +14,9 @@ public class AddCameraButton : MonoBehaviour
 
         spawnedPlaneInstance = Instantiate(selectionPlanePrefab, prefabPosition, prefabRotation);*/
         CameraManager.Instance.AddNewCamera();
+        // 成功
+        FeedbackManager.Instance.ShowMessage("Add Camera Successfully", MessageType.Success);
+
         Debug.Log("Generated at the original position of the prefab.");
         
     }

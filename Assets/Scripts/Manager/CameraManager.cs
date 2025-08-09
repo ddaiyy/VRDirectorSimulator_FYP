@@ -130,10 +130,11 @@ public class CameraManager : MonoBehaviour
             //Debug.Log($"[CameraManager] 时间 {currentTime:F2}s: 没有冲突，激活相机数量: {conflictingCameras.Count}");
             return conflictingCameras;
         }
-        
+        FeedbackManager.Instance.ShowMessage("Camera conflict!", MessageType.Error);
         Debug.LogError($"[CameraManager] 时间 {currentTime:F2}s: 检测到冲突！冲突相机数量: {conflictingCameras.Count}");
         foreach (var camera in conflictingCameras)
         {
+            FeedbackManager.Instance.ShowMessage("Camera conflict!", MessageType.Error);
             Debug.LogError($"[CameraManager] 冲突相机: {camera.transform.parent.gameObject.name}");
         }
         
