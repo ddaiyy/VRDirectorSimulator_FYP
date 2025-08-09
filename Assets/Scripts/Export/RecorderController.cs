@@ -1,12 +1,21 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using FfmpegUnity;
+using TMPro;
+using UnityEngine.UI;
 
 public class RecorderController : MonoBehaviour
 {
     public FfmpegCaptureCommand captureCommand;
-    public UnityEngine.UI.Button startButton;
+    public Button startButton;
+    public Canvas exportProgressCanvas;
+
+    public TMP_Text progressText;//显示播放完成/正在进行的Text
+    public Slider progressSlider;
+
+    public TMP_Text progerssSliderTimeText;
     //public Button stopButton;
 
     public float recordDuration = 10f; // 录制时长（秒），可在Inspector设置
@@ -14,15 +23,28 @@ public class RecorderController : MonoBehaviour
 
     private Coroutine recordCoroutine;
 
+    private bool isCanvasActive = false;
+    private float recordStartTime; 
+    private bool isRecording = false;
+
+    public Button closeCanvasButton;
     void Start()
     {
         captureCommand.ExecuteOnStart = false;
         startButton.onClick.AddListener(OnStartRecord);
+        exportProgressCanvas.gameObject.SetActive(false);
+        closeCanvasButton.onClick.AddListener(OnCloseCanvasButtonClicked);
     }
 
+    private void OnCloseCanvasButtonClicked()
+    {
+        exportProgressCanvas.gameObject.SetActive(false);
+    }
+
+    
     void OnStartRecord()
     {
-        float duration = TimelineManager.Instance.masterTrack.GetDuration();
+        recordDuration = TimelineManager.Instance.masterTrack.GetDuration();
         string fileName = outputFileName;
         if (!fileName.EndsWith(".mp4")) fileName += ".mp4";
 
@@ -39,18 +61,30 @@ public class RecorderController : MonoBehaviour
             StopCoroutine(recordCoroutine);
         }
         
-        recordCoroutine = StartCoroutine(RecordForSeconds(duration));
+        recordCoroutine = StartCoroutine(RecordForSeconds(recordDuration));
 
     }
 
     IEnumerator RecordForSeconds(float seconds)
     {
+        recordStartTime = Time.time;
+        // 设置 slider 最大值
+        progressSlider.maxValue = seconds;
+        
+        exportProgressCanvas.gameObject.SetActive(true);
+        closeCanvasButton.gameObject.SetActive(false);
+        isRecording = true;
+        progressText.text = "Recording...";
         captureCommand.StartFfmpeg(); // 开始录制
         Debug.Log("开始录制");
         TimelineManager.Instance.masterTrack.Play();
         yield return new WaitForSeconds(seconds);
         captureCommand.StopFfmpeg(); // 停止录制
+        progressText.text = "Finished!";
+        isRecording = false;
+        closeCanvasButton.gameObject.SetActive(true);
         Debug.Log("录制结束");
+        
 
 #if UNITY_ANDROID && !UNITY_EDITOR
     string fileName = outputFileName;
@@ -60,6 +94,33 @@ public class RecorderController : MonoBehaviour
 #endif
     }
 
+    private void Update()
+    {
+        if (isRecording)
+        {
+            RefreshExportCanvas();
+        }
+    }
+
+    void RefreshExportCanvas()
+    {
+        float elapsed = Time.time - recordStartTime;
+
+        // 如果录制完成
+        if (!isRecording || elapsed >= recordDuration)
+        {
+            elapsed = recordDuration;
+            progressSlider.value = recordDuration;
+            progerssSliderTimeText.text = "100%";
+            return;
+        }
+
+        // 正在录制时
+        progressSlider.value = Mathf.Clamp(elapsed, 0, recordDuration);
+        float percent = (elapsed / recordDuration) * 100f;
+        progerssSliderTimeText.text = $"{percent:F1}%";
+    }
+    
     void OnStopRecord()
     {
         if (recordCoroutine != null)
