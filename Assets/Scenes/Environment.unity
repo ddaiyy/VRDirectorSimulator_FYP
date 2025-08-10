@@ -20425,6 +20425,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: prototype
       objectReference: {fileID: 0}
+    - target: {fileID: 8313750981868384300, guid: 1800fdab27272de40a8c087dd7475bfd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -22821,6 +22825,10 @@ PrefabInstance:
     - target: {fileID: 9113446366961352568, guid: 6a689989e106ea34184502d9985ed0a0, type: 3}
       propertyPath: m_Name
       value: Cube 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9113446366961352568, guid: 6a689989e106ea34184502d9985ed0a0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

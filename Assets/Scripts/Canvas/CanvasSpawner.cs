@@ -8,7 +8,7 @@ public class CanvasSpawner : MonoBehaviour
     public GameObject canvasPrefab;
 
     [Header("Canvas 位置设置")]
-    public float distanceFromCamera = 2f;
+    public float distanceFromCamera = 8f;
     public float verticalOffset = -0.2f;
 
     private GameObject currentCanvasInstance;
