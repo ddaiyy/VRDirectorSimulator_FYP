@@ -33,7 +33,7 @@ public class TimelineTrack : MonoBehaviour
 
     [Header("测试用参数")] public string animName = "Test Animation Name";
     public float animDuration = 5f;
-    [SerializeField] private bool isAnimPlaying = false;
+    [SerializeField] public bool isAnimPlaying = false;
     private bool lastCameraActiveState = false; // 记录上次的相机激活状态，避免重复切换
 
     void Start()
@@ -714,7 +714,8 @@ public class TimelineTrack : MonoBehaviour
     {
         if (clips.Count == 0) return 0f;
         float maxTime = clips[clips.Count - 1].time;
-        return maxTime;
+        duration = maxTime;
+        return duration;
     }
 
     public void SetTime(float time)

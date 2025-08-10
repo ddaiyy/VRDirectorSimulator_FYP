@@ -16,12 +16,10 @@ public class MasterTimelineTrack : MonoBehaviour
             currentTime += Time.deltaTime;
             if (currentTime > duration)
             {
-                currentTime = duration;
                 foreach (var track in TimelineManager.Instance.GetAllTracks())
                 {
                     if (track.isControlledByMaster)
                     {
-                        // 检查clips是否为空，避免IndexOutOfRangeException
                         if (track.clips != null && track.clips.Count > 0)
                         {
                             track.SetTime(track.clips[0].time);
@@ -31,14 +29,9 @@ public class MasterTimelineTrack : MonoBehaviour
                             // 如果轨道没有关键帧，设置为0秒
                             track.SetTime(0f);
                         }
-                    }
-                }
 
-                foreach (var track in TimelineManager.Instance.GetAllTracks())
-                {
-                    if (track.isControlledByMaster)
-                    {
                         track.isControlledByMaster = false;
+                        track.isAnimPlaying = false;
                     }
                 }
 
@@ -49,11 +42,16 @@ public class MasterTimelineTrack : MonoBehaviour
                 // 推进所有轨道
                 foreach (var track in TimelineManager.Instance.GetAllTracks())
                 {
-                    if (track.isControlledByMaster){
+                    if (track.isControlledByMaster)
+                    {
+                        if (currentTime >= track.GetDuration())
+                        {
+                            track.isAnimPlaying = true;
+                        }
                         track.SetTime(currentTime);
                     }
                 }
-                
+
                 // 检测相机冲突
                 var conflictingCameras = CameraManager.Instance.CheckCameraConflictAtTime(currentTime);
                 if (conflictingCameras.Count > 1)
@@ -62,7 +60,7 @@ public class MasterTimelineTrack : MonoBehaviour
                     string cameraNames = string.Join(", ", conflictingCameras.Select(c => c.gameObject.name));
                     FeedbackManager.Instance.ShowMessage("Camera conflict!", MessageType.Error);
                     Debug.LogError($"[MasterTimelineTrack] 检测到相机冲突！时间: {currentTime:F2}s，冲突相机: {cameraNames}");
-                    
+
                     // 停止播放
                     isPlaying = false;
                     foreach (var track in TimelineManager.Instance.GetAllTracks())
@@ -73,13 +71,15 @@ public class MasterTimelineTrack : MonoBehaviour
                             track.SetTime(track.clips[0].time);
                         }
                     }
+
                     return; // 不执行后续的轨道更新
-                }else if (conflictingCameras.Count == 0)
+                }
+                else if (conflictingCameras.Count == 0)
                 {
                     //TODO:清空黑
                     CameraManager.Instance.ClearSelectedCamera(CameraManager.Instance.currentSelected);
                 }
-                else if(conflictingCameras.Count == 1)
+                else if (conflictingCameras.Count == 1)
                 {
                     if (CameraManager.Instance.currentSelected != conflictingCameras.First())
                     {
@@ -91,8 +91,6 @@ public class MasterTimelineTrack : MonoBehaviour
                         //A在播放，A激活
                     }
                 }
-                
-                
             }
         }
     }
@@ -104,13 +102,13 @@ public class MasterTimelineTrack : MonoBehaviour
         currentTime = 0f;
         duration = GetDuration();
         //ClearPreviewTexture();
-        
+
         foreach (var track in TimelineManager.Instance.GetAllTracks())
         {
             track.isControlledByMaster = true;
         }
     }
-    
+
 
     [ContextMenu("暂停")]
     public void Pause()
@@ -135,6 +133,7 @@ public class MasterTimelineTrack : MonoBehaviour
                 // 如果轨道没有关键帧，设置为0秒
                 track.SetTime(0f);
             }
+
             track.isControlledByMaster = false;
         }
     }
