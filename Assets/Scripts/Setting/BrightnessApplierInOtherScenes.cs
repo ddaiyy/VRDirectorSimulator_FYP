@@ -2,7 +2,7 @@
 
 public class BrightnessApplierInOtherScenes : MonoBehaviour
 {
-    public float maxIntensity = 1.5f;
+    public float maxIntensity = 1f;
     public float transitionDuration = 1.0f; // 淡入持续时间
 
     private Light sceneLight;
