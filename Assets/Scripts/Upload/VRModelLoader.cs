@@ -14,13 +14,10 @@ using static ModelUtils;
 
 public class VRModelLoader : MonoBehaviour
 {
-    [Header("UI References")]
-    public TMP_Text vrMessageText;
 
     [Header("Material Options")]
     public bool keepOriginalMaterial = true; // 控制是否保留 glTF 原材质
-    [Header("右手控制器物体名（场景中必须存在）")]
-    public string rightHandObjectName = "Right Controller";
+    
     [Header("UI Canvas 预制体")]
     public GameObject propUIPrefab;
 
@@ -28,13 +25,7 @@ public class VRModelLoader : MonoBehaviour
 
 
     void Start()
-    {// 一开始隐藏
-        if (vrMessageText != null)
-            vrMessageText.gameObject.SetActive(false);
-
-        // if (vrMessagePanel != null)
-        //    vrMessagePanel.SetActive(false);
-
+    {
         TryFindRightHandInteractor();
     }
 
@@ -69,17 +60,7 @@ public class VRModelLoader : MonoBehaviour
         }, null);
     }
 
-    public void ShowVRMessage(string message, float duration = 3f)
-    {
-        if (vrMessageText == null) return;
-
-        // 激活并设文本
-        vrMessageText.gameObject.SetActive(true);
-        vrMessageText.text = message;
-
-        StopAllCoroutines();
-        StartCoroutine(HideAfterDelay(duration));
-    }
+    
     private async Task LoadByExtension(string path)
     {
         string ext = Path.GetExtension(path).ToLowerInvariant();
@@ -94,17 +75,10 @@ public class VRModelLoader : MonoBehaviour
         else
         {
             Debug.LogError("❌ Currently only .glb files are supported.");
-            ShowVRMessage("Currently only .glb files are supported.", 5f);
+            FeedbackManager.Instance.ShowMessage("Currently only .glb files are supported.", MessageType.Warning);
         }
     }
 
-    IEnumerator HideAfterDelay(float seconds)
-    {
-        yield return new WaitForSeconds(seconds);
-        vrMessageText.gameObject.SetActive(false);
-        // if (vrMessagePanel != null)
-        //    vrMessagePanel.SetActive(false);
-    }
 
     public async Task LoadModel(string path)
     {
@@ -191,7 +165,6 @@ public class VRModelLoader : MonoBehaviour
 
         // 加载模型完成后，添加旋转控制脚本model.AddComponent<ModelJoystickRotator>();
         parent.AddComponent<ModelRotatorWithJoystick>();
-        parent.AddComponent<GrabScaleController_XRInput>();
 
         // ✅ 设置位置
         if (Camera.main != null)
@@ -210,7 +183,6 @@ public class VRModelLoader : MonoBehaviour
         }
 
         Debug.Log("✅ 模型加载完成");
-        ShowVRMessage("Model loaded successfully.", 5f);
 
     }
 
@@ -243,9 +215,8 @@ public class VRModelLoader : MonoBehaviour
 
         if (modelPath == null)
         {
-            string errorMsg = "❌ No .glb or .gltf file found in the Zip archive.";
-            Debug.LogError(errorMsg);
-            ShowVRMessage(errorMsg, 5f); // ✅ 在 VR 头显中显示错误提示
+            FeedbackManager.Instance.ShowMessage("No .glb or .gltf file found in the Zip archive.", MessageType.Warning);
+
             return;
         }
 

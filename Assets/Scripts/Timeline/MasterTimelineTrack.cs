@@ -60,6 +60,7 @@ public class MasterTimelineTrack : MonoBehaviour
                 {
                     // 有冲突，停止播放并报错
                     string cameraNames = string.Join(", ", conflictingCameras.Select(c => c.gameObject.name));
+                    FeedbackManager.Instance.ShowMessage("Camera conflict!", MessageType.Error);
                     Debug.LogError($"[MasterTimelineTrack] 检测到相机冲突！时间: {currentTime:F2}s，冲突相机: {cameraNames}");
                     
                     // 停止播放

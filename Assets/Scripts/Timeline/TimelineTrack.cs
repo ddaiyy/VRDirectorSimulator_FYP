@@ -360,6 +360,7 @@ public class TimelineTrack : MonoBehaviour
         if (!CanAddAnimationClip(preClip.time, animationDuration))
         {
             Debug.LogError($"[{gameObject.name}] 无法添加动画关键帧: {animationName} - 时间冲突");
+            FeedbackManager.Instance.ShowMessage("Time conflict, unable to add animation keyframes", MessageType.Error);
             return; // 阻止添加
         }
 
@@ -402,6 +403,7 @@ public class TimelineTrack : MonoBehaviour
             {
                 Debug.LogWarning(
                     $"[{gameObject.name}] 无法添加动画：时间冲突 (前一个动画结束: {preAnimClip.time + preAnimClip.animationDuration:F2}s, 新动画开始: {clipTime:F2}s, 新动画结束: {clipTime + clipDuration:F2}s, 下一个动画开始: {nextAnimClip.time:F2}s)");
+                FeedbackManager.Instance.ShowMessage("Time conflict, unable to add animation keyframes", MessageType.Error);
                 return false;
             }
         }
@@ -417,6 +419,7 @@ public class TimelineTrack : MonoBehaviour
             }
             else
             {
+                FeedbackManager.Instance.ShowMessage("Time conflict, unable to add animation keyframes", MessageType.Error);
                 Debug.LogWarning(
                     $"[{gameObject.name}] 无法添加动画：前一个动画还未结束 (前一个动画结束: {preAnimClip.time + preAnimClip.animationDuration:F2}s, 新动画开始: {clipTime:F2}s)");
                 return false;
@@ -434,6 +437,7 @@ public class TimelineTrack : MonoBehaviour
             }
             else
             {
+                FeedbackManager.Instance.ShowMessage("Time conflict, unable to add animation keyframes", MessageType.Error);
                 Debug.LogWarning(
                     $"[{gameObject.name}] 无法添加动画：新动画与下一个动画冲突 (新动画结束: {clipTime + clipDuration:F2}s, 下一个动画开始: {nextAnimClip.time:F2}s)");
                 return false;
@@ -747,6 +751,7 @@ public class TimelineTrack : MonoBehaviour
         var clipToDelete = clips.FirstOrDefault(c => Mathf.Approximately(c.time, time));
         if (clipToDelete == null)
         {
+            FeedbackManager.Instance.ShowMessage("No keyframes found.", MessageType.Error);
             Debug.LogWarning($"时间 {time:F2}s 没有找到关键帧");
             return false;
         }
