@@ -15521,6 +15521,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasPrefab: {fileID: 0}
+  distanceFromCamera: 2
+  verticalOffset: -0.2
   clikOnCanvas: {fileID: 713502187716421773}
 --- !u!1001 &1461484475546607788
 PrefabInstance:
@@ -15710,6 +15712,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasPrefab: {fileID: 6466212794866213612, guid: 3f48b6df86a666a4e81e8ac1bf5f52a5, type: 3}
+  distanceFromCamera: 2
+  verticalOffset: -0.2
   clikOnCanvas: {fileID: 0}
 --- !u!1 &1780696923608482504
 GameObject:
@@ -17479,6 +17483,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasPrefab: {fileID: 245845267}
+  distanceFromCamera: 2
+  verticalOffset: -0.2
   clikOnCanvas: {fileID: 0}
 --- !u!224 &4004797446760887530
 RectTransform:
@@ -19623,8 +19629,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6419865256871003132}
   m_HandleRect: {fileID: 2331478906388257413}
   m_Direction: 2
-  m_Value: -0.000001825838
-  m_Size: 0.61
+  m_Value: -0.0000016954206
+  m_Size: 0.60999995
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -19690,6 +19696,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasPrefab: {fileID: 4355028299619541375}
+  distanceFromCamera: 6
+  verticalOffset: -0.2
   clikOnCanvas: {fileID: 0}
 --- !u!114 &7396062327506587665
 MonoBehaviour:

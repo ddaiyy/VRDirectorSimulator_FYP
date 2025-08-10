@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class VideoPanelController : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class VideoPanelController : MonoBehaviour
     public Button nextButton;
     public Button prevButton;
     public Button closeButton;
+    public TMP_Text pageIndicator;
 
     private int currentIndex = 0;
 
@@ -22,7 +24,12 @@ public class VideoPanelController : MonoBehaviour
         nextButton.onClick.AddListener(ShowNext);
         closeButton.onClick.AddListener(ClosePanel);
 
-        closeButton.interactable = false; // 初始不可点击
+        // 初始状态
+        closeButton.interactable = false;
+        prevButton.interactable = false;  // 第一页不能点上一页
+        nextButton.interactable = videoPanels.Length > 1; // 如果只有1页就禁用Next
+
+        UpdatePageIndicator(); // 初始化分页显示
     }
 
     void ShowNext()
@@ -33,11 +40,7 @@ public class VideoPanelController : MonoBehaviour
             currentIndex++;
             videoPanels[currentIndex].SetActive(true);
 
-            // 如果已经是最后一页，就让 Close 按钮可用
-            if (currentIndex == videoPanels.Length - 1)
-            {
-                closeButton.interactable = true;
-            }
+            UpdateButtonStates();
         }
     }
 
@@ -49,11 +52,29 @@ public class VideoPanelController : MonoBehaviour
             currentIndex--;
             videoPanels[currentIndex].SetActive(true);
 
-            // 只要不是最后一页，Close 按钮就禁用
-            if (currentIndex != videoPanels.Length - 1)
-            {
-                closeButton.interactable = false;
-            }
+            UpdateButtonStates();
+        }
+    }
+
+    void UpdateButtonStates()
+    {
+        // 第一页禁用Prev
+        prevButton.interactable = currentIndex > 0;
+
+        // 最后一页禁用Next
+        nextButton.interactable = currentIndex < videoPanels.Length - 1;
+
+        // Close按钮：只在最后一页才可用
+        closeButton.interactable = currentIndex == videoPanels.Length - 1;
+
+        UpdatePageIndicator();
+    }
+
+    void UpdatePageIndicator()
+    {
+        if (pageIndicator != null)
+        {
+            pageIndicator.text = $"{currentIndex + 1} / {videoPanels.Length}";
         }
     }
 

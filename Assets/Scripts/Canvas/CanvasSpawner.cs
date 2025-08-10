@@ -7,6 +7,10 @@ public class CanvasSpawner : MonoBehaviour
     [Header("Canvas Ԥ����")]
     public GameObject canvasPrefab;
 
+    [Header("Canvas 位置设置")]
+    public float distanceFromCamera = 2f;
+    public float verticalOffset = -0.2f;
+
     private GameObject currentCanvasInstance;
 
     public GameObject clikOnCanvas;
@@ -44,7 +48,7 @@ public class CanvasSpawner : MonoBehaviour
         // ��ȡ�����λ�úͷ���
         Transform cam = Camera.main.transform;
 
-        Vector3 spawnPosition = cam.position + cam.forward * 10f + Vector3.up * -0.2f; // ��΢����һ��
+        Vector3 spawnPosition = cam.position + cam.forward * distanceFromCamera + Vector3.up * verticalOffset; // ��΢����һ��
         Quaternion rotation = Quaternion.LookRotation(cam.forward);
 
         currentCanvasInstance = Instantiate(canvasPrefab, spawnPosition, rotation);
