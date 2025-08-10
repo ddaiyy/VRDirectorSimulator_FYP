@@ -723,6 +723,7 @@ public class TimelineTrack : MonoBehaviour
         currentTime = time;
         ApplyClipAtTime(time);
     }
+    
 
     public void showUI()
     {

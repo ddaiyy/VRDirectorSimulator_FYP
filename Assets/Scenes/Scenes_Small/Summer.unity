@@ -14952,7 +14952,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 3.4538, y: -1.5103}
+  m_AnchoredPosition: {x: 3.4538, y: 2.17}
   m_SizeDelta: {x: 950, y: 542.1021}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1284367138872056331
@@ -15835,7 +15835,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionPlanePrefab: {fileID: 1312245114232953286, guid: 5c82cce74b7480448a91a41138c2baf4, type: 3}
   spawnPointName: SelectionPlaneSpawnPoint
-  planeKey: character
+  planeKey: 
 --- !u!114 &2481610751345293767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19318,7 +19318,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasPrefab: {fileID: 4355028299619541375}
-  distanceFromCamera: 6
+  distanceFromCamera: 2
   verticalOffset: -0.2
   clikOnCanvas: {fileID: 0}
 --- !u!114 &7396062327506587665

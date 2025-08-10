@@ -29,9 +29,9 @@ public class MasterTimelineTrack : MonoBehaviour
                             // 如果轨道没有关键帧，设置为0秒
                             track.SetTime(0f);
                         }
-
-                        track.isControlledByMaster = false;
+                        
                         track.isAnimPlaying = false;
+                        track.isControlledByMaster = false;
                     }
                 }
 
