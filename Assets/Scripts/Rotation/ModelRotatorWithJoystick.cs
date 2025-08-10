@@ -18,7 +18,8 @@ namespace MyGame.Selection
 
         [Header("UI 设置")]
         public GameObject ActionUI; // 动作ui
-        public GameObject currentCanvasInstance;
+        // 改为静态共享变量，所有实例共用一个UI实例
+        private static GameObject actionUICanvasInstance;
         public GameObject currentPropCanvasInstance;
 
 
@@ -88,13 +89,8 @@ namespace MyGame.Selection
                 {
                     SelectedCharacterManager.CurrentSelectedCharacter = controllerForCharacter;
                     Debug.Log($"✅ 选中了角色: {controllerForCharacter.gameObject.name}");
+                    HandleCharacterCanvas();
                 }
-            }
-
-            // 只要 currentCanvasInstance 为空或者不激活，都创建/显示它
-            if (currentCanvasInstance == null || !currentCanvasInstance.activeSelf)
-            {
-                HandleCharacterCanvas();
             }
         }
 
@@ -102,26 +98,25 @@ namespace MyGame.Selection
         {
             if (ActionUI == null || characterTransform == null)
             {
-                Debug.LogWarning("人物UI或者Transform未设置");
+                Debug.LogWarning("ActionUIPrefab 或 characterTransform 未设置");
                 return;
             }
 
-            // 第一个 Canvas：ActionUI
-            if (currentCanvasInstance == null || !currentCanvasInstance.activeSelf)
+            if (actionUICanvasInstance == null)
             {
-                currentCanvasInstance = Instantiate(ActionUI);
-                Vector3 offset = new Vector3(2f, 2f, 0);
-                currentCanvasInstance.transform.position = characterTransform.position + offset;
-
-                if (Camera.main != null)
-                {
-                    currentCanvasInstance.transform.LookAt(Camera.main.transform);
-                    currentCanvasInstance.transform.Rotate(0, 180f, 0);
-                }
-
-                // 不再作为人物子物体
-                currentCanvasInstance.transform.SetParent(null); // 或者 SetParent(UICanvasRootTransform, false)
+                actionUICanvasInstance = Instantiate(ActionUI);
             }
+
+            Vector3 offset = new Vector3(2f, 2f, 0f);
+            actionUICanvasInstance.transform.position = characterTransform.position + offset;
+
+            if (Camera.main != null)
+            {
+                actionUICanvasInstance.transform.LookAt(Camera.main.transform);
+                actionUICanvasInstance.transform.Rotate(0, 180f, 0);
+            }
+
+            actionUICanvasInstance.SetActive(true);
 
             // 第二个 Canvas：TrackUI
             TimelineTrack track = GetComponent<TimelineTrack>();
@@ -199,5 +194,12 @@ namespace MyGame.Selection
                 Mathf.Clamp(v.y, min, max),
                 Mathf.Clamp(v.z, min, max));
         }
+        [ContextMenu("测试 OnSelect")]
+        private void ContextMenuSelect()
+        {
+            OnSelect();
+            Debug.Log("ContextMenu: OnSelect called");
+        }
     }
+    
 }

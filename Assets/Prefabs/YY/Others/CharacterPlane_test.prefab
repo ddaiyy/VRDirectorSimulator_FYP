@@ -6947,7 +6947,6 @@ GameObject:
   - component: {fileID: 7259889388553577240}
   - component: {fileID: 4508323761986327336}
   - component: {fileID: 3131227996932405456}
-  - component: {fileID: 5405835155138598069}
   m_Layer: 0
   m_Name: Doozy_Test
   m_TagString: Untagged
@@ -7220,21 +7219,6 @@ MonoBehaviour:
   animator: {fileID: 520164035082425088}
   actionSequence: []
   isPlacedCharacter: 0
---- !u!114 &5405835155138598069
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3660542111334209625}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afbddb92ffbf54a41a246f6f1c912caf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controllerForThisCharacter: {fileID: 3131227996932405456}
-  propUI: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
-  characterTransform: {fileID: 141698069928482373}
 --- !u!1 &3695927553270399018
 GameObject:
   m_ObjectHideFlags: 0
@@ -9177,7 +9161,6 @@ GameObject:
   - component: {fileID: 7690267027248646742}
   - component: {fileID: 2160634717225920964}
   - component: {fileID: 5274062974041904030}
-  - component: {fileID: 1702740615502179368}
   m_Layer: 0
   m_Name: kaya_test
   m_TagString: Untagged
@@ -9453,21 +9436,6 @@ MonoBehaviour:
   animator: {fileID: 8699692981582510573}
   actionSequence: []
   isPlacedCharacter: 0
---- !u!114 &1702740615502179368
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4599195786085236966}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afbddb92ffbf54a41a246f6f1c912caf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controllerForThisCharacter: {fileID: 5274062974041904030}
-  propUI: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
-  characterTransform: {fileID: 4673803912909383166}
 --- !u!1 &4685409046088725250
 GameObject:
   m_ObjectHideFlags: 0
@@ -10344,7 +10312,6 @@ GameObject:
   - component: {fileID: 3475565823927017700}
   - component: {fileID: 5031221210965106083}
   - component: {fileID: 337723825306941750}
-  - component: {fileID: 5329779196102008872}
   m_Layer: 0
   m_Name: Sporty_test
   m_TagString: Untagged
@@ -10620,21 +10587,6 @@ MonoBehaviour:
   animator: {fileID: 1815620216762701050}
   actionSequence: []
   isPlacedCharacter: 0
---- !u!114 &5329779196102008872
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5139439381979805692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afbddb92ffbf54a41a246f6f1c912caf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controllerForThisCharacter: {fileID: 337723825306941750}
-  propUI: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
-  characterTransform: {fileID: 6231765806327750858}
 --- !u!1 &5156058745248488553
 GameObject:
   m_ObjectHideFlags: 0
@@ -15558,7 +15510,6 @@ GameObject:
   - component: {fileID: 7670763937706615587}
   - component: {fileID: 6231941573032423405}
   - component: {fileID: 7174569213926764506}
-  - component: {fileID: 3506061557649481942}
   m_Layer: 0
   m_Name: Michelle_test
   m_TagString: Untagged
@@ -15831,21 +15782,6 @@ MonoBehaviour:
   animator: {fileID: 1144652825442426522}
   actionSequence: []
   isPlacedCharacter: 0
---- !u!114 &3506061557649481942
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7308196607726879386}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afbddb92ffbf54a41a246f6f1c912caf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controllerForThisCharacter: {fileID: 7174569213926764506}
-  propUI: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
-  characterTransform: {fileID: 2861142239508409376}
 --- !u!1 &7313530030748399423
 GameObject:
   m_ObjectHideFlags: 0
@@ -19180,7 +19116,6 @@ GameObject:
   - component: {fileID: 6601752462496107739}
   - component: {fileID: 389875081947329055}
   - component: {fileID: 7790252096496337549}
-  - component: {fileID: 1704074931600777278}
   m_Layer: 0
   m_Name: Peasant_test
   m_TagString: Untagged
@@ -19453,21 +19388,6 @@ MonoBehaviour:
   animator: {fileID: 6432746110214079431}
   actionSequence: []
   isPlacedCharacter: 0
---- !u!114 &1704074931600777278
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9022363711768871813}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afbddb92ffbf54a41a246f6f1c912caf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controllerForThisCharacter: {fileID: 7790252096496337549}
-  propUI: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
-  characterTransform: {fileID: 5090997217714262043}
 --- !u!1 &9093993069264746750
 GameObject:
   m_ObjectHideFlags: 0

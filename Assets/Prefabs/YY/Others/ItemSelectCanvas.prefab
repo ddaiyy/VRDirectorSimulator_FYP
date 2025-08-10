@@ -147,6 +147,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionPlanePrefab: {fileID: 3435013403042788624, guid: 165f888ec6fb0ea43b406cf5a71761c9, type: 3}
   spawnPointName: SelectionPlaneSpawnPoint
+  planeKey: food
 --- !u!1 &2789188713986276233
 GameObject:
   m_ObjectHideFlags: 0
@@ -369,6 +370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionPlanePrefab: {fileID: 3956693168880783406, guid: ca3f88412dc6ff74ebedf401dc3780bc, type: 3}
   spawnPointName: SelectionPlaneSpawnPoint
+  planeKey: modern
 --- !u!1 &3668522336405508543
 GameObject:
   m_ObjectHideFlags: 0
@@ -965,6 +967,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionPlanePrefab: {fileID: 8865934013414703447, guid: 252721b52cceb5841a98eb6bc989982c, type: 3}
   spawnPointName: SelectionPlaneSpawnPoint
+  planeKey: acient
 --- !u!1 &8284633001288025470
 GameObject:
   m_ObjectHideFlags: 0
