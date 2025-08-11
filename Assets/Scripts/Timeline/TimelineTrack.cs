@@ -35,6 +35,7 @@ public class TimelineTrack : MonoBehaviour
     public float animDuration = 5f;
     [SerializeField] public bool isAnimPlaying = false;
     private bool lastCameraActiveState = false; // 记录上次的相机激活状态，避免重复切换
+    private bool suppressAnimationOnReset = false; // 防止在主时间轴重置时触发动画
 
     void Start()
     {
@@ -727,6 +728,7 @@ public class TimelineTrack : MonoBehaviour
     {
         currentTime = time;
         ApplyClipAtTime(time);
+        
     }
     
 
@@ -751,6 +753,12 @@ public class TimelineTrack : MonoBehaviour
     {
         Debug.Log("隐藏UI实例");
         objectTimelineUI.HidePanel();
+    }
+
+    // 设置是否在重置时抑制动画播放
+    public void SetSuppressAnimationOnReset(bool suppress)
+    {
+        suppressAnimationOnReset = suppress;
     }
 
     public bool DeleteClipAtTime(float time)
@@ -836,6 +844,18 @@ public class TimelineTrack : MonoBehaviour
 
     private void CheckAndTriggerAnimationClip(float currentTime)
     {
+        // 如果轨道被主线控制且已经播放完毕，不触发新的动画
+        if (isControlledByMaster && currentTime >= GetDuration())
+        {
+            return;
+        }
+
+        // 防止在主时间轴重置到0s时触发动画
+        if (suppressAnimationOnReset && Mathf.Approximately(currentTime, 0f))
+        {
+            return;
+        }
+
         // 查找当前时间点的动画关键帧
         var animationClip = clips.FirstOrDefault(c =>
             c.clipType == TimelineClip.ClipType.AnimationClip &&
@@ -848,7 +868,6 @@ public class TimelineTrack : MonoBehaviour
         // 处理AnimationClip（动画开始）- 防止重复播放
         if (animationClip != null && !isAnimPlaying)
         {
-            isAnimPlaying = true; // 标记为已播放
             CharacterActionController characterActionController = gameObject.GetComponent<CharacterActionController>();
             //characterActionController.PlayAction(animationClip.animationName,false);
             Animator animator = gameObject.GetComponent<Animator>();
@@ -860,6 +879,8 @@ public class TimelineTrack : MonoBehaviour
             else
             {
                 animator.Play(animationClip.animationName);
+                isAnimPlaying = true; // 标记为已播放
+                Debug.Log($"[{gameObject.name}] 播放动画 (时间: {currentTime:F2}s, 目标时间: {animationClip.time:F2}s)");
                 //animator.SetFloat("Speed", 1f); // 确保有一个控制速度的参数
                 StartCoroutine(StopAnimationAfterTime(animationClip.animationDuration));
             }
@@ -878,7 +899,7 @@ public class TimelineTrack : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         Animator animator = gameObject.GetComponent<Animator>();
-        //animator.SetFloat("Speed", 0f); // 停止播放
+        animator.SetFloat("Speed", 0f); // 停止播放
         animator.Play("T-Pose");
         isAnimPlaying = false;
         Debug.Log($"[{gameObject.name}] 停止播放动画 (时间: {currentTime:F2}s");

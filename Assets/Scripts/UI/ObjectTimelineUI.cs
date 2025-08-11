@@ -30,6 +30,9 @@ public class ObjectTimelineUI : MonoBehaviour
     public RectTransform timelineContent; // 拖到Inspector
     public float timelineWidth = 600f; // 你的时间轴UI宽度
     public float maxTime = 20f; // 时间轴最大时间
+
+    public Button deleteKeyframeButton;
+    public Button clearAllKeyframeButton;
     
     [Header("Camera相关")]
     public Toggle camActiveToggle;
@@ -49,6 +52,8 @@ public class ObjectTimelineUI : MonoBehaviour
         stopButton.onClick.AddListener(OnStopClicked);
         timeSlider.onValueChanged.AddListener(OnSliderChanged);
         addKeyframeButton.onClick.AddListener(OnAddKeyframeClicked);
+        deleteKeyframeButton.onClick.AddListener(OnDeleteKeyframeClicked);
+        clearAllKeyframeButton.onClick.AddListener(OnClearAllKeyframeClicked);
         
         //SelectCamera
         if (camActiveToggle != null)
@@ -64,6 +69,16 @@ public class ObjectTimelineUI : MonoBehaviour
             
         }
         //HidePanel();
+    }
+
+    private void OnClearAllKeyframeClicked()
+    {
+        currentTrack.DeleteAllClips();
+    }
+
+    private void OnDeleteKeyframeClicked()
+    {
+        currentTrack.DeleteClipAtTime(timeSlider.value);
     }
 
     private void OnFOVChanged(float value)
@@ -188,9 +203,19 @@ public class ObjectTimelineUI : MonoBehaviour
                     float t = clip.time;
                     btn.onClick.AddListener(() =>
                     {
+                        // 如果主时间轴正在控制，禁用关键帧跳转
+                        if(TimelineManager.Instance.isMasterControl) return;
+                        
+                        // 设置抑制动画标志，防止在跳转时意外触发动画
+                        currentTrack.SetSuppressAnimationOnReset(true);
                         currentTrack.SetTime(t);
+                        currentTrack.SetSuppressAnimationOnReset(false);
+                        
                         RefreshTime();
-                        RefreshCamera();
+                        if (currentTrack.isCamera)
+                        {
+                             RefreshCamera();
+                        }
                     });
                 }
             }
@@ -199,28 +224,39 @@ public class ObjectTimelineUI : MonoBehaviour
 
     void OnPlayClicked()
     {
+        // 如果主时间轴正在控制，禁用单个轨道的播放
+        if(TimelineManager.Instance.isMasterControl) return;
+        
         if (currentTrack != null)
             currentTrack.Play();
     }
 
     void OnStopClicked()
     {
+        // 如果主时间轴正在控制，禁用单个轨道的停止
+        if(TimelineManager.Instance.isMasterControl) return;
+        
         if (currentTrack != null)
             currentTrack.Stop();
     }
 
     void OnSliderChanged(float value)
     {
+        // 如果主时间轴正在控制，禁用UI时间滑块操作
+        if(TimelineManager.Instance.isMasterControl) return;
+        
         if (currentTrack != null)
         {
+            // 设置抑制动画标志，防止在手动拖动时意外触发动画
+            currentTrack.SetSuppressAnimationOnReset(true);
             currentTrack.SetTime(value);
+            currentTrack.SetSuppressAnimationOnReset(false);
 
             if (currentTrack.isCamera)
             {
                 RefreshCamera();
             }
         }
-        
     }
 
     void OnAddKeyframeClicked()

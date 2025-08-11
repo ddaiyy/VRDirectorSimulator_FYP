@@ -8,6 +8,7 @@ public class TimelineManager : MonoBehaviour
     public MasterTimelineTrack masterTrack;
     public List<TimelineTrack> tracks = new List<TimelineTrack>();
     public ObjectTimelineUI timelinePanel;
+    public bool isMasterControl=false;
     
     void Awake()
     {

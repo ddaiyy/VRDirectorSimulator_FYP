@@ -16,7 +16,7 @@ public class MasterTimelineTrack : MonoBehaviour
             currentTime += Time.deltaTime;
             if (currentTime > duration)
             {
-                foreach (var track in TimelineManager.Instance.GetAllTracks())
+                /*foreach (var track in TimelineManager.Instance.GetAllTracks())
                 {
                     if (track.isControlledByMaster)
                     {
@@ -27,15 +27,18 @@ public class MasterTimelineTrack : MonoBehaviour
                         else
                         {
                             // 如果轨道没有关键帧，设置为0秒
+                            track.currentTime = 0f;
                             track.SetTime(0f);
                         }
                         
-                        track.isAnimPlaying = false;
                         track.isControlledByMaster = false;
                     }
                 }
 
                 isPlaying = false;
+                TimelineManager.Instance.isMasterControl = false;*/
+                Stop();
+                TimelineManager.Instance.isMasterControl = false;
             }
             else
             {
@@ -44,11 +47,17 @@ public class MasterTimelineTrack : MonoBehaviour
                 {
                     if (track.isControlledByMaster)
                     {
+                        // 检查轨道是否已经播放完毕
                         if (currentTime >= track.GetDuration())
                         {
-                            track.isAnimPlaying = true;
+                            // 轨道已经播放完毕，设置到最后一帧并停止动画
+                            track.SetTime(track.GetDuration());
+                            track.isAnimPlaying = false;
                         }
-                        track.SetTime(currentTime);
+                        else
+                        {
+                            track.SetTime(currentTime);
+                        }
                     }
                 }
 
@@ -71,7 +80,7 @@ public class MasterTimelineTrack : MonoBehaviour
                             track.SetTime(track.clips[0].time);
                         }
                     }
-
+                    
                     return; // 不执行后续的轨道更新
                 }
                 else if (conflictingCameras.Count == 0)
@@ -101,6 +110,7 @@ public class MasterTimelineTrack : MonoBehaviour
         isPlaying = true;
         currentTime = 0f;
         duration = GetDuration();
+        TimelineManager.Instance.isMasterControl = true;
         //ClearPreviewTexture();
 
         foreach (var track in TimelineManager.Instance.GetAllTracks())
@@ -123,6 +133,9 @@ public class MasterTimelineTrack : MonoBehaviour
         currentTime = 0f;
         foreach (var track in TimelineManager.Instance.GetAllTracks())
         {
+            // 设置抑制动画标志，防止在重置到0s时触发动画
+            track.SetSuppressAnimationOnReset(true);
+            
             // 检查clips是否为空，避免IndexOutOfRangeException
             if (track.clips != null && track.clips.Count > 0)
             {
@@ -135,6 +148,10 @@ public class MasterTimelineTrack : MonoBehaviour
             }
 
             track.isControlledByMaster = false;
+            track.isAnimPlaying = false;
+            
+            // 重置抑制标志
+            track.SetSuppressAnimationOnReset(false);
         }
     }
 
