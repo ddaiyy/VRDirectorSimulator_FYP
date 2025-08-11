@@ -14823,8 +14823,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3169986090910801092}
   m_HandleRect: {fileID: 6342940825445960483}
   m_Direction: 0
-  m_Value: 0
-  m_Size: 0.20133449
+  m_Value: -0.011256842
+  m_Size: 0.00000016789322
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -16029,7 +16029,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.053000003, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 899.13995, y: 987.50684}
+  m_AnchoredPosition: {x: 907.3106, y: 1220.5707}
   m_SizeDelta: {x: -1082.14, y: 1395.4}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2710119329628953498
@@ -18669,6 +18669,7 @@ MonoBehaviour:
   masterTrack: {fileID: 7396062327506587665}
   tracks: []
   timelinePanel: {fileID: 0}
+  isMasterControl: 0
 --- !u!1 &6065940230602156885
 GameObject:
   m_ObjectHideFlags: 0
@@ -19270,8 +19271,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6419865256871003132}
   m_HandleRect: {fileID: 2331478906388257413}
   m_Direction: 2
-  m_Value: 0.18549418
-  m_Size: 0.1311452
+  m_Value: -0.0067392397
+  m_Size: 0
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -19697,7 +19698,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &7662059454202854972
 MonoBehaviour:
   m_ObjectHideFlags: 0
