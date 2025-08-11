@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2847428877833932728}
   - component: {fileID: 7974520150063276604}
   - component: {fileID: 6449136358622706945}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: RectangularTable_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -311,7 +311,7 @@ GameObject:
   - component: {fileID: 4116569621487419579}
   - component: {fileID: 5827765920772917983}
   - component: {fileID: 6566312898752413901}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Bottle_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -607,7 +607,7 @@ GameObject:
   - component: {fileID: 5244460751728083004}
   - component: {fileID: 4463408535717396712}
   - component: {fileID: 5344571822081341528}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: White_Porcelain_Jar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -903,7 +903,7 @@ GameObject:
   - component: {fileID: 6969913972621278915}
   - component: {fileID: 121266910075704493}
   - component: {fileID: 740451262388044397}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: WoodenShoes_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1199,7 +1199,7 @@ GameObject:
   - component: {fileID: 150447537631166642}
   - component: {fileID: 528925257915767241}
   - component: {fileID: 1086324887371490554}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: LacqueredBox_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1495,7 +1495,7 @@ GameObject:
   - component: {fileID: 906235419566846195}
   - component: {fileID: 223715830094680776}
   - component: {fileID: 2859096839490965059}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: WoodenShoes_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1791,7 +1791,7 @@ GameObject:
   - component: {fileID: 86173236686660488}
   - component: {fileID: 1639310928302669962}
   - component: {fileID: 429925377969574671}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: BrushHolderBamboo_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2084,7 +2084,7 @@ GameObject:
   - component: {fileID: 7103287074375986505}
   - component: {fileID: 3060386175128389590}
   - component: {fileID: 137955706685300522}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Item_Ancient
   m_TagString: Untagged
   m_Icon: {fileID: 0}

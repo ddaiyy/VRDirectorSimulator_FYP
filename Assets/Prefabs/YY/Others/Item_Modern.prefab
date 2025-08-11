@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3610063398876074537}
   - component: {fileID: 302647713097498140}
   - component: {fileID: 2956987785197252395}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Prop_TeddyBear_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -312,7 +312,7 @@ GameObject:
   - component: {fileID: 7744723593427508329}
   - component: {fileID: 7889980439266442849}
   - component: {fileID: 3084648858530081007}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Prop_Toy_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -609,7 +609,7 @@ GameObject:
   - component: {fileID: 4883465495977284900}
   - component: {fileID: 9114198291128275633}
   - component: {fileID: 7847968028958969499}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Prop_Ball_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -907,7 +907,7 @@ GameObject:
   - component: {fileID: 3501307663651399174}
   - component: {fileID: 7571172542860839090}
   - component: {fileID: 6292081456651223301}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Prop_Homeplant_06
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1200,7 +1200,7 @@ GameObject:
   - component: {fileID: 7239486677896979846}
   - component: {fileID: 4977291110878313288}
   - component: {fileID: 2713251233422156408}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Item_Modern
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1315,7 +1315,7 @@ GameObject:
   - component: {fileID: 3207423367569656635}
   - component: {fileID: 2377707838152755385}
   - component: {fileID: 6089505893749052384}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Prop_Chair_06
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1612,7 +1612,7 @@ GameObject:
   - component: {fileID: 5539007549512183394}
   - component: {fileID: 6576803457442705553}
   - component: {fileID: 1592191769065645861}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Prop_Table_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}

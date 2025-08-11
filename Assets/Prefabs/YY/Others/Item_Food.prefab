@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3837586256567424601}
   - component: {fileID: 6436034283304173951}
   - component: {fileID: 8731479513584295609}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Hotdog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -311,7 +311,7 @@ GameObject:
   - component: {fileID: 6296501954521573924}
   - component: {fileID: 2897835242476839521}
   - component: {fileID: 8003590459666955858}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Hamburguer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -604,7 +604,7 @@ GameObject:
   - component: {fileID: 8456972360046682755}
   - component: {fileID: 390351305463304025}
   - component: {fileID: 3395014792414648749}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Item_Food
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -719,7 +719,7 @@ GameObject:
   - component: {fileID: 8448059030454592438}
   - component: {fileID: 5024395456278307471}
   - component: {fileID: 1688209201721910107}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: SodaBottle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1015,7 +1015,7 @@ GameObject:
   - component: {fileID: 4843198592313912886}
   - component: {fileID: 9045427642750076839}
   - component: {fileID: 6891379300178110058}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Drink
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1311,7 +1311,7 @@ GameObject:
   - component: {fileID: 2282362401158852925}
   - component: {fileID: 7519002419748621973}
   - component: {fileID: 9014168366042094297}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Coffee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1607,7 +1607,7 @@ GameObject:
   - component: {fileID: 5169332038319029775}
   - component: {fileID: 8170439160315588177}
   - component: {fileID: 1107366097947233595}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: IceCream
   m_TagString: Untagged
   m_Icon: {fileID: 0}

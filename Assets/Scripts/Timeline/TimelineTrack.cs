@@ -516,6 +516,11 @@ public class TimelineTrack : MonoBehaviour
                 //这是摄像机
                 Debug.Log("实例化相机的操作Canvas");
                 uiInstance = Instantiate(cameraTimelineUIPrefab);
+                if (Camera.main != null)
+                {
+                    uiInstance.transform.LookAt(Camera.main.transform);
+                    uiInstance.transform.Rotate(0, 180f, 0);
+                }
             }
             else
             {
