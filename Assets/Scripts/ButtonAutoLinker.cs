@@ -3,19 +3,16 @@ using UnityEngine.UI;
 
 public class ButtonAutoLinker : MonoBehaviour
 {
-    public CanvasAutoHideController canvasController;
-
-    void Start()
+    private void Start()
     {
-        Button[] buttons = GetComponentsInChildren<Button>();
+        // 获取当前 Canvas 下的所有 Button
+        Button[] buttons = GetComponentsInChildren<Button>(true);
         foreach (Button btn in buttons)
         {
-            btn.onClick.AddListener(OnAnyButtonClicked);
+            btn.onClick.AddListener(() =>
+            {
+                gameObject.SetActive(false);
+            });
         }
-    }
-
-    void OnAnyButtonClicked()
-    {
-        canvasController.FadeOutAndHide();
     }
 }

@@ -28,6 +28,17 @@ public class ToggleCanvasWithButton : MonoBehaviour
 
     void Update()
     {
+        // 自动同步 Canvas 状态
+        if (canvasToToggle != null)
+        {
+            isCanvasVisible = canvasToToggle.activeSelf;
+        }
+
+        if (!rightController.isValid)
+        {
+            TryInitializeRightController();
+        }
+
         if (!rightController.isValid)
         {
             TryInitializeRightController();
