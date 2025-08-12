@@ -24,7 +24,7 @@ public class RecorderController : MonoBehaviour
     private Coroutine recordCoroutine;
 
     private bool isCanvasActive = false;
-    private float recordStartTime; 
+    private float recordStartTime;
     private bool isRecording = false;
 
     public Button closeCanvasButton;
@@ -41,10 +41,11 @@ public class RecorderController : MonoBehaviour
         exportProgressCanvas.gameObject.SetActive(false);
     }
 
-    
+
     void OnStartRecord()
     {
         recordDuration = TimelineManager.Instance.masterTrack.GetDuration();
+        Debug.Log($"RecordDuration:{recordDuration}");
         string fileName = outputFileName;
         if (!fileName.EndsWith(".mp4")) fileName += ".mp4";
 
@@ -54,13 +55,13 @@ public class RecorderController : MonoBehaviour
         string outputPath = Application.dataPath + "/" + fileName;
 #endif
         // 设置ffmpeg参数，注意空格
-        captureCommand.CaptureOptions = $" \"{outputPath}\"";
-        
+        captureCommand.CaptureOptions = $"-y \"{outputPath}\"";
+
         if (recordCoroutine != null)
         {
             StopCoroutine(recordCoroutine);
         }
-        
+
         recordCoroutine = StartCoroutine(RecordForSeconds(recordDuration));
 
     }
@@ -70,7 +71,7 @@ public class RecorderController : MonoBehaviour
         recordStartTime = Time.time;
         // 设置 slider 最大值
         progressSlider.maxValue = seconds;
-        
+
         exportProgressCanvas.gameObject.SetActive(true);
         closeCanvasButton.gameObject.SetActive(false);
         isRecording = true;
@@ -84,7 +85,7 @@ public class RecorderController : MonoBehaviour
         isRecording = false;
         closeCanvasButton.gameObject.SetActive(true);
         Debug.Log("录制结束");
-        
+
 
 #if UNITY_ANDROID && !UNITY_EDITOR
     string fileName = outputFileName;
@@ -120,7 +121,7 @@ public class RecorderController : MonoBehaviour
         float percent = (elapsed / recordDuration) * 100f;
         progerssSliderTimeText.text = $"{percent:F1}%";
     }
-    
+
     void OnStopRecord()
     {
         if (recordCoroutine != null)
