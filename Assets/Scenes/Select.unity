@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2988,7 +2988,7 @@ MonoBehaviour:
   progressSlider: {fileID: 1082988323}
   progerssSliderTimeText: {fileID: 1978558768}
   recordDuration: 10
-  outputFileName: output.mp4
+  outputFileName: output1.mp4
   closeCanvasButton: {fileID: 1946584019}
 --- !u!114 &708764284676169844
 MonoBehaviour:
@@ -3189,7 +3189,6 @@ MonoBehaviour:
   controllerForCharacter: {fileID: 0}
   characterTransform: {fileID: 0}
   ActionUI: {fileID: 0}
-  currentCanvasInstance: {fileID: 0}
   currentPropCanvasInstance: {fileID: 0}
   inputSource: 4
   buttonHand: 4
@@ -3460,9 +3459,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ee1d0a4d62872b4d9fa8e81e40c8c46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExecuteOnStart: 1
+  ExecuteOnStart: 0
   Options: 
-  PrintStdErr: 0
+  PrintStdErr: 1
   CaptureSources:
   - Type: 2
     Width: -1
@@ -7197,6 +7196,7 @@ MonoBehaviour:
   masterTrack: {fileID: 7396062327506587665}
   tracks: []
   timelinePanel: {fileID: 0}
+  isMasterControl: 0
 --- !u!1 &6065940230602156885
 GameObject:
   m_ObjectHideFlags: 0
@@ -9290,6 +9290,10 @@ PrefabInstance:
     - target: {fileID: 8793218317440421154, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
       propertyPath: m_Name
       value: Export Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 8793218317440421154, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

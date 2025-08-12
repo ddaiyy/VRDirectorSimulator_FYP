@@ -5,6 +5,7 @@ using UnityEngine;
 using FfmpegUnity;
 using TMPro;
 using UnityEngine.UI;
+using System.IO;
 
 public class RecorderController : MonoBehaviour
 {
@@ -49,7 +50,13 @@ public class RecorderController : MonoBehaviour
         if (!fileName.EndsWith(".mp4")) fileName += ".mp4";
 
 #if UNITY_ANDROID && !UNITY_EDITOR
-        string outputPath = "/sdcard/DCIM/Recordings/" + fileName;
+    string dirPath = "/sdcard/DCIM/Recordings/";
+    Directory.CreateDirectory(dirPath);  // 确保目录存在
+    string outputPath = dirPath + fileName;
+    if (File.Exists(outputPath))
+    {
+        File.Delete(outputPath);
+    }
 #else
         string outputPath = Application.dataPath + "/" + fileName;
 #endif
@@ -77,6 +84,8 @@ public class RecorderController : MonoBehaviour
         progressText.text = "Recording...";
         captureCommand.StartFfmpeg(); // 开始录制
         Debug.Log("开始录制");
+        Debug.Log("PathInStreamingAssetsCopy: " + captureCommand.PathInStreamingAssetsCopy);
+        Debug.Log("FFmpeg RunOptions: " + captureCommand.Options);
         TimelineManager.Instance.masterTrack.Play();
         yield return new WaitForSeconds(seconds);
         captureCommand.StopFfmpeg(); // 停止录制
