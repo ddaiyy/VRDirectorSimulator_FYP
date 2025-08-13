@@ -9,7 +9,7 @@ public class TimelinePanelScaler : MonoBehaviour
     public ScrollRect scrollRect;        // ScrollRect
     public Slider timelineSlider;        // Slider
     public RectTransform sliderHandle;   // Slider Handle
-    public Text timeLabel;               // 时间标签
+    //public Text timeLabel;               // 时间标签
 
     [Header("时间设置")]
     public float totalTime = 300f;
@@ -65,12 +65,12 @@ public class TimelinePanelScaler : MonoBehaviour
         sliderHandle.anchoredPosition = new Vector2(handleWidth / 2f, sliderHandle.anchoredPosition.y);
 
         // 更新 Label
-        UpdateLabel();
+        //UpdateLabel();
     }
 
-    private void UpdateLabel()
+    /*private void UpdateLabel()
     {
         timeLabel.text = $"当前显示时间长度: {currentVisibleTime:F1}s / 总长: {totalTime}s\n" +
                          $"起始时间: 0s";
-    }
+    }*/
 }
