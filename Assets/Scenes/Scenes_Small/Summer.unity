@@ -2252,6 +2252,10 @@ PrefabInstance:
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 817065088}
+    - target: {fileID: 340239600102080484, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 798971205239833936, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2259,6 +2263,26 @@ PrefabInstance:
     - target: {fileID: 983258186644473384, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1681839030688653394, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2304794950010469708, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2754490671731402847, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3585084664093792872, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839284601081285542, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5160907622547650062, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
       propertyPath: m_Pivot.x
@@ -2340,9 +2364,49 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5203103663982361759, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5702053347471005274, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
+      propertyPath: m_margin.z
+      value: -76.89149
+      objectReference: {fileID: 0}
+    - target: {fileID: 5702053347471005274, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 2a5f290c93f3b2643bf3bfeb1c272d00, type: 2}
+    - target: {fileID: 5702053347471005274, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -2350753340091217606, guid: 2a5f290c93f3b2643bf3bfeb1c272d00, type: 2}
+    - target: {fileID: 5702053347471005274, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6380782422993591335, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6739984845471447420, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7456296500662334729, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8628401236129917311, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8793218317440421154, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
       propertyPath: m_Name
       value: Export Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 8793218317440421154, guid: bbf2c45aaa8c86044ab6f534900c80fd, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -16061,6 +16125,14 @@ MonoBehaviour:
   recordDuration: 10
   outputFileName: yy1.mp4
   closeCanvasButton: {fileID: 661085390}
+  leftRay: {fileID: 306162311}
+  rightRay: {fileID: 2068869944}
+  normalMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  uiOnlyMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!114 &708764284676169844
 MonoBehaviour:
   m_ObjectHideFlags: 0
