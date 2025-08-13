@@ -4,8 +4,8 @@ public class ShowCanvasInFront : MonoBehaviour
 {
     public GameObject targetCanvas;   // 要显示的 Canvas
     public Transform playerCamera;    // XR Origin 中的 Main Camera
-    public float distance = 8f;       // 前方距离
-    public float verticalOffset = 1f; // 垂直偏移，可在 Inspector 调
+    public float distance = 4f;       // 前方距离（建议 VR 用 1.5~2）
+    public float verticalOffset = 0.0f; // 垂直偏移
 
     private bool isShowing = false;
 
@@ -36,11 +36,17 @@ public class ShowCanvasInFront : MonoBehaviour
 
     void UpdateCanvasPosition()
     {
-        // 始终在玩家眼前
+        // 计算 UI 位置：玩家正前方 + 垂直偏移
         Vector3 forwardPos = playerCamera.position + playerCamera.forward * distance;
         forwardPos.y += verticalOffset;
-
         targetCanvas.transform.position = forwardPos;
-        targetCanvas.transform.rotation = playerCamera.rotation;
+
+        // 只旋转 Y 轴，避免 UI 跟着上下倾斜
+        Vector3 lookDirection = playerCamera.position - targetCanvas.transform.position;
+        lookDirection.y = 0; // 锁定 Y 轴
+        if (lookDirection.sqrMagnitude > 0.001f)
+        {
+            targetCanvas.transform.rotation = Quaternion.LookRotation(-lookDirection);
+        }
     }
 }

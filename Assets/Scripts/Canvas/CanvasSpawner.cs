@@ -8,26 +8,45 @@ public class CanvasSpawner : MonoBehaviour
     public GameObject canvasPrefab;
 
     [Header("Canvas 位置设置")]
-    public float distanceFromCamera = 8f;
+    public float distanceFromCamera = 6f;
     public float verticalOffset = -0.2f;
 
     private GameObject currentCanvasInstance;
 
     public GameObject clikOnCanvas;
+    public float heightOffset = 0f; // 高度偏移
+    public float distance = 3f; // Canvas 距离相机的距离
     void Start()
     {
-        // ȷ�����������
         if (Camera.main == null)
         {
-            Debug.LogError("û���ҵ����������");
+            Debug.LogError("没有找到主相机");
         }
     }
 
     public void ClikOnCanvas()
     {
-        clikOnCanvas.SetActive(!clikOnCanvas.activeSelf);
+        // 切换激活状态
+        bool newActiveState = !clikOnCanvas.activeSelf;
+        clikOnCanvas.SetActive(newActiveState);
+
+        // 如果刚刚激活，移动到用户眼前
+        if (newActiveState && Camera.main != null)
+        {
+            Transform cam = Camera.main.transform;
+
+            // 计算位置：相机前 distance 米 + 高度偏移
+            Vector3 newPos = cam.position + cam.forward * distance;
+            newPos.y += heightOffset;
+
+            clikOnCanvas.transform.position = newPos;
+
+            // 面向相机
+            clikOnCanvas.transform.LookAt(cam);
+            clikOnCanvas.transform.Rotate(0, 180f, 0);
+        }
     }
-    // ��������ڰ�ť���ʱ������
+    
     public void ToggleCanvas()
     {
         if (currentCanvasInstance == null)

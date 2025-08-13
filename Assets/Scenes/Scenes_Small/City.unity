@@ -40953,8 +40953,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1718648332}
   m_HandleRect: {fileID: 1718648331}
   m_Direction: 0
-  m_Value: -0.00000016817822
-  m_Size: 0.2013558
+  m_Value: -0.00000016817823
+  m_Size: 0.20135581
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -43949,8 +43949,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 774254058}
   m_HandleRect: {fileID: 774254057}
   m_Direction: 2
-  m_Value: -0.00000020136967
-  m_Size: 0.13114518
+  m_Value: -0.0000002013697
+  m_Size: 0.1311452
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -50569,8 +50569,8 @@ RectTransform:
   m_GameObject: {fileID: 1874409437}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 3.72}
-  m_LocalScale: {x: 0.030000001, y: 0.019368585, z: 0.019368585}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 0.0325269, y: 0.021, z: 0.021}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 995498371}
   - {fileID: 1078004706}
@@ -59491,6 +59491,8 @@ MonoBehaviour:
   distanceFromCamera: 2
   verticalOffset: -0.2
   clikOnCanvas: {fileID: 0}
+  heightOffset: 0
+  distance: 3
 --- !u!114 &1672104654606017125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61673,6 +61675,8 @@ MonoBehaviour:
   distanceFromCamera: 2
   verticalOffset: -0.2
   clikOnCanvas: {fileID: 1874409437}
+  heightOffset: 0
+  distance: 3
 --- !u!114 &5341774155075610210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63033,8 +63037,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetCanvas: {fileID: 4355028299619541375}
-  playerCamera: {fileID: 1635285699}
-  distance: 8
+  playerCamera: {fileID: 817065088}
+  distance: 4
   verticalOffset: 1
 --- !u!222 &8039719828805291637
 CanvasRenderer:
@@ -63677,6 +63681,8 @@ MonoBehaviour:
   distanceFromCamera: 8
   verticalOffset: -0.2
   clikOnCanvas: {fileID: 0}
+  heightOffset: 0
+  distance: 3
 --- !u!114 &8970051236434435145
 MonoBehaviour:
   m_ObjectHideFlags: 0
