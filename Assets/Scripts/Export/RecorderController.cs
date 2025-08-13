@@ -50,7 +50,7 @@ public class RecorderController : MonoBehaviour
 
     void OnStartRecord()
     {
-        recordDuration = TimelineManager.Instance.masterTrack.GetDuration();
+        recordDuration = TimelineManager.Instance.masterTrack.GetDuration() + 2.0f;
         Debug.Log($"RecordDuration:{recordDuration}");
         string fileName = outputFileName;
         if (!fileName.EndsWith(".mp4")) fileName += ".mp4";
