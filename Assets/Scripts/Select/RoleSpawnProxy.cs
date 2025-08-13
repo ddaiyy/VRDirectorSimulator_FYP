@@ -1,18 +1,58 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class RoleSpawnProxy : MonoBehaviour
 {
     public GameObject originalPrefab;  // 拖入角色 prefab
+    public GameObject selectionPlane;
+    public List<GameObject> displayCharacters; // 手动拖入所有展示用人物（比如A, B）
 
     public void OnGrab(SelectEnterEventArgs args)
     {
+        /*var interactor = args.interactorObject as XRBaseInteractor;
+        if (interactor != null)
+        {
+
+            // 当前抓取的展示人物
+            GameObject grabbedDisplayCharacter = args.interactableObject.transform.gameObject;
+            SpawnNewCharacter(interactor.transform.position, interactor);
+
+            // 销毁平面和所有展示人物
+            if (selectionPlane != null)
+            {
+                Destroy(selectionPlane);
+            }
+        }*/
+
         var interactor = args.interactorObject as XRBaseInteractor;
         if (interactor != null)
         {
+            // 生成克隆体
             SpawnNewCharacter(interactor.transform.position, interactor);
+
+            // 销毁平面
+            if (selectionPlane != null)
+            {
+                Destroy(selectionPlane);
+            }
+
+            // 销毁展示用人物（除了克隆体）
+            foreach (var displayChar in displayCharacters)
+            {
+                if (displayChar != null)
+                {
+                    Destroy(displayChar);
+                }
+            }
         }
+    }
+
+    private void DestroyPlane()
+    {
+
+        Destroy(selectionPlane);
     }
 
     private void SpawnNewCharacter(Vector3 position, XRBaseInteractor interactor = null)
