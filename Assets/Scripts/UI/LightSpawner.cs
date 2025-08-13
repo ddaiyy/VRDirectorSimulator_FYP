@@ -19,5 +19,6 @@ public class LightSpawner : MonoBehaviour
         GameObject newLight = Instantiate(lightPrefab, spawnPos, Quaternion.identity);
 
         SceneObjectManager.Instance.RegisterObject(newLight);
+        FeedbackManager.Instance.ShowMessage("Add Light Successfully", MessageType.Success);
     }
 }

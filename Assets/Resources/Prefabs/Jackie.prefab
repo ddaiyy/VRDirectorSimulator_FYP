@@ -2248,9 +2248,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.19728172
-  m_Height: 1.6743687
+  m_Height: 1.6493343
   m_Direction: 1
-  m_Center: {x: -0.00873664, y: 0.81068283, z: 0.021211252}
+  m_Center: {x: -0.00873664, y: 0.82320005, z: 0.021211252}
 --- !u!54 &6664416708519458302
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2500,7 +2500,6 @@ MonoBehaviour:
   controllerForCharacter: {fileID: 5083038581258631808}
   characterTransform: {fileID: 2506800998407036457}
   ActionUI: {fileID: 6364722592905770632, guid: 900382043cc57fe48b80ceb0b7241bcf, type: 3}
-  currentCanvasInstance: {fileID: 0}
   currentPropCanvasInstance: {fileID: 0}
   inputSource: 4
   buttonHand: 4
