@@ -1508,7 +1508,6 @@ MonoBehaviour:
   scrollRect: {fileID: 8834394112909015310}
   timelineSlider: {fileID: 9207724317284409654}
   sliderHandle: {fileID: 8266424408077458755}
-  timeLabel: {fileID: 0}
   totalTime: 300
   defaultVisibleTime: 20
   zoomStep: 1.5
@@ -2407,7 +2406,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8791246850671157109}
   m_HandleRect: {fileID: 1090492724895160108}
   m_Direction: 0
-  m_Value: 0.00000441526
+  m_Value: 0.00001473255
   m_Size: 0.22795646
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3217,7 +3216,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Keyframe
+  m_text: Timeline
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2a5f290c93f3b2643bf3bfeb1c272d00, type: 2}
   m_sharedMaterial: {fileID: -2350753340091217606, guid: 2a5f290c93f3b2643bf3bfeb1c272d00, type: 2}
@@ -3860,7 +3859,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 19, y: -186.4}
+  m_AnchoredPosition: {x: 35, y: -201}
   m_SizeDelta: {x: 0, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6637417703315223145
