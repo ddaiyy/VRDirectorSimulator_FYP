@@ -202,27 +202,39 @@ public class CameraManager : MonoBehaviour
             previewPlaneRenderer.material.mainTexture = previewTexture;
         }
         
-    } 
-    
-    public void AddNewCamera()
-    {
-        GameObject camObj = Instantiate(cameraPrefab, cameraSpawnPoint.position, cameraSpawnPoint.rotation);
-        camObj.name=GetCameraNameWithIndex(cameraPrefab.name);
-        CameraController controller = camObj.GetComponentInChildren<CameraController>();
-        
-        TimelineManager.Instance.RegisterTrack(camObj.GetComponentInChildren<TimelineTrack>());
+    }
 
+    public GameObject AddNewCamera()
+    {
+        // 在 SpawnPoint 位置实例化摄像机
+        GameObject camObj = Instantiate(cameraPrefab, cameraSpawnPoint.position, cameraSpawnPoint.rotation);
+        camObj.name = GetCameraNameWithIndex(cameraPrefab.name);
+
+        // 注册 TimelineTrack
+        TimelineTrack track = camObj.GetComponentInChildren<TimelineTrack>();
+        if (track != null)
+        {
+            TimelineManager.Instance.RegisterTrack(track);
+        }
+
+        // 获取 CameraController
+        CameraController controller = camObj.GetComponentInChildren<CameraController>();
         if (controller == null)
         {
             Debug.LogError("CameraController not found on the instantiated cameraPrefab!");
-            return;
+            return camObj; // 依然返回实例化对象
         }
 
         controller.rigRoot = camObj;
 
+        // 注册并选中摄像机
         RegisterCamera(controller);
-        SelectCamera(controller); 
+        SelectCamera(controller);
+
+        // 返回实例化的摄像机对象
+        return camObj;
     }
+
 
     private string GetCameraNameWithIndex(string cameraPrefabName)
     {

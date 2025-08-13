@@ -16839,6 +16839,8 @@ MonoBehaviour:
   distanceFromCamera: 2
   verticalOffset: -0.2
   clikOnCanvas: {fileID: 713502187716421773}
+  heightOffset: 0
+  distance: 3
 --- !u!1001 &1461484475546607788
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17030,6 +17032,8 @@ MonoBehaviour:
   distanceFromCamera: 2
   verticalOffset: -0.2
   clikOnCanvas: {fileID: 0}
+  heightOffset: 0
+  distance: 3
 --- !u!114 &1829540114819757788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21368,8 +21372,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetCanvas: {fileID: 4355028299619541375}
-  playerCamera: {fileID: 1635285699}
-  distance: 8
+  playerCamera: {fileID: 817065088}
+  distance: 6
   verticalOffset: 1
 --- !u!114 &8252346275370888263
 MonoBehaviour:
@@ -22071,7 +22075,7 @@ RectTransform:
   m_GameObject: {fileID: 713502187716421773}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 6.13}
-  m_LocalScale: {x: 0.059999995, y: 0.038737167, z: 0.038737167}
+  m_LocalScale: {x: 0.0325269, y: 0.021, z: 0.021}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1039864917}

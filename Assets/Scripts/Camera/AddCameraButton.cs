@@ -8,20 +8,17 @@ public class AddCameraButton : MonoBehaviour
     [ContextMenu("Test SpawnPlane")]
     public void OnCursorClicked()
     {
-        // 使用预制体原始位置和旋转（即 prefab 设计时的位置）
-        /*Vector3 prefabPosition = selectionPlanePrefab.transform.position;
-        Quaternion prefabRotation = selectionPlanePrefab.transform.rotation;
+        GameObject newCam = CameraManager.Instance.AddNewCamera();
+        if (newCam != null && Camera.main != null)
+        {
+            // 将摄像机移动到玩家眼前 2 米
+            newCam.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 3f;
+            newCam.transform.rotation = Camera.main.transform.rotation;
+            Debug.Log("Camera spawned in front of player.");
+        }
 
-        spawnedPlaneInstance = Instantiate(selectionPlanePrefab, prefabPosition, prefabRotation);*/
-        CameraManager.Instance.AddNewCamera();
-        // 成功
         FeedbackManager.Instance.ShowMessage("Add Camera Successfully", MessageType.Success);
-
-        Debug.Log("Generated at the original position of the prefab.");
-        
     }
-    /*public void OnClick()
-    {
-        CameraManager.Instance.AddNewCamera();
-    }*/
+
+
 }

@@ -519,7 +519,9 @@ public class TimelineTrack : MonoBehaviour
                 uiInstance = Instantiate(cameraTimelineUIPrefab);
                 if (Camera.main != null)
                 {
-                    uiInstance.transform.LookAt(Camera.main.transform);
+                    Transform cam = Camera.main.transform;
+                    uiInstance.transform.position = cam.position + cam.forward * 2.5f; // 距离玩家 2 米
+                    uiInstance.transform.LookAt(cam);
                     uiInstance.transform.Rotate(0, 180f, 0);
                 }
             }

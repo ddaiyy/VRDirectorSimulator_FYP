@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 namespace MyGame.Selection
 {
@@ -112,8 +113,13 @@ namespace MyGame.Selection
 
             if (Camera.main != null)
             {
-                actionUICanvasInstance.transform.LookAt(Camera.main.transform);
+
+                Transform cam = Camera.main.transform;
+                Vector3 rightOffset = cam.right * -0.7f; // 往左偏
+                actionUICanvasInstance.transform.position = cam.position + cam.forward * 3f; // 距离玩家 2 米
+                actionUICanvasInstance.transform.LookAt(cam);
                 actionUICanvasInstance.transform.Rotate(0, 180f, 0);
+
             }
 
             actionUICanvasInstance.SetActive(true);
@@ -131,6 +137,9 @@ namespace MyGame.Selection
 
                     if (Camera.main != null)
                     {
+                        Transform cam = Camera.main.transform;
+                        Vector3 rightOffset = Camera.main.transform.right * 0.7f;
+                        actionUICanvasInstance.transform.position = cam.position + cam.forward * 3f; // 距离玩家 2 米
                         trackUI.transform.LookAt(Camera.main.transform);
                         trackUI.transform.Rotate(0, 180f, 0);
                     }
@@ -159,7 +168,9 @@ namespace MyGame.Selection
 
                     if (Camera.main != null)
                     {
+                        Transform cam = Camera.main.transform;
                         currentPropCanvasInstance.transform.LookAt(Camera.main.transform);
+                        currentPropCanvasInstance.transform.position = cam.position + cam.forward * 3f; // 距离玩家 2 米
                         currentPropCanvasInstance.transform.Rotate(0, 180f, 0);
                     }
 
