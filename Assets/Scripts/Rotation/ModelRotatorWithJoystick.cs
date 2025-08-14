@@ -34,11 +34,25 @@ namespace MyGame.Selection
 
         private bool isSelected = false;
 
+        private Outline outline;
+
+
 
         void Start()
         {
             device = InputDevices.GetDeviceAtXRNode(inputSource);
             buttonDevice = InputDevices.GetDeviceAtXRNode(buttonHand);
+
+            outline = GetComponent<Outline>();
+            if (outline == null)
+            {
+                outline = gameObject.AddComponent<Outline>();
+                outline.OutlineMode = Outline.Mode.OutlineAll; // 模式
+                outline.OutlineColor = Color.yellow;           // 高亮颜色
+                outline.OutlineWidth = 10f;                     // 高亮粗细
+            }
+            outline.enabled = false; // 默认关闭
+
         }
 
 
@@ -78,6 +92,9 @@ namespace MyGame.Selection
         public void OnSelect()
         {
             isSelected = true;
+
+            // 选中时开启描边
+            if (outline != null) outline.enabled = true;
 
             if (type == SelectableType.Item)
             {
@@ -190,6 +207,9 @@ namespace MyGame.Selection
         public void OnDeselect()
         {
             isSelected = false;
+
+            // 取消选中时关闭描边
+            if (outline != null) outline.enabled = false;
 
         }
         private void ScaleObject(float scaleFactor)
