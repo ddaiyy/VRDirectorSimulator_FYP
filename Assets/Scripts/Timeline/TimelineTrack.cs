@@ -35,7 +35,7 @@ public class TimelineTrack : MonoBehaviour
     public float animDuration = 5f;
     [SerializeField] public bool isAnimPlaying = false;
     private bool lastCameraActiveState = false; // 记录上次的相机激活状态，避免重复切换
-    private bool suppressAnimationOnReset = false; // 防止在主时间轴重置时触发动画
+    [SerializeField] private bool suppressAnimationOnReset = false; // 防止在主时间轴重置时触发动画
 
     void Start()
     {
@@ -212,7 +212,9 @@ public class TimelineTrack : MonoBehaviour
                 // 安全地回到第一个关键帧位置
                 if (clips.Count > 0)
                 {
+                    // 找最早的时间点
                     SetTime(clips[0].time);
+                    suppressAnimationOnReset = true;
                 }
                 else
                 {
@@ -623,6 +625,7 @@ public class TimelineTrack : MonoBehaviour
         else if (time < nonAutoAnimationClips.First().time && !isPlaying)
         {
             var first = nonAutoAnimationClips.First();
+            
             transform.position = first.position;
             transform.rotation = first.rotation;
             transform.localScale = first.scale;
@@ -631,7 +634,6 @@ public class TimelineTrack : MonoBehaviour
                 cameraController.SetFOV(first.fov);
                 cameraController.SetFocusDistance(first.focusDistance);
             }
-
             return;
         }
 
@@ -730,6 +732,7 @@ public class TimelineTrack : MonoBehaviour
         ApplyClipAtTime(time);
         
     }
+    
     
 
     public void showUI()
@@ -853,6 +856,7 @@ public class TimelineTrack : MonoBehaviour
         // 防止在主时间轴重置到0s时触发动画
         if (suppressAnimationOnReset && Mathf.Approximately(currentTime, 0f))
         {
+            Debug.Log($"TimelineTrack:[suppressAnimationOnReset]:{suppressAnimationOnReset}");
             return;
         }
 
@@ -866,7 +870,7 @@ public class TimelineTrack : MonoBehaviour
             currentTime >= c.time && currentTime < c.time + 0.1f); // 允许0.1秒的误差
 
         // 处理AnimationClip（动画开始）- 防止重复播放
-        if (animationClip != null && !isAnimPlaying)
+        if (animationClip != null && !isAnimPlaying && (isPlaying||isControlledByMaster))
         {
             CharacterActionController characterActionController = gameObject.GetComponent<CharacterActionController>();
             //characterActionController.PlayAction(animationClip.animationName,false);
