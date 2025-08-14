@@ -29,7 +29,7 @@ public class ObjectTimelineUI : MonoBehaviour
 
     public RectTransform timelineContent; // 拖到Inspector
     public float timelineWidth = 600f; // 你的时间轴UI宽度
-    public float maxTime = 20f; // 时间轴最大时间
+    public float maxTime = 300f; // 时间轴最大时间
 
     public Button deleteKeyframeButton;
     public Button clearAllKeyframeButton;
@@ -172,7 +172,7 @@ public class ObjectTimelineUI : MonoBehaviour
         // 如果是摄像机，加上FOV
         if (currentTrack.GetComponentInChildren<Camera>() != null)
         {
-            properties = new string[] { "Position", "Rotation", "Scale", "FOV" };
+            properties = new string[] { "Position", "Rotation", "Scale", "FOV", "DOF" };
         }
 
         foreach (string prop in properties)
@@ -319,7 +319,7 @@ public class ObjectTimelineUI : MonoBehaviour
         
         // 更新时间轴范围
         timeSlider.minValue = 0;
-        timeSlider.maxValue = 20f;//TODO:可能需要更改
+        timeSlider.maxValue = 300f;//TODO:可能需要更改
         timeSlider.value = currentTrack.currentTime;
 
         // 刷新关键帧列表
