@@ -1606,7 +1606,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &4375261358268256519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1660,11 +1660,11 @@ MonoBehaviour:
   stopButton: {fileID: 6690906212363059926}
   timeSlider: {fileID: 9207724317284409654}
   currentTimeText: {fileID: 2417116029701563602}
-  keyframeListContent: {fileID: 2728004768739307788}
+  keyframeListContent: {fileID: 6541114985558444527}
   propertyTrackPrefab: {fileID: 5278214164810843863, guid: ba98f6d585a0e654fb4a9e868f1e11bf, type: 3}
   keyframeItemPrefab: {fileID: 1664421510332346941, guid: a72443b3d46072749ae8bac884dc47b3, type: 3}
   addKeyframeButton: {fileID: 3545475215888365132}
-  timelineContent: {fileID: 2728004768739307788}
+  timelineContent: {fileID: 6541114985558444527}
   timelineWidth: 600
   maxTime: 20
   deleteKeyframeButton: {fileID: 1274757729975723137}

@@ -334,7 +334,6 @@ MonoBehaviour:
   controllerForCharacter: {fileID: 0}
   characterTransform: {fileID: 0}
   ActionUI: {fileID: 0}
-  currentCanvasInstance: {fileID: 0}
   currentPropCanvasInstance: {fileID: 0}
   inputSource: 4
   buttonHand: 4
@@ -358,7 +357,7 @@ MonoBehaviour:
   duration: 0
   isControlledByMaster: 0
   objectTimelineUI: {fileID: 0}
-  objectTimelineUIPrefab: {fileID: 2791715501363014936, guid: 490edafdc819bc440a89a8cb59aa1d04, type: 3}
+  objectTimelineUIPrefab: {fileID: 2791715501363014936, guid: 83a717884f472714b96f278cf9ae165a, type: 3}
   cameraTimelineUIPrefab: {fileID: 0}
   startPosition: {x: 0, y: 0, z: 0}
   startRotation: {x: 0, y: 0, z: 0, w: 0}
