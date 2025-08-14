@@ -597,15 +597,7 @@ public class TimelineTrack : MonoBehaviour
         var nonAutoAnimationClips = clips.Where(c => c.clipType != TimelineClip.ClipType.AutoAnimationClip)
             .OrderBy(c => c.time).ToList();
         if (nonAutoAnimationClips.Count() == 0) return;
-        
-        var nonAnimationClip = clips.Where(c => c.clipType != TimelineClip.ClipType.AutoAnimationClip && c.clipType != TimelineClip.ClipType.AnimationClip) 
-            .OrderBy(c => c.time).ToList();//既没有animation clip也没有 autoAnimation clip
-        if (nonAnimationClip.Count() == 1 && !isCamera)
-        {
-            FeedbackManager.Instance.ShowMessage("You can't just add a normal keyframe", MessageType.Error);
-            return;
-        }
-        
+
         // 处理相机激活状态切换（必须在所有其他逻辑之前执行）
         HandleCameraActivation(time);
 
