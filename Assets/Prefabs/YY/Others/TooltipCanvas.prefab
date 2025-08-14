@@ -1031,7 +1031,6 @@ MonoBehaviour:
   - {fileID: 1096562680003653369}
   nextButton: {fileID: 1922167821929860365}
   prevButton: {fileID: 6396942122569356368}
-  closeButton: {fileID: 8273944523543819033}
   pageIndicator: {fileID: 5897020616775082569}
 --- !u!1 &3926310599377950714
 GameObject:
