@@ -1,8 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class MasterTimelineUI : MonoBehaviour
 {
@@ -21,7 +23,15 @@ public class MasterTimelineUI : MonoBehaviour
     public float timelineHeight = 40f;    // 条带高度
     public float barSpacing = 10f;        // 条带间距
 
-    
+    [Header("Clapperboard")]
+    public GameObject clapperboard; // 拖打板对象
+    private Animator clapperAnimator;
+    private AudioSource clapperAudio;
+    public Transform playerCamera;    // XR Origin 中的 Main Camera
+    public float distance = 4f;       // 前方距离（建议 VR 用 1.5~2）
+    public float verticalOffset = 0.0f; // 垂直偏移
+
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -37,17 +47,83 @@ public class MasterTimelineUI : MonoBehaviour
         RefreshTimelineUI();
         playButton.onClick.AddListener(OnPlayClicked);
         stopButton.onClick.AddListener(OnStopClicked);
-        
+
+        if (clapperboard != null)
+        {
+            clapperAnimator = clapperboard.GetComponent<Animator>();
+            clapperAudio = clapperboard.GetComponent<AudioSource>();
+        }
+
+    }
+
+    void UpdateCanvasPosition()
+    {
+        // 计算 UI 位置：玩家正前方 + 垂直偏移
+        Vector3 forwardPos = playerCamera.position + playerCamera.forward * distance;
+        forwardPos.y += verticalOffset;
+        clapperboard.transform.position = forwardPos;
+
+        // 只旋转 Y 轴，避免 UI 跟着上下倾斜
+        Vector3 lookDirection = playerCamera.position - clapperboard.transform.position;
+        lookDirection.y = 0; // 锁定 Y 轴
+        if (lookDirection.sqrMagnitude > 0.001f)
+        {
+            clapperboard.transform.rotation = Quaternion.LookRotation(-lookDirection);
+        }
     }
 
     private void OnStopClicked()
     {
         TimelineManager.Instance.masterTrack.Stop();
+        if (clapperboard != null)
+        {
+            clapperboard.SetActive(false);
+        }
     }
 
     private void OnPlayClicked()
     {
         TimelineManager.Instance.masterTrack.Play();
+        
+        if (clapperboard != null)
+        {
+            // 启用打板
+            clapperboard.SetActive(true);
+            UpdateCanvasPosition();
+
+            // Y轴旋转180
+            clapperboard.transform.Rotate(0f, 180f, 0f);
+
+
+            // 播放动画
+            if (clapperAnimator != null)
+            {
+                clapperAnimator.Play("Clapboard", 0, 0f);
+            }
+
+            // 延迟播放声音
+            if (clapperAudio != null)
+            {
+                StartCoroutine(PlayAudioWithDelay(clapperAudio, 0.5f));
+            }
+            // 2秒后隐藏打板
+            StartCoroutine(HideAfterSeconds(1f));
+
+        }
+    }
+
+    private IEnumerator HideAfterSeconds(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        if (clapperboard != null)
+        {
+            clapperboard.SetActive(false);
+        }
+    }
+    private IEnumerator PlayAudioWithDelay(AudioSource audio, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        audio.Play();
     }
 
     public void RefreshTimelineUI()
