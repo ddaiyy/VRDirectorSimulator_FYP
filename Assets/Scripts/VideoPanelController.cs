@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -7,7 +7,6 @@ public class VideoPanelController : MonoBehaviour
     public GameObject[] videoPanels;
     public Button nextButton;
     public Button prevButton;
-    public Button closeButton;
     public TMP_Text pageIndicator;
 
     private int currentIndex = 0;
@@ -15,7 +14,7 @@ public class VideoPanelController : MonoBehaviour
 
     void Start()
     {
-        // ³õÊ¼»¯£ºÖ»ÏÔÊ¾µÚÒ»¸öÊÓÆµ
+        // åˆå§‹åŒ–ï¼šåªæ˜¾ç¤ºç¬¬ä¸€ä¸ªè§†é¢‘
         for (int i = 0; i < videoPanels.Length; i++)
         {
             videoPanels[i].SetActive(i == 0);
@@ -23,15 +22,14 @@ public class VideoPanelController : MonoBehaviour
 
         prevButton.onClick.AddListener(ShowPrev);
         nextButton.onClick.AddListener(ShowNext);
-        closeButton.onClick.AddListener(ClosePanel);
 
-        // ³õÊ¼×´Ì¬
-        closeButton.interactable = false;
-        prevButton.interactable = false;  // µÚÒ»Ò³²»ÄÜµãÉÏÒ»Ò³
-        nextButton.interactable = videoPanels.Length > 1; // Èç¹ûÖ»ÓĞ1Ò³¾Í½ûÓÃNext
+        // åˆå§‹çŠ¶æ€
+        prevButton.gameObject.SetActive(false); // ç¬¬ä¸€é¡µç›´æ¥éšè—
+        nextButton.interactable = videoPanels.Length > 1;
 
-        UpdatePageIndicator(); // ³õÊ¼»¯·ÖÒ³ÏÔÊ¾
+        UpdatePageIndicator();
     }
+
 
     void ShowNext()
     {
@@ -59,17 +57,15 @@ public class VideoPanelController : MonoBehaviour
 
     void UpdateButtonStates()
     {
-        // µÚÒ»Ò³½ûÓÃPrev
-        prevButton.interactable = currentIndex > 0;
+        // ç¬¬1é¡µéšè— Prev æŒ‰é’®
+        prevButton.gameObject.SetActive(currentIndex > 0);
 
-        // ×îºóÒ»Ò³½ûÓÃNext
+        // æœ€åä¸€é¡µç¦ç”¨ Next
         nextButton.interactable = currentIndex < videoPanels.Length - 1;
-
-        // Close°´Å¥£ºÖ»ÔÚ×îºóÒ»Ò³²Å¿ÉÓÃ
-        closeButton.interactable = currentIndex == videoPanels.Length - 1;
 
         UpdatePageIndicator();
     }
+
 
     void UpdatePageIndicator()
     {
