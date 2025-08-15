@@ -18,11 +18,6 @@ public class SaveSlotUIManager : MonoBehaviour
         foreach (Transform child in slotContainer)
             Destroy(child.gameObject);
 
-        // 1. 先生成Tutorial按钮，固定第一个
-        GameObject tutorialGO = Instantiate(saveSlotPrefab, slotContainer);
-        SaveSlotButton tutorialSlot = tutorialGO.GetComponent<SaveSlotButton>();
-        tutorialSlot.SetupTutorialSlot();
-
         List<SaveData> all = SaveSystem.LoadAll();
 
         foreach (var save in all)
@@ -33,7 +28,7 @@ public class SaveSlotUIManager : MonoBehaviour
 
         }
 
-        if (all.Count < 4)
+        if (all.Count < 5)
         {
             GameObject add = Instantiate(saveSlotPrefab, slotContainer);
             var addSlot = add.GetComponent<SaveSlotButton>();
