@@ -254,7 +254,7 @@ MonoBehaviour:
   isControlledByMaster: 0
   objectTimelineUI: {fileID: 0}
   objectTimelineUIPrefab: {fileID: 0}
-  cameraTimelineUIPrefab: {fileID: 2791715501363014936, guid: fcb69a79499469643986efdc55052e41, type: 3}
+  cameraTimelineUIPrefab: {fileID: 2791715501363014936, guid: eed49bc536de04742a267894a501583b, type: 3}
   startPosition: {x: 0, y: 0, z: 0}
   startRotation: {x: 0, y: 0, z: 0, w: 0}
   startFov: 27
@@ -265,6 +265,7 @@ MonoBehaviour:
   animName: Test Animation Name
   animDuration: 5
   isAnimPlaying: 0
+  suppressAnimationOnReset: 0
 --- !u!1 &2740323080326873554
 GameObject:
   m_ObjectHideFlags: 0
