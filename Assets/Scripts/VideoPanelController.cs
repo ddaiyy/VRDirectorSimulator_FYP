@@ -60,8 +60,8 @@ public class VideoPanelController : MonoBehaviour
         // 第1页隐藏 Prev 按钮
         prevButton.gameObject.SetActive(currentIndex > 0);
 
-        // 最后一页禁用 Next
-        nextButton.interactable = currentIndex < videoPanels.Length - 1;
+        // 最后一页隐藏 Next 按钮
+        nextButton.gameObject.SetActive(currentIndex < videoPanels.Length - 1);
 
         UpdatePageIndicator();
     }
