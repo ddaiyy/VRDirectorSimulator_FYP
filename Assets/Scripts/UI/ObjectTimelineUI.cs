@@ -43,6 +43,9 @@ public class ObjectTimelineUI : MonoBehaviour
     [Header("安全选项")]
     public bool autoFixConflictingLayoutOnContent = true;
 
+    [Header("背景条（覆盖所有 Content）")]
+    public RectTransform timelineBackground;  // 把你那条整段背景图拖进来
+
     // 运行态
     private float currentVisibleTime;
     private float pixelsPerSecond;          // pps = viewport.width / currentVisibleTime
@@ -118,7 +121,7 @@ public class ObjectTimelineUI : MonoBehaviour
             focusDistanceSlider.onValueChanged.AddListener(OnFocusDistanceChanged);
         }
 
-        UpdateTimeline();   // 计算 pps，设置 Content/Slider 宽度，同步滚动条
+        UpdateTimeline();   // 计算 pps，设置 Content/Slider/背景 宽度，同步滚动条
         RefreshAll();       // 生成行与关键帧
         EnsureTimeVisible(timeSlider ? timeSlider.value : 0f);
     }
@@ -159,18 +162,41 @@ public class ObjectTimelineUI : MonoBehaviour
     // ---------------- 缩放/滚动 ----------------
     public void ZoomIn()
     {
-        currentVisibleTime = Mathf.Max(currentVisibleTime / zoomStep, minVisibleTime);
+        // 每秒像素数增加，单位时间占更多像素 → 页面能看到的时间变少
+        pixelsPerSecond *= zoomStep;
+        ClampZoom();
         UpdateTimeline();
-        RefreshKeyframeList();
         EnsureTimeVisible(timeSlider ? timeSlider.value : 0f);
     }
 
     public void ZoomOut()
     {
-        currentVisibleTime = Mathf.Min(currentVisibleTime * zoomStep, maxVisibleTime);
+        // 每秒像素数减少，单位时间占更少像素 → 页面能看到的时间变多
+        pixelsPerSecond /= zoomStep;
+        ClampZoom();
         UpdateTimeline();
-        RefreshKeyframeList();
         EnsureTimeVisible(timeSlider ? timeSlider.value : 0f);
+    }
+
+    // 保证缩放范围在 minVisibleTime ~ maxVisibleTime 之间
+    private void ClampZoom()
+    {
+        float viewportWidth = viewport ? viewport.rect.width : 0f;
+        if (viewportWidth <= 0f) return;
+
+        // 计算当前一页能显示多少秒
+        currentVisibleTime = viewportWidth / pixelsPerSecond;
+
+        if (currentVisibleTime < minVisibleTime)
+        {
+            currentVisibleTime = minVisibleTime;
+            pixelsPerSecond = viewportWidth / currentVisibleTime;
+        }
+        else if (currentVisibleTime > maxVisibleTime)
+        {
+            currentVisibleTime = maxVisibleTime;
+            pixelsPerSecond = viewportWidth / currentVisibleTime;
+        }
     }
 
     private void UpdateTimeline()
@@ -185,7 +211,15 @@ public class ObjectTimelineUI : MonoBehaviour
         // Content 宽：总时长 * pps + 右侧缓冲
         float contentWidth = totalTime * pixelsPerSecond + Mathf.Max(rightEdgePaddingPx, 0f);
         SetContentWidth(contentWidth);
-
+        
+        if (timelineBackground)
+        {
+            // 建议背景锚点与 Content 一致：anchorMin=(0,1), anchorMax=(0,1), pivot=(0,1)
+            var bg = timelineBackground;
+            bg.sizeDelta = new Vector2(contentWidth, bg.sizeDelta.y);
+            bg.anchoredPosition = new Vector2(0f, bg.anchoredPosition.y);
+        }
+        
         // Slider 轨道长度 = Content 宽（保持对齐）
         if (timeSlider)
         {

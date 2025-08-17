@@ -33,6 +33,8 @@ public class TimelinePanelScaler : MonoBehaviour
     {
         currentVisibleTime = Mathf.Max(currentVisibleTime / zoomStep, minVisibleTime);
         UpdateTimeline();
+        
+        
     }
 
     public void ZoomOut()

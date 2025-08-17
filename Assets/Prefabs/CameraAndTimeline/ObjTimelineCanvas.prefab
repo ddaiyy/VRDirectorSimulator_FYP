@@ -961,9 +961,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8723440240864728201}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: TimelinePanelScaler, Assembly-CSharp
-        m_MethodName: ZoomIn
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1645,6 +1645,7 @@ MonoBehaviour:
   rightEdgePaddingPx: 24
   topRowGapPx: 0
   autoFixConflictingLayoutOnContent: 1
+  timelineBackground: {fileID: 6196263744131099904}
   currentTrack: {fileID: 0}
 --- !u!114 &909939589247278252
 MonoBehaviour:
@@ -3305,9 +3306,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8723440240864728201}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: TimelinePanelScaler, Assembly-CSharp
-        m_MethodName: ZoomOut
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3344,7 +3345,7 @@ RectTransform:
   m_GameObject: {fileID: 6887867886508981406}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9131096515437264448}
@@ -4162,7 +4163,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4483232126959218675, guid: ba98f6d585a0e654fb4a9e868f1e11bf, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4483232126959218675, guid: ba98f6d585a0e654fb4a9e868f1e11bf, type: 3}
       propertyPath: m_AnchorMin.x
@@ -4170,7 +4171,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4483232126959218675, guid: ba98f6d585a0e654fb4a9e868f1e11bf, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4483232126959218675, guid: ba98f6d585a0e654fb4a9e868f1e11bf, type: 3}
       propertyPath: m_SizeDelta.x
@@ -4210,11 +4211,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4483232126959218675, guid: ba98f6d585a0e654fb4a9e868f1e11bf, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 9.188669
       objectReference: {fileID: 0}
     - target: {fileID: 4483232126959218675, guid: ba98f6d585a0e654fb4a9e868f1e11bf, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -1.3683014
       objectReference: {fileID: 0}
     - target: {fileID: 4483232126959218675, guid: ba98f6d585a0e654fb4a9e868f1e11bf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
