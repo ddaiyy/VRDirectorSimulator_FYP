@@ -16,7 +16,8 @@ public class ObjectTimelineUI : MonoBehaviour
     public Transform keyframeListContent;   // Scroll View/Viewport/Content/Keyframe Rows 容器
     public GameObject propertyTrackPrefab;  // 需含子节点 "Track Content"（作为本行的点的容器）
     public GameObject keyframeItemPrefab;   // 关键帧点 Prefab（Button + Text 可选）
-
+    
+    
     [Header("相机控制(可选)")]
     public Toggle camActiveToggle;
     public Slider fovSlider, focusDistanceSlider;
@@ -33,8 +34,14 @@ public class ObjectTimelineUI : MonoBehaviour
     public float totalTime = 60f;           // 总时长（秒）
     public float defaultVisibleTime = 20f;  // 每页可见（秒）
     public float zoomStep = 1.5f;           // 缩放因子
-    public float minVisibleTime = 5f;
-    public float maxVisibleTime = 120f;
+    public float minVisibleTime = 5f;       // 硬下限（安全）
+    public float maxVisibleTime = 120f;     // 硬上限（安全）
+
+    [Header("缩放阈值（可自定义）")]
+    [Tooltip("当每页可见时间 <= minPageSeconds 时，禁止继续放大（即再减小可见时间）。例如 10s。")]
+    public float minPageSeconds = 10f;
+    [Tooltip("当每页可见时间 >= maxPageSeconds 时，禁止继续缩小（即再增大可见时间）。例如 30s。")]
+    public float maxPageSeconds = 30f;
 
     [Header("几何与缓冲")]
     public float rightEdgePaddingPx = 24f;  // Content 右侧缓冲像素，避免滚到尽头顶死
@@ -43,8 +50,15 @@ public class ObjectTimelineUI : MonoBehaviour
     [Header("安全选项")]
     public bool autoFixConflictingLayoutOnContent = true;
 
-    [Header("背景条（覆盖所有 Content）")]
-    public RectTransform timelineBackground;  // 把你那条整段背景图拖进来
+    
+    [Header("背景条（覆盖关键帧区域，不随缩放变高）")]
+    public RectTransform timelineBackground;        // 拖 Content 下的 Image/RawImage
+    public float timelineBackgroundPaddingTop = 4f; // 上内边距
+    public float timelineBackgroundPaddingBottom = 4f; // 下内边距
+
+    [Header("布局偏移")]
+    [Tooltip("左侧轨道名列的固定像素宽度；0s 从该列右边开始")]
+    public float nameColumnWidthPx = 120f;
 
     // 运行态
     private float currentVisibleTime;
@@ -53,6 +67,10 @@ public class ObjectTimelineUI : MonoBehaviour
 
     private float _lastSetContentWidth = -1f;
     private bool _programmaticScroll = false;
+
+    // 便捷：有效缩放边界（把安全上下限与业务阈值合并）
+    private float EffectiveMinPage => Mathf.Max(minVisibleTime, minPageSeconds);
+    private float EffectiveMaxPage => Mathf.Min(maxVisibleTime, maxPageSeconds);
 
     // ---------------- 生命周期 ----------------
     private void Awake()
@@ -93,7 +111,8 @@ public class ObjectTimelineUI : MonoBehaviour
             timelineScrollbar.onValueChanged.AddListener(OnTimelineScroll);
         }
 
-        currentVisibleTime = Mathf.Clamp(defaultVisibleTime, minVisibleTime, maxVisibleTime);
+        // ✅ 默认页宽也受可自定义阈值夹取
+        currentVisibleTime = Mathf.Clamp(defaultVisibleTime, EffectiveMinPage, EffectiveMaxPage);
 
         // 交互
         if (playButton) playButton.onClick.AddListener(OnPlayClicked);
@@ -124,6 +143,7 @@ public class ObjectTimelineUI : MonoBehaviour
         UpdateTimeline();   // 计算 pps，设置 Content/Slider/背景 宽度，同步滚动条
         RefreshAll();       // 生成行与关键帧
         EnsureTimeVisible(timeSlider ? timeSlider.value : 0f);
+        UpdateZoomButtons(); // ✅ 初始化按钮状态
     }
 
     private void OnDestroy()
@@ -140,6 +160,7 @@ public class ObjectTimelineUI : MonoBehaviour
         if (!isActiveAndEnabled) return;
         UpdateTimeline();
         RefreshKeyframeList(); // 重新定位关键帧点的 x
+        UpdateZoomButtons();
     }
 
     private void Update()
@@ -162,94 +183,155 @@ public class ObjectTimelineUI : MonoBehaviour
     // ---------------- 缩放/滚动 ----------------
     public void ZoomIn()
     {
-        // 每秒像素数增加，单位时间占更多像素 → 页面能看到的时间变少
-        pixelsPerSecond *= zoomStep;
-        ClampZoom();
+        // 放大 = 每页显示更少秒
+        float target = currentVisibleTime / zoomStep;
+        // 受可自定义阈值限制
+        target = Mathf.Max(target, EffectiveMinPage);
+
+        if (NearlyEqual(target, currentVisibleTime)) return;
+
+        currentVisibleTime = target;
+        ClampZoom();             // 与硬上下限再对齐一次
         UpdateTimeline();
+        RefreshKeyframeList();
         EnsureTimeVisible(timeSlider ? timeSlider.value : 0f);
+        UpdateZoomButtons();     // ✅ 按钮交互
     }
 
     public void ZoomOut()
     {
-        // 每秒像素数减少，单位时间占更少像素 → 页面能看到的时间变多
-        pixelsPerSecond /= zoomStep;
+        // 缩小 = 每页显示更多秒
+        float target = currentVisibleTime * zoomStep;
+        // 受可自定义阈值限制
+        target = Mathf.Min(target, EffectiveMaxPage);
+
+        if (NearlyEqual(target, currentVisibleTime)) return;
+
+        currentVisibleTime = target;
         ClampZoom();
         UpdateTimeline();
+        RefreshKeyframeList();
         EnsureTimeVisible(timeSlider ? timeSlider.value : 0f);
+        UpdateZoomButtons();     // ✅ 按钮交互
     }
 
-    // 保证缩放范围在 minVisibleTime ~ maxVisibleTime 之间
+    // 保证缩放范围在 minVisibleTime ~ maxVisibleTime 之间（安全护栏）
     private void ClampZoom()
     {
         float viewportWidth = viewport ? viewport.rect.width : 0f;
         if (viewportWidth <= 0f) return;
 
-        // 计算当前一页能显示多少秒
-        currentVisibleTime = viewportWidth / pixelsPerSecond;
-
-        if (currentVisibleTime < minVisibleTime)
-        {
-            currentVisibleTime = minVisibleTime;
-            pixelsPerSecond = viewportWidth / currentVisibleTime;
-        }
-        else if (currentVisibleTime > maxVisibleTime)
-        {
-            currentVisibleTime = maxVisibleTime;
-            pixelsPerSecond = viewportWidth / currentVisibleTime;
-        }
+        currentVisibleTime = Mathf.Clamp(currentVisibleTime, Mathf.Max(minVisibleTime, 0.0001f), maxVisibleTime);
+        // 像素/秒由 UpdateTimeline 统一计算，这里不直接改 pps
     }
+
+    private void UpdateZoomButtons()
+    {
+        if (zoomInButton)  zoomInButton.interactable  = currentVisibleTime > EffectiveMinPage + 0.001f;
+        if (zoomOutButton) zoomOutButton.interactable = currentVisibleTime < EffectiveMaxPage - 0.001f;
+    }
+
+    private static bool NearlyEqual(float a, float b, float eps = 0.0001f) => Mathf.Abs(a - b) < eps;
 
     private void UpdateTimeline()
+{
+    Canvas.ForceUpdateCanvases();
+    float viewportWidth = viewport ? viewport.rect.width : 0f;
+    if (viewportWidth <= 0f) return;
+
+    // 一页（viewport）= currentVisibleTime 秒
+    pixelsPerSecond = viewportWidth / Mathf.Max(currentVisibleTime, 0.0001f);
+
+    // 时间区域宽度（不含左列）
+    float timelineWidth = totalTime * pixelsPerSecond;
+
+    // Content 总宽 = 左列 + 时间区域 + 右缓冲
+    float contentWidth = nameColumnWidthPx + timelineWidth + Mathf.Max(rightEdgePaddingPx, 0f);
+    SetContentWidth(contentWidth);
+
+    // ---------------- 背景条覆盖时间区域（并保证高度为正） ----------------
+    if (timelineBackground)
     {
-        Canvas.ForceUpdateCanvases();
-        float viewportWidth = viewport ? viewport.rect.width : 0f;
-        if (viewportWidth <= 0f) return;
+        var bg = timelineBackground;
 
-        // 强制比例：一页（viewport） = currentVisibleTime 秒
-        pixelsPerSecond = viewportWidth / Mathf.Max(currentVisibleTime, 0.0001f);
+        // 与 Content 一致的锚点/枢轴：左上
+        bg.anchorMin = new Vector2(0f, 1f);
+        bg.anchorMax = new Vector2(0f, 1f);
+        bg.pivot     = new Vector2(0f, 1f);
 
-        // Content 宽：总时长 * pps + 右侧缓冲
-        float contentWidth = totalTime * pixelsPerSecond + Mathf.Max(rightEdgePaddingPx, 0f);
-        SetContentWidth(contentWidth);
-        
-        if (timelineBackground)
+        // 宽：只覆盖“时间区域”（不含左侧名字列）
+        float bgWidth = Mathf.Max(1f, timelineWidth);
+
+        // 高：使用 Content 的真实高度（先强制重建一次布局，拿到最新 rect）
+        var contentRT = content as RectTransform;
+        if (contentRT)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(contentRT);
+
+        float contentHeight = contentRT ? Mathf.Max(1f, contentRT.rect.height) : 100f; // 兜底 100
+
+        // 应用尺寸（高度=整个 Content 高度；宽度=时间区域宽度）
+        bg.sizeDelta = new Vector2(bgWidth, contentHeight);
+
+        // 位置：X 从“名字列右边”开始，Y 贴住 Content 顶部（上锚坐标系）
+        bg.anchoredPosition = new Vector2(nameColumnWidthPx, 0f);
+
+        // 放到底层，避免遮挡交互
+        bg.SetAsFirstSibling();
+
+        // 可见性兜底
+        var img = bg.GetComponent<Image>();
+        if (img)
         {
-            // 建议背景锚点与 Content 一致：anchorMin=(0,1), anchorMax=(0,1), pivot=(0,1)
-            var bg = timelineBackground;
-            bg.sizeDelta = new Vector2(contentWidth, bg.sizeDelta.y);
-            bg.anchoredPosition = new Vector2(0f, bg.anchoredPosition.y);
+            if (img.sprite == null && img.color.a <= 0.01f) img.color = new Color(0,0,0,0.12f);
+            img.raycastTarget = false;
         }
-        
-        // Slider 轨道长度 = Content 宽（保持对齐）
-        if (timeSlider)
+        var raw = bg.GetComponent<RawImage>();
+        if (raw)
         {
-            var rt = timeSlider.GetComponent<RectTransform>();
-            rt.anchorMin = new Vector2(0f, 1f);
-            rt.anchorMax = new Vector2(0f, 1f);
-            rt.pivot     = new Vector2(0f, 1f);
-            rt.sizeDelta = new Vector2(contentWidth, rt.sizeDelta.y);
-            rt.anchoredPosition = new Vector2(0f, -topRowGapPx); // 与行对齐（上缘坐标系：向下为负）
-            timeSlider.minValue = 0f;
-            timeSlider.maxValue = totalTime;
-        }
-
-        // 滚动条把手比例 = 可见/总
-        if (timelineScrollbar)
-        {
-            timelineScrollbar.size = Mathf.Clamp01(currentVisibleTime / Mathf.Max(totalTime, 0.0001f));
-
-            float scrollRangePx = Mathf.Max(contentWidth - viewportWidth, 0f);
-            if (scrollRangePx < 1f)
-            {
-                _programmaticScroll = true;
-                timelineScrollbar.value = 0f;
-                _programmaticScroll = false;
-            }
+            if (raw.texture == null && raw.color.a <= 0.01f) raw.color = new Color(0,0,0,0.12f);
+            raw.raycastTarget = false;
         }
 
-        // 应用当前位置
-        OnTimelineScroll(timelineScrollbar ? timelineScrollbar.value : 0f);
+        // 防止被意外翻转（高度绝对为正）
+        var ls = bg.localScale;
+        bg.localScale = new Vector3(Mathf.Abs(ls.x) < 1e-3f ? 1f : Mathf.Abs(ls.x),
+            Mathf.Abs(ls.y) < 1e-3f ? 1f : Mathf.Abs(ls.y),
+            1f);
     }
+
+    // ----------------------------------------------------------------------
+
+    // timeSlider 轨道只覆盖“时间区域”，并从 0s 位置开始
+    if (timeSlider)
+    {
+        var rt = timeSlider.GetComponent<RectTransform>();
+        rt.anchorMin = new Vector2(0f, 1f);
+        rt.anchorMax = new Vector2(0f, 1f);
+        rt.pivot     = new Vector2(0f, 1f);
+        rt.sizeDelta = new Vector2(timelineWidth, rt.sizeDelta.y);
+        rt.anchoredPosition = new Vector2(nameColumnWidthPx, -topRowGapPx);
+        timeSlider.minValue = 0f;
+        timeSlider.maxValue = totalTime;
+    }
+
+    // 滚动条把手比例 = 可见/总
+    if (timelineScrollbar)
+    {
+        timelineScrollbar.size = Mathf.Clamp01(currentVisibleTime / Mathf.Max(totalTime, 0.0001f));
+        float scrollRangePx = Mathf.Max(contentWidth - viewportWidth, 0f);
+        if (scrollRangePx < 1f)
+        {
+            _programmaticScroll = true;
+            timelineScrollbar.value = 0f;
+            _programmaticScroll = false;
+        }
+    }
+
+    // 应用当前位置
+    OnTimelineScroll(timelineScrollbar ? timelineScrollbar.value : 0f);
+}
+
+
 
     private void SetContentWidth(float w)
     {
@@ -283,6 +365,7 @@ public class ObjectTimelineUI : MonoBehaviour
     }
 
     /// 保证时间 t 在视窗内（必要时滚动视图）
+    /// 保证时间 t 在视窗内（必要时滚动视图）——考虑左侧名字列宽
     private void EnsureTimeVisible(float t)
     {
         if (!timelineScrollbar) return;
@@ -291,37 +374,52 @@ public class ObjectTimelineUI : MonoBehaviour
         float contentWidth  = content.sizeDelta.x;
         float pps           = Mathf.Max(pixelsPerSecond, 0.0001f);
 
-        float viewStartSec = Mathf.Max(-content.anchoredPosition.x / pps, 0f);
+        // 当前视窗的时间范围（左缘要扣除名字列）
+        float viewStartSec = GetViewStartSec();
         float viewEndSec   = viewStartSec + currentVisibleTime;
         if (t >= viewStartSec && t <= viewEndSec) return;
 
-        float targetStart = Mathf.Clamp(t - currentVisibleTime * 0.5f, 0f, Mathf.Max(totalTime - currentVisibleTime, 0f));
-        float desiredOffsetX = targetStart * pps;
+        // 目标左缘时间（尽量把 t 放屏幕中间，再做边界夹取）
+        float maxStart = Mathf.Max(totalTime - currentVisibleTime, 0f);
+        float targetStart = Mathf.Clamp(t - currentVisibleTime * 0.5f, 0f, maxStart);
+
+        // ← 关键：把目标时间左缘转成 Content 坐标的像素时，加回左列宽
+        float desiredOffsetX = nameColumnWidthPx + targetStart * pps;
+
         float scrollRangePx  = Mathf.Max(contentWidth - viewportWidth, 0f);
         desiredOffsetX       = Mathf.Clamp(desiredOffsetX, 0f, scrollRangePx);
 
+        // 反推 scrollbar.value（考虑把手尺寸）
         float size  = Mathf.Clamp01(timelineScrollbar.size);
         float range = Mathf.Max(1f - size, 0.0001f);
         float nComp = (scrollRangePx <= 0f) ? 0f : desiredOffsetX / scrollRangePx;
         float value = Mathf.Clamp01(nComp * range);
 
         _programmaticScroll = true;
-        timelineScrollbar.value = value; // 会触发 OnTimelineScroll
+        timelineScrollbar.value = value; // 触发 OnTimelineScroll → 真正移动 content
         _programmaticScroll = false;
     }
 
+
+    
+    // 视窗左缘对应的“时间秒”（考虑左侧名字列的像素偏移）
+    private float GetViewStartSec()
+    {
+        float pps = Mathf.Max(pixelsPerSecond, 0.0001f);
+        float leftX = -content.anchoredPosition.x; // 视窗左缘在 Content 坐标里的 X
+        float t = (leftX - nameColumnWidthPx) / pps; // 扣除左列宽，再换算成秒
+        return Mathf.Max(t, 0f);
+    }
+    
     // ---------------- 通用：将时间点安全放入任意 Track 行 ----------------
-    /// <summary>
-    /// 将时间 t 放置到 trackContent 的局部坐标中（自动做 Content→世界→Track 的坐标转换），
-    /// 避免锚点/缩放/左侧标签等结构造成的偏移，保证与 timeSlider.Handle 垂直对齐。
-    /// </summary>
     private void PlacePointAtTime(RectTransform point, RectTransform trackContent, float t)
     {
-        float xInContent = t * Mathf.Max(pixelsPerSecond, 0.0001f);     // 时间在 Content 坐标系的 X
-        Vector3 world = content.TransformPoint(new Vector3(xInContent, 0f, 0f)); // Content→世界
-        Vector3 localInTrack = trackContent.InverseTransformPoint(world);         // 世界→Track局部
-        point.anchoredPosition = new Vector2(localInTrack.x, 0f);
+        float xInContent = nameColumnWidthPx + t * Mathf.Max(pixelsPerSecond, 0.0001f);
+        Vector3 world    = content.TransformPoint(new Vector3(xInContent, 0f, 0f)); // Content→世界
+        Vector3 local    = trackContent.InverseTransformPoint(world);               // 世界→Track局部
+        point.anchoredPosition = new Vector2(local.x, 0f);
     }
+
 
     // ---------------- 关键帧渲染/对齐 ----------------
     private float TimeToX(float t) => t * Mathf.Max(pixelsPerSecond, 0.0001f); // 仍可用在自定义绘制里
@@ -331,7 +429,6 @@ public class ObjectTimelineUI : MonoBehaviour
         foreach (Transform child in keyframeListContent)
             Destroy(child.gameObject);
 
-        // 你想展示的轨道（相机多两个）
         string[] properties = { "Position", "Rotation", "Scale" };
         if (currentTrack != null && currentTrack.GetComponentInChildren<Camera>() != null)
             properties = new[] { "Position", "Rotation", "Scale", "FOV", "DOF" };
@@ -348,7 +445,6 @@ public class ObjectTimelineUI : MonoBehaviour
             RectTransform trackContent = row.transform.Find("Track Content") as RectTransform;
             if (trackContent == null) continue;
 
-            // 每个关键帧：用坐标转换放置，免疫预制结构差异
             if (currentTrack != null)
             {
                 foreach (var clip in currentTrack.clips)
@@ -356,7 +452,7 @@ public class ObjectTimelineUI : MonoBehaviour
                     GameObject point = Instantiate(keyframeItemPrefab, trackContent);
                     RectTransform rect = point.GetComponent<RectTransform>();
 
-                    // ✅ 坐标转换，保证与 Handle 垂直对齐
+                    // 坐标转换，保证与 Handle 垂直对齐
                     PlacePointAtTime(rect, trackContent, clip.time);
 
                     var text = point.GetComponentInChildren<TextMeshProUGUI>();
@@ -368,7 +464,6 @@ public class ObjectTimelineUI : MonoBehaviour
                         float t = clip.time;
                         btn.onClick.AddListener(() =>
                         {
-                            // 点击关键帧 → 跳到该时间（并保证可见）
                             currentTrack.SetSuppressAnimationOnReset(true);
                             currentTrack.SetTime(t);
                             currentTrack.SetSuppressAnimationOnReset(false);
@@ -392,7 +487,7 @@ public class ObjectTimelineUI : MonoBehaviour
         if (currentTrack == null || timeSlider == null) return;
         float t = Mathf.Clamp(timeSlider.value, 0f, totalTime);
         currentTrack.AddClip(t);
-        RefreshKeyframeList(); // 新点自动落在 Handle 正上方（同一 x）
+        RefreshKeyframeList();
     }
     private void OnDeleteKeyframeClicked()
     {
@@ -499,9 +594,13 @@ public class ObjectTimelineUI : MonoBehaviour
             timeSlider.value    = Mathf.Clamp(track.currentTime, 0f, totalTime);
         }
 
+        // 默认页宽/总时长可以直接在 Inspector 改；运行时改用下面两个 API
+        currentVisibleTime = Mathf.Clamp(defaultVisibleTime, EffectiveMinPage, EffectiveMaxPage);
+
         UpdateTimeline();
         RefreshAll();
         EnsureTimeVisible(timeSlider ? timeSlider.value : 0f);
+        UpdateZoomButtons();
     }
 
     public void RefreshAll()
@@ -512,6 +611,46 @@ public class ObjectTimelineUI : MonoBehaviour
         if (currentTrack.isCamera) RefreshCamera();
     }
 
+    // ---------------- 运行时参数修改 API ----------------
+    /// <summary>运行时修改总时长。会自动更新 slider 区间与布局。</summary>
+    public void SetTotalTime(float newTotalTime, bool clampCurrentTime = true)
+    {
+        totalTime = Mathf.Max(0.001f, newTotalTime);
+        if (timeSlider)
+        {
+            timeSlider.maxValue = totalTime;
+            if (clampCurrentTime)
+                timeSlider.value = Mathf.Clamp(timeSlider.value, 0f, totalTime);
+        }
+        UpdateTimeline();
+        RefreshKeyframeList();
+        EnsureTimeVisible(timeSlider ? timeSlider.value : 0f);
+    }
+
+    /// <summary>运行时设置每页可见秒数（会被阈值与安全上下限夹取）。</summary>
+    public void SetVisibleTime(float visibleSeconds)
+    {
+        currentVisibleTime = Mathf.Clamp(visibleSeconds, EffectiveMinPage, EffectiveMaxPage);
+        ClampZoom();
+        UpdateTimeline();
+        RefreshKeyframeList();
+        EnsureTimeVisible(timeSlider ? timeSlider.value : 0f);
+        UpdateZoomButtons();
+    }
+
+    /// <summary>运行时调整可自定义阈值（例如把 10..30 改到 8..40）。会立即夹取当前页宽并刷新。</summary>
+    public void SetZoomPageBounds(float minPage, float maxPage)
+    {
+        minPageSeconds = Mathf.Max(0.001f, minPage);
+        maxPageSeconds = Mathf.Max(minPageSeconds + 0.001f, maxPage);
+        // 重新应用到当前页宽
+        currentVisibleTime = Mathf.Clamp(currentVisibleTime, EffectiveMinPage, EffectiveMaxPage);
+        UpdateTimeline();
+        RefreshKeyframeList();
+        EnsureTimeVisible(timeSlider ? timeSlider.value : 0f);
+        UpdateZoomButtons();
+    }
+
     // ---------------- 调试 ----------------
     [ContextMenu("Debug Timeline Geometry")]
     private void DebugCheck()
@@ -520,13 +659,15 @@ public class ObjectTimelineUI : MonoBehaviour
         float pps = pixelsPerSecond;
         float contentWidth = content ? content.sizeDelta.x : 0f;
         float visibleTime  = (pps > 0f) ? viewportWidth / pps : 0f;
-        float viewStartSec = (pps > 0f) ? Mathf.Max(-content.anchoredPosition.x / pps, 0f) : 0f;
+        float viewStartSec = GetViewStartSec();
         float viewEndSec   = viewStartSec + currentVisibleTime;
 
+        
+        
         Debug.Log(
             $"[Timeline Debug]\n" +
             $"- totalTime: {totalTime}s\n" +
-            $"- currentVisibleTime(set): {currentVisibleTime}s\n" +
+            $"- currentVisibleTime(set): {currentVisibleTime}s (bounds {EffectiveMinPage}..{EffectiveMaxPage})\n" +
             $"- viewportWidth(px): {viewportWidth:F1}\n" +
             $"- pixelsPerSecond: {pps:F3}\n" +
             $"- contentWidth(px): {contentWidth:F1}\n" +
@@ -537,13 +678,23 @@ public class ObjectTimelineUI : MonoBehaviour
         );
     }
 
-    public void HidePanel()
+    public void HidePanel() => gameObject.SetActive(false);
+    public void ShowPanel() => gameObject.SetActive(true);
+    
+    [ContextMenu("Debug Background Rect")]
+    private void DebugBackgroundRect()
     {
-        gameObject.SetActive(false);
-    }
-
-    public void ShowPanel()
-    {
-        gameObject.SetActive(true);
+        if (!timelineBackground)
+        {
+            Debug.LogWarning("timelineBackground = null");
+            return;
+        }
+        var bg = timelineBackground;
+        Debug.Log(
+            $"[BG] sizeDelta=({bg.sizeDelta.x:F1},{bg.sizeDelta.y:F1}) " +
+            $"rect=({bg.rect.width:F1},{bg.rect.height:F1}) " +
+            $"anchoredPos=({bg.anchoredPosition.x:F1},{bg.anchoredPosition.y:F1}) " +
+            $"anchors=({bg.anchorMin})-({bg.anchorMax}) pivot={bg.pivot}"
+        );
     }
 }
