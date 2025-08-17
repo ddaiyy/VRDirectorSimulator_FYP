@@ -94,7 +94,7 @@ public class TesTimelineUI : MonoBehaviour
     {
         Debug.Log("显示 " + track.gameObject.name + " 的时间轴UI");
         // 这里写你的UI刷新逻辑
-        timelinePanel.ShowPanel(track);
+        timelinePanel.ShowPanel();
     }
 
     // 关闭UI逻辑

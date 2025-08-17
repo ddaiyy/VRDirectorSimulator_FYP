@@ -1533,7 +1533,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &4375261358268256519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1583,24 +1583,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   titleText: {fileID: 5942136706531131881}
-  playButton: {fileID: 670653681477656803}
-  stopButton: {fileID: 6690906212363059926}
   timeSlider: {fileID: 9207724317284409654}
   currentTimeText: {fileID: 2417116029701563602}
+  playButton: {fileID: 670653681477656803}
+  stopButton: {fileID: 6690906212363059926}
+  addKeyframeButton: {fileID: 3545475215888365132}
+  deleteKeyframeButton: {fileID: 111791521750706843}
+  clearAllKeyframeButton: {fileID: 6069577860975609685}
   keyframeListContent: {fileID: 2728004768739307788}
   propertyTrackPrefab: {fileID: 5278214164810843863, guid: ba98f6d585a0e654fb4a9e868f1e11bf, type: 3}
   keyframeItemPrefab: {fileID: 1664421510332346941, guid: a72443b3d46072749ae8bac884dc47b3, type: 3}
-  addKeyframeButton: {fileID: 3545475215888365132}
-  timelineContent: {fileID: 2728004768739307788}
-  timelineWidth: 600
-  maxTime: 20
-  deleteKeyframeButton: {fileID: 111791521750706843}
-  clearAllKeyframeButton: {fileID: 6069577860975609685}
   camActiveToggle: {fileID: 0}
   fovSlider: {fileID: 0}
-  fovText: {fileID: 0}
   focusDistanceSlider: {fileID: 0}
+  fovText: {fileID: 0}
   focusDistanceValueText: {fileID: 0}
+  content: {fileID: 0}
+  viewport: {fileID: 0}
+  scrollRect: {fileID: 0}
+  timelineScrollbar: {fileID: 0}
+  sliderHandle: {fileID: 0}
+  zoomInButton: {fileID: 0}
+  zoomOutButton: {fileID: 0}
+  totalTime: 300
+  defaultVisibleTime: 20
+  zoomStep: 1.5
+  minVisibleTime: 5
+  maxVisibleTime: 120
+  pixelsPerSecond: 20
   currentTrack: {fileID: 0}
 --- !u!114 &909939589247278252
 MonoBehaviour:
@@ -1845,7 +1855,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 4, y: 89.3}
+  m_AnchoredPosition: {x: 8, y: 13.3}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3503703630972210783
@@ -1939,7 +1949,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 7.9537888, w: 0}
+  m_margin: {x: 0, y: 0, z: -65.60619, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -2333,8 +2343,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8791246850671157109}
   m_HandleRect: {fileID: 1090492724895160108}
   m_Direction: 0
-  m_Value: 0.000008695359
-  m_Size: 0.22795646
+  m_Value: 0.0000044152594
+  m_Size: 0.22795644
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3244,8 +3254,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -2, y: 79.47}
-  m_SizeDelta: {x: 4.82, y: 134.42}
+  m_AnchoredPosition: {x: -4.600006, y: 130.4}
+  m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1344620602926797691
 CanvasRenderer:
@@ -3268,14 +3278,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8773585, g: 0.52475965, b: 0.52475965, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 866256e17d45e5247a36de3fe9c007c8, type: 3}
+  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

@@ -746,7 +746,7 @@ public class TimelineTrack : MonoBehaviour
         if (objectTimelineUI != null)
         {
             objectTimelineUI.gameObject.SetActive(true);
-            objectTimelineUI.ShowPanel(this);
+            objectTimelineUI.ShowPanel();
         }
         else
         {
@@ -803,6 +803,7 @@ public class TimelineTrack : MonoBehaviour
         clips.Remove(clipToDelete);
         UpdateTimelineAfterClipChange();
         Debug.Log($"已删除时间 {time:F2}s 的关键帧");
+        objectTimelineUI.RefreshAll();
         return true;
     }
 
