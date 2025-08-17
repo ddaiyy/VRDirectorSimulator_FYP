@@ -1,140 +1,62 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ObjectTimelineUI : MonoBehaviour
 {
-    [Header("UI引用")]
-    //public Text titleText;
+    [Header("播放控制")]
     public TextMeshProUGUI titleText;
-
-    public Button playButton;
-    public Button stopButton;
-
-    public Slider timeSlider;
-
-    //public Text currentTimeText;
+    public Slider timeSlider;               // 播放指针
     public TextMeshProUGUI currentTimeText;
+    public Button playButton, stopButton;
+    public Button addKeyframeButton, deleteKeyframeButton, clearAllKeyframeButton;
 
-    public Transform keyframeListContent;
+    [Header("关键帧 UI")]
+    public Transform keyframeListContent;   // Scroll View/Viewport/Content/Keyframe Content List
+    public GameObject propertyTrackPrefab;  // 每个属性轨道的Prefab
+    public GameObject keyframeItemPrefab;   // 每个关键帧点的Prefab
 
-    //public Transform propertyTrackListContent; // Vertical Layout Group
-    public GameObject propertyTrackPrefab; // 每个属性轨道的Prefab
-
-    public GameObject keyframeItemPrefab;
-    public Button addKeyframeButton;
-
-    public RectTransform timelineContent; // 拖到Inspector
-    public float timelineWidth = 600f; // 你的时间轴UI宽度
-    public float maxTime = 60f; // 时间轴最大时间
-
-    public Button deleteKeyframeButton;
-    public Button clearAllKeyframeButton;
-    
-    [Header("Camera相关")]
+    [Header("相机控制 (可选)")]
     public Toggle camActiveToggle;
-    public Slider fovSlider;
-    public Text fovText;
-    public Slider focusDistanceSlider;
-    public Text focusDistanceValueText;
-    
-    
-    [Header("对应TimelineObject")]
+    public Slider fovSlider, focusDistanceSlider;
+    public Text fovText, focusDistanceValueText;
+
+    [Header("时间轴缩放/滚动")]
+    public RectTransform content;           // ScrollView Content
+    public RectTransform viewport;          // ScrollView Viewport
+    public ScrollRect scrollRect;           // ScrollView
+    public Scrollbar timelineScrollbar;     // Scrollbar Horizontal
+    public RectTransform sliderHandle;      // 缩放手柄（可选）
+    public Button zoomInButton, zoomOutButton;
+
+    [Header("时间参数")]
+    public float totalTime = 300f;          // 时间轴总时长
+    public float defaultVisibleTime = 20f;  // 默认显示范围
+    public float zoomStep = 1.5f;           // 缩放步长
+    public float minVisibleTime = 5f;
+    public float maxVisibleTime = 120f;
+    public float pixelsPerSecond = 20f;     // 每秒多少像素
+
+    private float currentVisibleTime;
     [SerializeField] private TimelineTrack currentTrack;
 
     void Start()
     {
-        // 绑定按钮事件
+        currentVisibleTime = defaultVisibleTime;
+        UpdateTimeline();
+
+        // 绑定按钮
         playButton.onClick.AddListener(OnPlayClicked);
         stopButton.onClick.AddListener(OnStopClicked);
-        timeSlider.onValueChanged.AddListener(OnSliderChanged);
         addKeyframeButton.onClick.AddListener(OnAddKeyframeClicked);
         deleteKeyframeButton.onClick.AddListener(OnDeleteKeyframeClicked);
         clearAllKeyframeButton.onClick.AddListener(OnClearAllKeyframeClicked);
-        
-        //SelectCamera
-        if (camActiveToggle != null)
-        {
-            camActiveToggle.onValueChanged.AddListener(OnCamActiveChanged);
-            //dof
-            focusDistanceSlider.minValue = 0.1f;
-            focusDistanceSlider.maxValue = 10f;
-            focusDistanceSlider.onValueChanged.AddListener(OnFocusDistanceChanged);
-            //fov
-            fovSlider.onValueChanged.AddListener(OnFOVChanged);
-            
-            
-        }
-        //HidePanel();
-    }
 
-    private void OnClearAllKeyframeClicked()
-    {
-        currentTrack.DeleteAllClips();
-    }
+        timeSlider.onValueChanged.AddListener(OnSliderChanged);
 
-    private void OnDeleteKeyframeClicked()
-    {
-        currentTrack.DeleteClipAtTime(timeSlider.value);
-    }
-
-    private void OnFOVChanged(float value)
-    {
-        currentTrack.cameraController.SetFOV(value);
-        fovText.text = value.ToString("F0");
-    }
-
-    private void OnFocusDistanceChanged(float value)
-    {
-        currentTrack.cameraController.SetFocusDistance(value);
-        focusDistanceValueText.text = value.ToString("F0");
-    }
-
-    // 处理相机激活状态变化
-    private void OnCamActiveChanged(bool isActive)
-    {
-        if (currentTrack != null && currentTrack.isCamera)
-        {
-            // 更新当前关键帧的激活状态
-            var currentClip = currentTrack.GetClipAtTime(currentTrack.currentTime);
-            if (currentClip != null)
-            {
-                currentClip.isCameraActiveAtTime= isActive;
-                Debug.Log($"[{currentTrack.gameObject.name}] 相机激活状态设置为: {isActive}");
-            }
-            
-            // 如果当前轨道对应的相机是当前选中的相机，更新CameraManager
-            if (CameraManager.Instance != null)
-            {
-                var currentSelectedCamera = CameraManager.Instance.GetCurrentSelectedCameraController();
-                if (currentSelectedCamera != null && currentSelectedCamera!=currentTrack.cameraController)
-                {
-                    if (isActive)
-                    {
-                        CameraManager.Instance.SelectCamera(currentSelectedCamera);
-                    }
-                    else
-                    {
-                        CameraManager.Instance.ClearSelectedCamera(currentSelectedCamera);
-                    }
-                }
-            }
-        }
-    }
-    
-    public void ShowPanel(TimelineTrack track)
-    {
-        Initialize(track);
-        RefreshAll();
-        gameObject.SetActive(true);
-    }
-
-    public void HidePanel()
-    {
-        gameObject.SetActive(false);
+        if (zoomInButton != null) zoomInButton.onClick.AddListener(ZoomIn);
+        if (zoomOutButton != null) zoomOutButton.onClick.AddListener(ZoomOut);
     }
 
     void Update()
@@ -145,118 +67,118 @@ public class ObjectTimelineUI : MonoBehaviour
         }
     }
 
-    private void RefreshCamera()
+    // ================== 时间轴缩放/滚动 ==================
+    public void ZoomIn()
     {
-        camActiveToggle.isOn = currentTrack.GetPreCameraClipActive(currentTrack.currentTime);
-        fovSlider.value = currentTrack.cameraController.GetFOV();
-        fovText.text=fovSlider.value.ToString("F0");
-
-        focusDistanceSlider.value = currentTrack.cameraController.GetFocusDistance();
-        focusDistanceValueText.text = focusDistanceSlider.value.ToString("F0");
+        currentVisibleTime = Mathf.Max(currentVisibleTime / zoomStep, minVisibleTime);
+        UpdateTimeline();
+        RefreshKeyframeList();
     }
 
-    void RefreshTime()
+    public void ZoomOut()
     {
-        currentTimeText.text = $"Time: {currentTrack.currentTime:F2}";
-        timeSlider.value = currentTrack.currentTime;
+        currentVisibleTime = Mathf.Min(currentVisibleTime * zoomStep, maxVisibleTime);
+        UpdateTimeline();
+        RefreshKeyframeList();
     }
 
+    private void UpdateTimeline()
+    {
+        // 动态调整 Content 宽度
+        float contentWidth = totalTime * pixelsPerSecond;
+        content.sizeDelta = new Vector2(contentWidth, content.sizeDelta.y);
+
+        // Scrollbar handle 宽度（代表可见范围比例）
+        if (timelineScrollbar != null && sliderHandle != null)
+        {
+            RectTransform scrollbarRect = timelineScrollbar.GetComponent<RectTransform>();
+            float scrollbarWidth = scrollbarRect.sizeDelta.x;
+            float handleWidth = defaultVisibleTime / currentVisibleTime * scrollbarWidth;
+            sliderHandle.sizeDelta = new Vector2(handleWidth, sliderHandle.sizeDelta.y);
+            sliderHandle.anchoredPosition = new Vector2(handleWidth / 2f, sliderHandle.anchoredPosition.y);
+        }
+    }
+    /*private void UpdateTimeline()
+    {
+        // 总时长像素
+        float totalPixelLength = totalTime * pixelsPerSecond;
+
+        // ✅ 保证 Content 宽度 = 时间长度 + Viewport 宽度
+        float contentWidth = totalPixelLength + viewport.rect.width;
+        content.sizeDelta = new Vector2(contentWidth, content.sizeDelta.y);
+
+        if (timelineScrollbar != null && sliderHandle != null)
+        {
+            RectTransform scrollbarRect = timelineScrollbar.GetComponent<RectTransform>();
+            float scrollbarWidth = scrollbarRect.sizeDelta.x;
+
+            // handle 宽度 = 可见范围 / 总时间
+            float handleWidth = Mathf.Max((currentVisibleTime / totalTime) * scrollbarWidth, 20f);
+            sliderHandle.sizeDelta = new Vector2(handleWidth, sliderHandle.sizeDelta.y);
+        }
+    }*/
+
+    // ================== 关键帧刷新 ==================
     void RefreshKeyframeList()
     {
-        // 清空旧的
         foreach (Transform child in keyframeListContent)
             Destroy(child.gameObject);
 
-        // 你要支持的属性
         string[] properties = { "Position", "Rotation", "Scale" };
-        // 如果是摄像机，加上FOV
         if (currentTrack.GetComponentInChildren<Camera>() != null)
-        {
             properties = new string[] { "Position", "Rotation", "Scale", "FOV", "DOF" };
-        }
 
         foreach (string prop in properties)
         {
             GameObject trackRow = Instantiate(propertyTrackPrefab, keyframeListContent);
             trackRow.GetComponentInChildren<TextMeshProUGUI>().text = prop;
-
             RectTransform trackContent = trackRow.transform.Find("Track Content").GetComponent<RectTransform>();
 
-            // 这里直接遍历所有关键帧
             foreach (var clip in currentTrack.clips)
             {
                 GameObject point = Instantiate(keyframeItemPrefab, trackContent);
-                float normalizedTime = Mathf.Clamp01(clip.time / maxTime);
-                float x = normalizedTime * timelineWidth;
-                var rect = point.GetComponent<RectTransform>();
-                rect.anchoredPosition = new Vector2(x, 0);
+                float x = clip.time * pixelsPerSecond; // ✅ 关键帧位置按缩放计算
+                point.GetComponent<RectTransform>().anchoredPosition = new Vector2(x, 0);
 
-                // 可选：显示时间
                 var text = point.GetComponentInChildren<TextMeshProUGUI>();
-                if (text != null)
-                    text.text = $"{clip.time:F2}";
-
-                // 可选：点击跳转
-                var btn = point.GetComponent<Button>();
-                if (btn != null)
-                {
-                    float t = clip.time;
-                    btn.onClick.AddListener(() =>
-                    {
-                        // 如果主时间轴正在控制，禁用关键帧跳转
-                        if(TimelineManager.Instance.isMasterControl) return;
-                        
-                        // 设置抑制动画标志，防止在跳转时意外触发动画
-                        currentTrack.SetSuppressAnimationOnReset(true);
-                        currentTrack.SetTime(t);
-                        currentTrack.SetSuppressAnimationOnReset(false);
-                        
-                        RefreshTime();
-                        if (currentTrack.isCamera)
-                        {
-                             RefreshCamera();
-                        }
-                    });
-                }
+                if (text != null) text.text = $"{clip.time:F2}";
             }
         }
     }
 
+    public void ShowPanel()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void HidePanel()
+    {
+        gameObject.SetActive(false);
+    }
+
+    // ================== 播放控制 ==================
     void OnPlayClicked()
     {
-        // 如果主时间轴正在控制，禁用单个轨道的播放
-        if(TimelineManager.Instance.isMasterControl) return;
-        
-        if (currentTrack != null)
-            currentTrack.Play();
+        if (TimelineManager.Instance.isMasterControl) return;
+        currentTrack?.Play();
     }
 
     void OnStopClicked()
     {
-        // 如果主时间轴正在控制，禁用单个轨道的停止
-        if(TimelineManager.Instance.isMasterControl) return;
-        
-        if (currentTrack != null)
-            currentTrack.Stop();
+        if (TimelineManager.Instance.isMasterControl) return;
+        currentTrack?.Stop();
     }
 
     void OnSliderChanged(float value)
     {
-        // 如果主时间轴正在控制，禁用UI时间滑块操作
-        if(TimelineManager.Instance.isMasterControl) return;
-        
-        if (currentTrack != null)
-        {
-            // 设置抑制动画标志，防止在手动拖动时意外触发动画
-            currentTrack.SetSuppressAnimationOnReset(true);
-            currentTrack.SetTime(value);
-            currentTrack.SetSuppressAnimationOnReset(false);
+        if (TimelineManager.Instance.isMasterControl) return;
+        if (currentTrack == null) return;
 
-            if (currentTrack.isCamera)
-            {
-                RefreshCamera();
-            }
-        }
+        currentTrack.SetSuppressAnimationOnReset(true);
+        currentTrack.SetTime(value);
+        currentTrack.SetSuppressAnimationOnReset(false);
+
+        if (currentTrack.isCamera) RefreshCamera();
     }
 
     void OnAddKeyframeClicked()
@@ -264,75 +186,56 @@ public class ObjectTimelineUI : MonoBehaviour
         if (currentTrack != null)
         {
             float time = timeSlider.value;
-            AddKeyframeAtTime(currentTrack, time);
+            currentTrack.AddClip(time);
             RefreshKeyframeList();
         }
     }
 
-    void AddKeyframeAtTime(TimelineTrack track, float time)
+    void OnDeleteKeyframeClicked()
     {
-        track.AddClip(time);
+        currentTrack?.DeleteClipAtTime(timeSlider.value);
+    }
+
+    void OnClearAllKeyframeClicked()
+    {
+        currentTrack?.DeleteAllClips();
+    }
+
+    // ================== 刷新 ==================
+    void RefreshTime()
+    {
+        currentTimeText.text = $"Time: {currentTrack.currentTime:F2}";
+        timeSlider.value = currentTrack.currentTime;
+    }
+
+    private void RefreshCamera()
+    {
+        if (camActiveToggle == null || currentTrack == null) return;
+        camActiveToggle.isOn = currentTrack.GetPreCameraClipActive(currentTrack.currentTime);
+        fovSlider.value = currentTrack.cameraController.GetFOV();
+        fovText.text = fovSlider.value.ToString("F0");
+        focusDistanceSlider.value = currentTrack.cameraController.GetFocusDistance();
+        focusDistanceValueText.text = focusDistanceSlider.value.ToString("F0");
     }
 
     public void Initialize(TimelineTrack track)
     {
         currentTrack = track;
         gameObject.SetActive(true);
-
         titleText.text = "Timeline- " + track.gameObject.name;
+
         timeSlider.minValue = 0;
-        timeSlider.maxValue = 20f;
+        timeSlider.maxValue = totalTime;
         timeSlider.value = track.currentTime;
 
-        // 如果是相机轨道，同步激活状态
-        if (track.isCamera)
-        {
-            var currentClip = track.GetClipAtTime(track.currentTime);
-            if (currentClip != null)
-            {
-                camActiveToggle.isOn = currentClip.isCameraActiveAtTime;
-                focusDistanceSlider.value = currentClip.focusDistance;
-                fovSlider.value = currentClip.fov;
-                
-                focusDistanceValueText.text = currentClip.focusDistance.ToString("F0");
-                fovText.text=currentClip.fov.ToString("F0");
-            }
-            else
-            {
-                // 如果没有关键帧，默认激活
-                camActiveToggle.isOn = false;
-                focusDistanceSlider.value = track.startFocusDistance;
-                fovSlider.value = track.startFov;
-                
-                fovText.text = track.startFov.ToString("F0");
-                focusDistanceValueText.text = track.startFocusDistance.ToString("F0");
-            }
-        }
-
+        RefreshAll();
     }
 
     public void RefreshAll()
     {
         if (currentTrack == null) return;
-
-        Debug.Log("[ObjectTimelineUI] 刷新所有UI内容");
-        
-        // 更新时间轴范围
-        timeSlider.minValue = 0;
-        timeSlider.maxValue = 60f;//TODO:可能需要更改
-        timeSlider.value = currentTrack.currentTime;
-
-        // 刷新关键帧列表
         RefreshKeyframeList();
-
-        // 刷新时间显示
         RefreshTime();
-
-        // 如果是相机轨道，同步激活状态
-        if (currentTrack.isCamera )
-        {
-            RefreshCamera();
-        }
+        if (currentTrack.isCamera) RefreshCamera();
     }
-    
 }

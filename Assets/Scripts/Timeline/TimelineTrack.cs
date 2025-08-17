@@ -746,7 +746,7 @@ public class TimelineTrack : MonoBehaviour
         if (objectTimelineUI != null)
         {
             objectTimelineUI.gameObject.SetActive(true);
-            objectTimelineUI.ShowPanel(this);
+            objectTimelineUI.ShowPanel();
         }
         else
         {

@@ -363,7 +363,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1785.15, y: -357.89}
+  m_AnchoredPosition: {x: 1833, y: -357.89}
   m_SizeDelta: {x: 447.83, y: 18.409}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &9207724317284409654
@@ -1498,7 +1498,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2516336920972927968}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e0337a636c7d0874fb9778214a280ff3, type: 3}
   m_Name: 
@@ -1656,24 +1656,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   titleText: {fileID: 5942136706531131881}
-  playButton: {fileID: 670653681477656803}
-  stopButton: {fileID: 6690906212363059926}
   timeSlider: {fileID: 9207724317284409654}
   currentTimeText: {fileID: 2417116029701563602}
-  keyframeListContent: {fileID: 6541114985558444527}
-  propertyTrackPrefab: {fileID: 5278214164810843863, guid: ba98f6d585a0e654fb4a9e868f1e11bf, type: 3}
-  keyframeItemPrefab: {fileID: 1664421510332346941, guid: a72443b3d46072749ae8bac884dc47b3, type: 3}
+  playButton: {fileID: 670653681477656803}
+  stopButton: {fileID: 6690906212363059926}
   addKeyframeButton: {fileID: 3545475215888365132}
-  timelineContent: {fileID: 6541114985558444527}
-  timelineWidth: 600
-  maxTime: 20
   deleteKeyframeButton: {fileID: 1274757729975723137}
   clearAllKeyframeButton: {fileID: 6069577860975609685}
+  keyframeListContent: {fileID: 2728004768739307788}
+  propertyTrackPrefab: {fileID: 5278214164810843863, guid: ba98f6d585a0e654fb4a9e868f1e11bf, type: 3}
+  keyframeItemPrefab: {fileID: 1664421510332346941, guid: a72443b3d46072749ae8bac884dc47b3, type: 3}
   camActiveToggle: {fileID: 0}
   fovSlider: {fileID: 0}
-  fovText: {fileID: 0}
   focusDistanceSlider: {fileID: 0}
+  fovText: {fileID: 0}
   focusDistanceValueText: {fileID: 0}
+  content: {fileID: 9131096515437264448}
+  viewport: {fileID: 505622490573716254}
+  scrollRect: {fileID: 8834394112909015310}
+  timelineScrollbar: {fileID: 6665403690320744587}
+  sliderHandle: {fileID: 1090492724895160108}
+  zoomInButton: {fileID: 421851284215513542}
+  zoomOutButton: {fileID: 9008412542749404695}
+  totalTime: 300
+  defaultVisibleTime: 20
+  zoomStep: 1.5
+  minVisibleTime: 5
+  maxVisibleTime: 120
+  pixelsPerSecond: 20
   currentTrack: {fileID: 0}
 --- !u!114 &909939589247278252
 MonoBehaviour:
@@ -2406,8 +2416,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8791246850671157109}
   m_HandleRect: {fileID: 1090492724895160108}
   m_Direction: 0
-  m_Value: 0.00000847009
-  m_Size: 0.22795644
+  m_Value: 0.000009145895
+  m_Size: 0.22795646
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4335,7 +4345,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5278214164810843863, guid: ba98f6d585a0e654fb4a9e868f1e11bf, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
