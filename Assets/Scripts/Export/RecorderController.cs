@@ -43,10 +43,11 @@ public class RecorderController : MonoBehaviour
 
     private void OnCloseCanvasButtonClicked()
     {
+      
         exportProgressCanvas.gameObject.SetActive(false);
-        // ✅ 关闭UI后恢复正常场景交互
         SetRaycastMask(normalMask);
     }
+
 
     void OnStartRecord()
     {
@@ -89,7 +90,7 @@ public class RecorderController : MonoBehaviour
 
         yield return new WaitForSeconds(seconds);
 
-        captureCommand.StopFfmpeg(); // 停止录制
+        OnStopRecord();
         progressText.text = "Finished!";
         isRecording = false;
         closeCanvasButton.gameObject.SetActive(true);

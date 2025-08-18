@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using System.Collections;
+using Unity.VisualScripting;
 
 public class VideoGalleryManager : MonoBehaviour
 {
@@ -10,8 +12,14 @@ public class VideoGalleryManager : MonoBehaviour
     public GameObject videoItemPrefab; // 你的新 prefab：含 RawImage + Button
     public Transform contentContainer; // ScrollView/Content
 
-    void Start()
+    /*void Start()
     {
+        LoadVideoList();
+    }*/
+
+    IEnumerator Start()
+    {
+        yield return new WaitForEndOfFrame() ;
         LoadVideoList();
     }
 

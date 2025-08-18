@@ -460,9 +460,21 @@ PrefabInstance:
       propertyPath: videoPanels.Array.data[15]
       value: 
       objectReference: {fileID: 949776300}
+    - target: {fileID: 2505305474298295433, guid: aaa4350eb070ef045b5d40bd0ad84e4a, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 17.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2611481743527863041, guid: aaa4350eb070ef045b5d40bd0ad84e4a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4124388674728930789, guid: aaa4350eb070ef045b5d40bd0ad84e4a, type: 3}
       propertyPath: m_Name
       value: All Tutorial
+      objectReference: {fileID: 0}
+    - target: {fileID: 4239560487107724315, guid: aaa4350eb070ef045b5d40bd0ad84e4a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6586865721917635276, guid: aaa4350eb070ef045b5d40bd0ad84e4a, type: 3}
       propertyPath: m_Pivot.x
@@ -544,9 +556,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7195701623147263053, guid: aaa4350eb070ef045b5d40bd0ad84e4a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7706728651216447048, guid: aaa4350eb070ef045b5d40bd0ad84e4a, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7973109171965304237, guid: aaa4350eb070ef045b5d40bd0ad84e4a, type: 3}
+      propertyPath: m_text
+      value: '1. To add keyframes, first adjust the time, then move the object position.
+
+
+        2.
+        Activate the camera before recording.
+
+
+        3. Only one active camera
+        per scene; multiple active cameras cause master timeline playback errors.
+
+
+        4.
+        A character can have only one action at a time; multiple actions cause errors.'
+      objectReference: {fileID: 0}
+    - target: {fileID: 7973109171965304237, guid: aaa4350eb070ef045b5d40bd0ad84e4a, type: 3}
+      propertyPath: m_fontSize
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7973109171965304237, guid: aaa4350eb070ef045b5d40bd0ad84e4a, type: 3}
+      propertyPath: m_margin.w
+      value: -386.30103
+      objectReference: {fileID: 0}
+    - target: {fileID: 7973109171965304237, guid: aaa4350eb070ef045b5d40bd0ad84e4a, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 8215229027667528721, guid: aaa4350eb070ef045b5d40bd0ad84e4a, type: 3}
       propertyPath: m_IsActive
