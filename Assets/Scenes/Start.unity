@@ -3369,7 +3369,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &180628126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38065,7 +38065,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1001 &4920166277757962752
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38074,6 +38074,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1208382881}
     m_Modifications:
+    - target: {fileID: 2577393115058698027, guid: 5ac46096772d43542b3270cc58e262e4, type: 3}
+      propertyPath: m_text
+      value: Select
+      objectReference: {fileID: 0}
     - target: {fileID: 4451382463244639933, guid: 5ac46096772d43542b3270cc58e262e4, type: 3}
       propertyPath: m_Name
       value: Panel
